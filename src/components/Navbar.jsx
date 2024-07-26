@@ -5,11 +5,11 @@ import BlueLogo from '../assets/blue-image-logo.png';
 
 const Navbar = () => {
   return (
-    <nav className="fixed top-0 left-0 w-full p-4 md:p-6 flex items-center transition ease-out backdrop-blur-sm bg-primary text-text-light shadow-md">
+    <nav className="top-0 left-0 w-full p-4 md:p-6 flex items-center transition ease-out backdrop-blur-sm bg-primary text-text-light shadow-md">
       <a href="#">
       <Image 
       src={BlueLogo} 
-      alt="The Do-Nation Station" width={300}/>
+      alt="The Do-Nation Station" width={250}/>
       </a>
       <ul className="list-none ml-auto hidden md:flex">
         <li className="ml-5"><a href="#" className="hover:underline focus:underline">About</a></li>

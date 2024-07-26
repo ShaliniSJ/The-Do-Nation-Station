@@ -1,4 +1,5 @@
 import { MdMailOutline, MdLockOutline } from 'react-icons/md';
+import CustomButton from './custombutton';
 
 const SignIn = () => {
   return (
@@ -19,7 +20,7 @@ const SignIn = () => {
             <input id="password" className="flex-1 p-4 border-none text-gray-600 text-lg placeholder-gray-400 rounded-lg outline-none transition-transform duration-150 transform focus:scale-105" placeholder="Password" type="password" />
           </div>
           
-          <input className="w-full p-4 bg-gradient-to-r from-blue-skyblue to-blue-100 text-white font-semibold text-sm rounded-lg cursor-pointer transition-transform duration-150 transform focus:scale-105" type="submit" value="SignUp" />
+          <CustomButton title="Sign In"/>
         </form>
         <div className="flex justify-center items-center text-xs mt-4">
           <span className="text-primary">New User?</span>

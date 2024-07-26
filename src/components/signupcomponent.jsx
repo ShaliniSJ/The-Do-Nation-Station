@@ -36,7 +36,7 @@ const SignUp = () => {
               <option value="organization" className='text-gray-400 text-lg'>Organization</option>
             </select>
           </div>
-          <input className="w-full p-4 bg-gradient-to-r from-blue-skyblue to-blue-100 text-white font-semibold text-sm rounded-lg cursor-pointer transition-transform duration-150 transform focus:scale-105" type="submit" value="SignUp" />
+          <CustomButton title="Sign Up"/>
         </form>
         <div className="flex justify-center items-center text-xs mt-4">
           <span className="text-primary">Not new?</span>

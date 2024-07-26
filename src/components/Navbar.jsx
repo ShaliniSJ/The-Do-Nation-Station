@@ -1,11 +1,19 @@
 // src/components/Navbar.jsx
 import React from 'react';
+import Image from 'next/image';
 import { IoSearchSharp } from 'react-icons/io5';
+import transparentLogo from '../assets/logo-white-transparent.png';
 
 const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 w-full p-4 md:p-6 flex items-center transition ease-out backdrop-blur-sm brightness-125 text-white text-sm md:text-base mask-mask mt-0"> {/* Add mt-4 for margin-top */}
-      <a href="#" className="hover:underline focus:underline">The Do-Nation Station</a>
+      <a href="#" className="hover:underline focus:underline">
+        <Image 
+          src={transparentLogo}
+          alt="The Do-Nation Station" 
+          width={500} 
+          height={500} />
+      </a>
       <ul className="list-none ml-auto hidden md:flex">
         <li className="ml-5"><a href="#" className="hover:underline focus:underline">About</a></li>
         <li className="ml-5"><a href="#" className="hover:underline focus:underline">Leader Board</a></li>

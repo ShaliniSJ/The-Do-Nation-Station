@@ -1,4 +1,4 @@
-import { MdMailOutline, MdLockOutline } from 'react-icons/md';
+
 
 const Organisation =() =>{
     return (
@@ -14,7 +14,7 @@ const Organisation =() =>{
                 name="description"
                 id="description"
                 placeholder="Enter your description here"
-                className="flex flex-1 border sm:text-sm rounded-md focus:ring-inset dark:border-gray-300 dark:text-gray-800 dark:bg-gray-100 focus:dark:ring-violet-600 p-2"
+                className="flex flex-1 border sm:text-sm rounded-r-md focus:ring focus:ring-blue focus:border-blue-100 dark:border-gray-300 dark:text-gray-800 dark:bg-gray-100 p-2"
                 ></textarea>
             </div>
         </fieldset>
@@ -35,7 +35,7 @@ const Organisation =() =>{
                 name="licenseId"
                 id="licenseId"
                 placeholder="Enter your License ID"
-                className="flex flex-1 border sm:text-sm rounded-md focus:ring-inset dark:border-gray-300 dark:text-gray-800 dark:bg-gray-100 focus:dark:ring-violet-600 p-2"
+                className="flex flex-1 border sm:text-sm rounded-r-md focus:ring focus:ring-blue focus:border-blue-100 dark:border-gray-300 dark:text-gray-800 dark:bg-gray-100 p-2"
                 />
             </div>
         </fieldset>
@@ -49,7 +49,7 @@ const Organisation =() =>{
                 name="url"
                 id="url"
                 placeholder="www.google.com/maps"
-                className="flex flex-1 border sm:text-sm rounded-r-md focus:ring focus:ring-violet-600 focus:border-violet-600 dark:border-gray-300 dark:text-gray-800 dark:bg-gray-100 p-2"
+                className="flex flex-1 border sm:text-sm rounded-r-md focus:ring focus:ring-blue focus:border-blue-100 dark:border-gray-300 dark:text-gray-800 dark:bg-gray-100 p-2"
                 />
             </div>
         </fieldset>
@@ -67,7 +67,7 @@ const Organisation =() =>{
             </div>
         </fieldset>
 
-          <input className="w-full p-4 bg-gradient-to-r from-blue-skyblue to-blue-100 text-white font-semibold text-sm rounded-lg cursor-pointer transition-transform duration-150 transform focus:scale-105" type="submit" value="Submit" />
+          <input className="w-full p-4 bg-gradient-to-r from-blue-skyblue to-blue-100 text-white font-semibold text-sm rounded-lg cursor-pointer transition-transform duration-150 transform focus:scale-105" type="submit" value="Next" />
         </form>
         
       </div>

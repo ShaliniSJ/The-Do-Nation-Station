@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ionic/react": "^8.2.6",
+    "ionicons": "^7.4.0",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",

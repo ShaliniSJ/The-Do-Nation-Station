@@ -36,10 +36,9 @@ module.exports = {
           light: "#052560", // Text color
           dark: "#E0E0E0", // Dark text color for contrast on light backgrounds
         },
-        accent: {
-          DEFAULT: "#FF9001", // Primary accent color
-          light: "#FF8E01", // Light accent color
-        },
+        background:{
+          DEFAULT:'#e4e8f2'
+        }
       },
     },
   },

@@ -4,12 +4,12 @@ import HomeWithLogin from '../components/HomeWithLogin';
 import HomeWithOutLogin from '../components/HomeWithOutLogin';
 
 export default function Home() {
-  const [showAfterLogin, setShowAfterLogin] = useState(false);
+  const [showAfterLogin, setShowBeforeLogin] = useState(true);
 
   return (
     <div>
       <Navbar />
-      {showAfterLogin ? <HomeWithLogin /> : <HomeWithOutLogin />}
+      {showAfterLogin ? <HomeWithOutLogin /> : <HomeWithLogin />}
     </div>
   );
 }

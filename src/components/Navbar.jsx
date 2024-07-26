@@ -18,7 +18,7 @@ const Navbar = () => {
           inline-block font-sans
           py-1.5 px-5
           text-center text-base
-          transition-all duration-250
+          transition-all duration-250 
           border-0
           select-none
           hover:shadow-[rgba(47,91,253,.35)_0_-25px_18px_-14px_inset,rgba(47,91,253,.25)_0_1px_2px,rgba(47,91,253,.25)_0_2px_4px,rgba(47,91,253,.25)_0_4px_8px,rgba(47,91,253,.25)_0_8px_16px,rgba(47,91,253,.25)_0_16px_32px]

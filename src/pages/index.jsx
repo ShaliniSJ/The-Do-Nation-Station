@@ -1,9 +1,15 @@
-import Image from "next/image";
-import Navbar from "../components/Navbar";
+import React, { useState } from 'react';
+import Navbar from '../components/Navbar';
+import HomeWithLogin from '../components/HomeWithLogin';
+import HomeWithOutLogin from '../components/HomeWithOutLogin';
 
 export default function Home() {
+  const [showAfterLogin, setShowAfterLogin] = useState(false);
+
   return (
-    <Navbar/>
-    
+    <div>
+      <Navbar />
+      {showAfterLogin ? <HomeWithLogin /> : <HomeWithOutLogin />}
+    </div>
   );
 }

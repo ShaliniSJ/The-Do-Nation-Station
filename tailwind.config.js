@@ -17,7 +17,8 @@ module.exports = {
         },
         blue:{
           DEFAULT: "#052560", // Primary blue color
-          100: "#2E5DFF", // Secondary blue color
+          100: "#2E5DFF",
+          skyblue:'#55CEFF'// Secondary blue color
         },
         black: {
           DEFAULT: "#000000", // Absolute black

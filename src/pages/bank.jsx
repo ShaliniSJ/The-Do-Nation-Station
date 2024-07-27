@@ -1,4 +1,4 @@
-import  Bankdetails from '../components/bankdetails'
+import  Bankdetails from '../components/BankDetails'
 const bank=()=>{
     return(
         <Bankdetails/>

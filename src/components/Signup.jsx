@@ -10,20 +10,26 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import backgroundImage from "../assets/the-do-nation-station-high-resolution-logo.png";
+import { createUser } from "../lib/appwrite.js";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get("username"),
-      email: data.get("email"),
-      password: data.get("password"),
-      userType: data.get("userType"),
-    });
-  };
+    try {
+      await createUser(
+        data.get("email"),
+        data.get("password"),
+        data.get("username"),
+        data.get("userType")
+      );
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    }
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -113,6 +119,10 @@ export default function SignUp() {
               >
                 Sign Up
               </Button>
+              <div className="flex justify-center">
+                <div className="font-normal ">Not New?</div>
+                <a href="/signin" className="font-semibold text-blue-100"> Sign In</a>
+              </div>
             </Box>
           </Box>
         </Grid>

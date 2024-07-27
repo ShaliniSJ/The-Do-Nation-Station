@@ -2,10 +2,16 @@ import React from 'react';
 import { IoSearchSharp } from 'react-icons/io5';
 import Image from 'next/image';
 import BlueLogo from '../assets/blue-image-logo.png';
+import IconLogo from '../assets/favicon-32x32.png';
 
 const Navbar = () => {
   return (
     <nav className="top-0 left-0 w-full p-4 md:p-6 flex items-center transition ease-out backdrop-blur-sm bg-primary text-text-light shadow-md">
+      <a href="#">
+      <Image 
+      src={IconLogo} 
+      alt="The Do-Nation Station Icon" width={43}/>
+      </a>
       <a href="#">
       <Image 
       src={BlueLogo} 

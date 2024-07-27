@@ -77,6 +77,7 @@ export default function SignIn() {
                   sx={{ mt: 1, mb: 2 }}
                 />
               </FormControl>
+             
               <Button
                 type="submit"
                 fullWidth
@@ -86,6 +87,10 @@ export default function SignIn() {
               >
                 Sign In
               </Button>
+              <div className="flex justify-center">
+                <div className="font-normal ">New User?</div>
+                <a href="/signup" className="font-semibold text-blue-100"> Sign Up</a>
+              </div>
             </Box>
           </Box>
         </Grid>

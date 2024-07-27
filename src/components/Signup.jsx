@@ -113,6 +113,10 @@ export default function SignUp() {
               >
                 Sign Up
               </Button>
+              <div className="flex justify-center">
+                <div className="font-normal ">Not New?</div>
+                <a href="/signin" className="font-semibold text-blue-100"> Sign In</a>
+              </div>
             </Box>
           </Box>
         </Grid>

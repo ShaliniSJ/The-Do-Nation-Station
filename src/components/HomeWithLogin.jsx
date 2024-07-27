@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import donationImage from '../assets/donation-image.jpg';
 import { Grid, TextField, Button, Card, CardContent, Typography, Box } from '@mui/material';
+import DonationModal from './DonationModal'; // Ensure correct path
 
 // Sample data function
 const getSampleNeeds = () => Array.from({ length: 50 }, (_, index) => ({
@@ -22,6 +23,8 @@ const HomeWithLogin = () => {
   const [amount, setAmount] = useState('');
   const [impact, setImpact] = useState('');
   const [needs, setNeeds] = useState([]);
+  const [selectedNeed, setSelectedNeed] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     // Generate sample data on the client-side
@@ -41,11 +44,14 @@ const HomeWithLogin = () => {
     setNeeds(filteredNeeds);
   };
 
-  const handleDonate = (needId) => {
-    // Handle the donation action here (e.g., redirect to donation page, open modal, etc.)
-    console.log(`Donate button clicked for need ID: ${needId}`);
-    // Example: Redirect to a donation page
-    // router.push(`/donate/${needId}`);
+  const handleDonate = (need) => {
+    setSelectedNeed(need);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedNeed(null);
   };
 
   return (
@@ -144,7 +150,7 @@ const HomeWithLogin = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleDonate(need.id)}
+                    onClick={() => handleDonate(need)}
                     sx={{ backgroundColor: '#172554' }}
                   >
                     Donate
@@ -155,6 +161,12 @@ const HomeWithLogin = () => {
           </Grid>
         ))}
       </Grid>
+
+      <DonationModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        need={selectedNeed}
+      />
     </div>
   );
 };

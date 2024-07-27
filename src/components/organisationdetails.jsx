@@ -1,93 +1,73 @@
-import CustomButton from "./custombutton";
-import Input from "./Input";
+import React, { useState } from 'react';
+import { Container, Paper, Box, Typography } from '@mui/material';
+import CustomButton from './CustomButton';
+import InputField from './InputField';
+import FileInput from './FileInput';
 
+const Organisation = () => {
+  const [formValues, setFormValues] = useState({
+    desc: '',
+    license: '',
+    location: '',
+    phno: '',
+    files: null,
+    fileURL: '',
+  });
 
-const Organisation =() =>{
-    return (
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue to-blue-skyblue">
-      <div className="relative p-8 bg-black/15 rounded-3xl shadow-lg w-full max-w-md">
-        <div className="absolute inset-0 bg-noise bg-primary rounded-lg" />
-        <form className="relative space-y-6 ">
-           
-        {/* <fieldset className="w-full space-y-1 dark:text-gray-800">
-            <label htmlFor="description" className="block text-sm font-medium">Description</label>
-            <div className="flex">
-                <textarea
-                name="description"
-                id="description"
-                placeholder="Enter your description here"
-                className="flex flex-1 border sm:text-sm rounded-r-md focus:ring focus:ring-blue focus:border-blue-100 dark:border-gray-300 dark:text-gray-800 dark:bg-gray-100 p-2"
-                ></textarea>
-            </div>
-        </fieldset> 
-         <fieldset className="w-full space-y-1 dark:text-gray-800">
-            <label htmlFor="licenseId" className="block text-sm font-medium">License ID</label>
-            <div className="flex">
-                <input
-                type="text"
-                name="licenseId"
-                id="licenseId"
-                placeholder="Enter your License ID"
-                className="flex flex-1 border sm:text-sm rounded-r-md focus:ring focus:ring-blue focus:border-blue-100 dark:border-gray-300 dark:text-gray-800 dark:bg-gray-100 p-2"
-                />
-            </div>
-        </fieldset>
-        <fieldset className="w-full space-y-1 dark:text-gray-800">
-            <label htmlFor="url" className="block text-sm font-medium">Location</label>
-            <div className="flex">
-                <span className="flex items-center px-3 pointer-events-none sm:text-sm rounded-l-md dark:bg-gray-300 bg-gray-200">https://</span>
-                <input
-                type="text"
-                name="url"
-                id="url"
-                placeholder="www.google.com/maps"
-                className="flex flex-1 border sm:text-sm rounded-r-md focus:ring focus:ring-blue focus:border-blue-100 dark:border-gray-300 dark:text-gray-800 dark:bg-gray-100 p-2"
-                />
-            </div>
-        </fieldset>
-        <fieldset className="w-full space-y-1 dark:text-gray-800">
-            <label htmlFor="phno" className="block text-sm font-medium">Phone Number</label>
-            <div className="flex">
-                <input
-                type="text"
-                name="phonenumber"
-                id="phonenumber"
-                placeholder="Enter your Phone Number"
-                className="flex flex-1 border sm:text-sm rounded-md focus:ring-inset dark:border-gray-300 dark:text-gray-800 dark:bg-gray-100 focus:dark:ring-violet-600 p-2"
-                />
-            </div>
-        </fieldset>
-        */}
-        
-        <Input title="Description" holder="Write about your organisation" type="textarea" name="desc" id="desc" />
+  const handleChange = (event) => {
+    const { name, value, type, files } = event.target;
+    if (type === 'file') {
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [name]: files[0],
+        fileURL: URL.createObjectURL(files[0]),
+      }));
+    } else {
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [name]: value
+      }));
+    }
+  };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(formValues);
+  };
 
-        <fieldset className="w-full space-y-1 dark:text-gray-800">
-            <label htmlFor="files" className="block text-sm font-medium">Photos</label>
-            <div className="flex">
-                <input type="file" name="files" id="files" className="px-8 py-12 border-2 border-dashed rounded-md dark:border-gray-300 dark:text-gray-600 dark:bg-gray-100" />
-            </div>
-        </fieldset>
-        <Input title="Lisence ID" holder="Enter your license id" type="text" name="license" id="licence" />
-        <Input title="Location" holder="www.google.com/maps" type="text" name="location" id="location" />
-        <Input title="Phone Number" holder="+91 9956867412" type="text" name="phno" id="phno" />
-        
+  return (
+    <Container component="main" maxWidth="xs" className='mt-10'>
+      <Paper elevation={6} className='p-16 rounded-lg'>
+        <Typography component="h1" variant="h5" align="center">
+            Organisation Details
+        </Typography>
+        <Box
+          component="form"
+          noValidate
+          sx={{ mt: 3 }}
+          onSubmit={handleSubmit}
+        >
+          <InputField title="Description" holder="Write about your organisation" type="textarea" name="desc" id="desc" handleChange={handleChange} />
+            <Typography variant="subtitle1">Upload Photo</Typography>
+            <div className='justify-center align-middle ml-[20%] mt-4 mb-4'>
+          <FileInput handleChange={handleChange} />
+          {formValues.fileURL && (
+            <Box mt={2} textAlign="center">
+              <Typography variant="subtitle1">Uploaded Photo</Typography>
+              <img src={formValues.fileURL} alt="Uploaded" style={{ width: '100%', height: 'auto', marginTop: '10px' }} />
+            </Box>
+          )}
+          </div>
 
-       
+          <InputField title="License ID" holder="Enter your license id" type="text" name="license" id="license" handleChange={handleChange} />
+          <InputField title="Location" holder="www.google.com/maps" type="text" name="location" id="location" handleChange={handleChange} />
+          <InputField title="Phone Number" holder="+91 9956867412" type="text" name="phno" id="phno" handleChange={handleChange} />
 
-        
-
-        
-
-         <CustomButton title="Next"/>
-        </form>
-        
-      </div>
-    </div>
-
-    );
-}
+          <CustomButton title="Next" />
+        </Box>
+      </Paper>
+    </Container>
+  );
+};
 
 export default Organisation;
-
-//<span className="flex items-center px-3 pointer-events-none sm:text-sm rounded-l-md dark:bg-gray-300">https://</span>

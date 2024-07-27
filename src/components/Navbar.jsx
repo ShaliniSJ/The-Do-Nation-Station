@@ -2,7 +2,7 @@ import React from 'react';
 import { IoSearchSharp } from 'react-icons/io5';
 import Image from 'next/image';
 import BlueLogo from '../assets/blue-image-logo.png';
-import IconLogo from '../assets/favicon-32x32.png';
+import IconLogo from '../assets/apple-touch-icon.png';
 
 const Navbar = () => {
   return (

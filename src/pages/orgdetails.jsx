@@ -1,4 +1,4 @@
-import Organisation from "../components/organisationdetails";
+import Organisation from "../components/OrganisationDetails";
 
 const OrgDetails=()=>{
     return(

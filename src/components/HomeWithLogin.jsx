@@ -41,6 +41,13 @@ const HomeWithLogin = () => {
     setNeeds(filteredNeeds);
   };
 
+  const handleDonate = (needId) => {
+    // Handle the donation action here (e.g., redirect to donation page, open modal, etc.)
+    console.log(`Donate button clicked for need ID: ${needId}`);
+    // Example: Redirect to a donation page
+    // router.push(`/donate/${needId}`);
+  };
+
   return (
     <div className="mt-0 p-4">
       <h1 className="text-4xl font-bold mb-4 text-blue">Search for Donation Needs</h1>
@@ -133,6 +140,16 @@ const HomeWithLogin = () => {
                 <Typography variant="body2">
                   {need.description}
                 </Typography>
+                <Box display="flex" justifyContent="center" mt={2}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleDonate(need.id)}
+                    sx={{ backgroundColor: '#172554' }}
+                  >
+                    Donate
+                  </Button>
+                </Box>
               </CardContent>
             </Card>
           </Grid>

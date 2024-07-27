@@ -24,19 +24,21 @@ const NavbarBeforeLogin = () => {
         <li className="ml-5"><a href="#" className="hover:underline focus:underline">History</a></li>
       </ul>
       <div className='mx-5'>
-        <button className="bg-blue rounded-full 
-          shadow-[rgba(144,223,245,.2)0-25px_18px_-14px_inset,rgba(144,223,245,.15)_0_1px_2px,rgba(144,223,245,.15)_0_2px_4px,rgba(144,223,245,.15)_0_4px_8px,rgba(144,223,245,.15)_0_8px_16px,rgba(144,223,245,.15)_0_16px_32px]
-          text-gray-200 cursor-pointer
-          inline-block font-sans
-          py-1.5 px-5
-          text-center text-base
-          transition-all duration-250 
-          border-0
-          select-none
-          hover:shadow-[rgba(47,91,253,.35)0-25px_18px_-14px_inset,rgba(47,91,253,.25)_0_1px_2px,rgba(47,91,253,.25)_0_2px_4px,rgba(47,91,253,.25)_0_4px_8px,rgba(47,91,253,.25)_0_8px_16px,rgba(47,91,253,.25)_0_16px_32px]
-          hover:scale-105 hover:rotate-[-1deg] ">
-          Login
-        </button>
+        <a href="/signin">
+          <button className="bg-blue rounded-full 
+            shadow-[rgba(144,223,245,.2)0-25px_18px_-14px_inset,rgba(144,223,245,.15)_0_1px_2px,rgba(144,223,245,.15)_0_2px_4px,rgba(144,223,245,.15)_0_4px_8px,rgba(144,223,245,.15)_0_8px_16px,rgba(144,223,245,.15)_0_16px_32px]
+            text-gray-200 cursor-pointer
+            inline-block font-sans
+            py-1.5 px-5
+            text-center text-base
+            transition-all duration-250 
+            border-0
+            select-none
+            hover:shadow-[rgba(47,91,253,.35)0-25px_18px_-14px_inset,rgba(47,91,253,.25)_0_1px_2px,rgba(47,91,253,.25)_0_2px_4px,rgba(47,91,253,.25)_0_4px_8px,rgba(47,91,253,.25)_0_8px_16px,rgba(47,91,253,.25)_0_16px_32px]
+            hover:scale-105 hover:rotate-[-1deg] ">
+            Login
+          </button>
+          </a>
       </div>
     </nav>
   );

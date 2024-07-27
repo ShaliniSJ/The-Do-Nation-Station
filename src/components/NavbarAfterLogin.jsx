@@ -35,7 +35,7 @@ const NavbarAfterLogin = () => {
           select-none
           hover:shadow-[rgba(47,91,253,.35)0-25px_18px_-14px_inset,rgba(47,91,253,.25)_0_1px_2px,rgba(47,91,253,.25)_0_2px_4px,rgba(47,91,253,.25)_0_4px_8px,rgba(47,91,253,.25)_0_8px_16px,rgba(47,91,253,.25)_0_16px_32px]
           hover:scale-105 hover:rotate-[-1deg] ">
-          Login
+          Profile
         </button>
       </div>
     </nav>

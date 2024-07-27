@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useRouter } from "next/router";
 import Avatar from "@mui/material/Avatar";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Button, FormLabel, Input, MenuItem, Select } from "@mui/material";
@@ -15,6 +16,8 @@ import { createUser } from "../lib/appwrite.js";
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const router = useRouter();
+
   async function handleSubmit(event) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -25,6 +28,7 @@ export default function SignUp() {
         data.get("username"),
         data.get("userType")
       );
+      router.push("/signin"); // Redirect to sign-in page after successful sign-up
     } catch (e) {
       console.log(e);
       alert(e);
@@ -120,7 +124,7 @@ export default function SignUp() {
                 Sign Up
               </Button>
               <div className="flex justify-center">
-                <div className="font-normal ">Not New?</div>
+                <div className="font-normal">Not New?</div>
                 <a href="/signin" className="font-semibold text-blue-100"> Sign In</a>
               </div>
             </Box>

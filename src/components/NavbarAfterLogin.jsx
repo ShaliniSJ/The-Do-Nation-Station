@@ -18,6 +18,7 @@ const NavbarAfterLogin = () => {
       alt="The Do-Nation Station" width={250}/>
       </a>
       <ul className="list-none ml-auto hidden md:flex">
+        <li className="ml-5"><a href="/" className="hover:underline focus:underline">Home</a></li>
         <li className="ml-5"><a href="/aboutUs" className="hover:underline focus:underline">About</a></li>
         <li className="ml-5"><a href="#" className="hover:underline focus:underline">Leaderboard</a></li>
         <li className="ml-5"><a href="#" className="hover:underline focus:underline">History</a></li>

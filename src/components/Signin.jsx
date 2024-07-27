@@ -10,18 +10,15 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import backgroundImage from "../assets/the-do-nation-station-high-resolution-logo.png";
+import { signIn, createUser } from "../lib/appwrite.js";
 
 const defaultTheme = createTheme();
 
-
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    console.log(await signIn(data.get("email"), data.get("password")));
   };
 
   return (

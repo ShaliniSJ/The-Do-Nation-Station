@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
+import NavbarBeforeLogin from '../components/NavbarBeforeLogin';
+import NavbarAfterLogin from '../components/NavbarBeforeLogin';
 import HomeWithLogin from '../components/HomeWithLogin';
 import HomeWithOutLogin from '../components/HomeWithOutLogin';
 
@@ -8,7 +9,7 @@ export default function Home() {
 
   return (
     <div>
-      <Navbar />
+      {showAfterLogin ? <NavbarBeforeLogin/> : <NavbarAfterLogin />}
       {showAfterLogin ? <HomeWithOutLogin /> : <HomeWithLogin />}
     </div>
   );

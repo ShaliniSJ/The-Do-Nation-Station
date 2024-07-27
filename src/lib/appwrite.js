@@ -1,4 +1,8 @@
-// import { Platform } from "react-native";
+// ---------------------
+// 1 - donor 0 
+// 0 - organisation 
+// ---------------------
+
 import {
   Account,
   Avatars,
@@ -9,10 +13,18 @@ import {
   Storage,
 } from "appwrite";
 
+const DATABASE_ID = process.env.NEXT_PUBLIC_DATABASE_ID;
+const PROJECT_ID = process.env.NEXT_PUBLIC_PROJECT_ID;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const USERS = process.env.NEXT_PUBLIC_USERS_COLLECTION;
+const ORGANIZATIONS = process.env.NEXT_PUBLIC_ORGANIZATIONS_COLLECTION;
+const DONORS = process.env.NEXT_PUBLIC_DONARS_COLLECTION;
+
+
 export const Config = {
-  endpoint: process.env.NEXT_PUBLIC_BASE_URL,
-  projectId: "66a25e570028bcc1a114",
-  databaseId: "66a25edd002d144c8589",
+  endpoint: BASE_URL,
+  projectId: PROJECT_ID,
+  databaseId: DATABASE_ID,
 };
 
 const { endpoint, projectId, databaseId } = Config;
@@ -24,7 +36,7 @@ client
 const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
-export const createUser = async (email, password, username,isDonor) => {
+export const createUser = async (email, password, username, isDonor) => {
   try {
     const newAccount = await account.create(
       ID.unique(),
@@ -32,27 +44,51 @@ export const createUser = async (email, password, username,isDonor) => {
       password,
       username
     );
-
     if (!newAccount) {
       throw new Error("Account creation failed");
     }
 
     const avatarUrl = avatars.getInitials(username);
     await signIn(email, password);
-
-    // const newUser = await databases.createDocument(
-    //   databaseId, //databaseId
-    //   userCollectionId, //collectionId
-    //   ID.unique(), //documentId
-    //   //data
-    //   {
-    //     accountid: newAccount.$id,
-    //     email,
-    //     username,
-    //     avatar: avatarUrl,
-    //   }
-    // );
-    return newUser;
+    const newUser = await databases.createDocument(
+      databaseId,
+      USERS,
+      ID.unique(),
+      {
+        appwrite_id: newAccount.$id,
+        is_donor: isDonor === "Donor" ,
+      }
+    );
+    if (!newUser) {
+      throw new Error("User creation failed");
+    }
+    if (isDonor == "Donor") {
+      const newDonor = await databases.createDocument(
+        DATABASE_ID, //databaseId
+        DONORS, //collectionId
+        ID.unique(), //documentId
+        {
+          user_id: newAccount.$id,
+          email,
+          name: username,
+          avatar_url: avatarUrl,
+        }
+      );
+      return newDonor;
+    } else {
+      const newOrganization = await databases.createDocument(
+        DATABASE_ID, //databaseId
+        ORGANIZATIONS, //collectionId
+        ID.unique(), //documentId
+        {
+          organisation_id: newAccount.$id,
+          organisation_name: username,
+          email,
+          avatar_url: avatarUrl,
+        }
+      );
+      return newOrganization;
+    }
   } catch (e) {
     console.log(e);
     throw new Error(e);
@@ -60,10 +96,8 @@ export const createUser = async (email, password, username,isDonor) => {
 };
 
 export const signIn = async (email, password) => {
-    console.log(email, password);
   try {
-    const session = await account.createEmailPasswordSession(email,password);
-    console.log(session);
+    const session = await account.createEmailPasswordSession(email, password);
     return session;
   } catch (e) {
     console.log(e);

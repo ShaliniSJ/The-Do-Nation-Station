@@ -105,6 +105,7 @@ export const signIn = async (email, password) => {
   }
 };
 
+ 
 export const getCurrentUser = async () => {
   try {
     const currentAccount = await account.get();

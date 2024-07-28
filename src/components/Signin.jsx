@@ -11,7 +11,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import backgroundImage from "../assets/the-do-nation-station-high-resolution-logo.png";
-import { signIn } from "../lib/appwrite.js";
+import { signIn,getCurrentUser } from "../lib/appwrite.js";
 
 const defaultTheme = createTheme();
 
@@ -23,8 +23,15 @@ export default function SignIn() {
     const data = new FormData(event.currentTarget);
     try {
       const token = await signIn(data.get("email"), data.get("password"));
-      localStorage.setItem('token', token); // Store the token in localStorage
-      
+      // localStorage.setItem('token', token); // Store the token in localStorage
+      localStorage.setItem("islogged", true);
+      const user = await getCurrentUser();
+      if(user.is_donor){
+        window.location.href = "/";
+      }
+      else{
+        window.location.href = "/";
+      }
       router.push("/"); // Redirect to homepage after successful sign-in
     } catch (e) {
       console.log(e);

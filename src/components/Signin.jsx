@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useRouter } from "next/router";
 import Avatar from "@mui/material/Avatar";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Button, FormLabel, Input } from "@mui/material";
@@ -10,18 +11,25 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import backgroundImage from "../assets/the-do-nation-station-high-resolution-logo.png";
+import { signIn } from "../lib/appwrite.js";
 
 const defaultTheme = createTheme();
 
-
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const router = useRouter();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    try {
+      const token = await signIn(data.get("email"), data.get("password"));
+      localStorage.setItem('token', token); // Store the token in localStorage
+      
+      router.push("/"); // Redirect to homepage after successful sign-in
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    }
   };
 
   return (
@@ -88,7 +96,7 @@ export default function SignIn() {
                 Sign In
               </Button>
               <div className="flex justify-center">
-                <div className="font-normal ">New User?</div>
+                <div className="font-normal">New User?</div>
                 <a href="/signup" className="font-semibold text-blue-100"> Sign Up</a>
               </div>
             </Box>

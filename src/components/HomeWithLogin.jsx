@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import donationImage from '../assets/donation-image.jpg';
 import { Grid, TextField, Button, Card, CardContent, Typography, Box } from '@mui/material';
+import DonationModal from './DonationModal'; // Ensure correct path
 
 // Sample data function
 const getSampleNeeds = () => Array.from({ length: 50 }, (_, index) => ({
@@ -22,6 +23,8 @@ const HomeWithLogin = () => {
   const [amount, setAmount] = useState('');
   const [impact, setImpact] = useState('');
   const [needs, setNeeds] = useState([]);
+  const [selectedNeed, setSelectedNeed] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     // Generate sample data on the client-side
@@ -39,6 +42,16 @@ const HomeWithLogin = () => {
     });
 
     setNeeds(filteredNeeds);
+  };
+
+  const handleDonate = (need) => {
+    setSelectedNeed(need);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedNeed(null);
   };
 
   return (
@@ -133,11 +146,27 @@ const HomeWithLogin = () => {
                 <Typography variant="body2">
                   {need.description}
                 </Typography>
+                <Box display="flex" justifyContent="center" mt={2}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleDonate(need)}
+                    sx={{ backgroundColor: '#172554' }}
+                  >
+                    Donate
+                  </Button>
+                </Box>
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
+
+      <DonationModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        need={selectedNeed}
+      />
     </div>
   );
 };

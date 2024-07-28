@@ -23,6 +23,7 @@ export default function SignUp() {
       password: data.get("password"),
       userType: data.get("userType"),
     });
+    
   };
 
   return (

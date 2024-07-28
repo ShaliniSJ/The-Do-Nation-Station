@@ -22,10 +22,14 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     try {
-      const token = await signIn(data.get("email"), data.get("password"));
-      localStorage.setItem('token', token); // Store the token in localStorage
-      
-      router.push("/"); // Redirect to homepage after successful sign-in
+      const { session, is_donor } = await signIn(
+        data.get("email"),
+        data.get("password")
+      );
+      localStorage.setItem("token", session); // Store the token in localStorage
+      // the is_donar is boolean value, if 1 donar else organisation redirect it such that
+      if(is_donor)router.push("/index"); // Redirect to homepage after successful sign-in
+      else router.push("/orgdetails");
     } catch (e) {
       console.log(e);
       alert(e);
@@ -85,7 +89,7 @@ export default function SignIn() {
                   sx={{ mt: 1, mb: 2 }}
                 />
               </FormControl>
-             
+
               <Button
                 type="submit"
                 fullWidth
@@ -97,7 +101,10 @@ export default function SignIn() {
               </Button>
               <div className="flex justify-center">
                 <div className="font-normal">New User?</div>
-                <a href="/signup" className="font-semibold text-blue-100"> Sign Up</a>
+                <a href="/signup" className="font-semibold text-blue-100">
+                  {" "}
+                  Sign Up
+                </a>
               </div>
             </Box>
           </Box>

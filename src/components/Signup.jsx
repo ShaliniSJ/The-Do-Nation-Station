@@ -30,9 +30,9 @@ export default function SignUp() {
       );
       localStorage.setItem("islogged", true);
       if(data.get("userType") === "Donor"){
-        window.location.href = "/index";
+        router.push("/");
       } else {
-        window.location.href = "/orgdetails";
+        router.push("/orgdetails");
       }
       // router.push("/signin"); // Redirect to sign-in page after successful sign-up
     } catch (e) {

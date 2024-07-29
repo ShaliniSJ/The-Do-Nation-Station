@@ -26,6 +26,9 @@ const ProfileButton = ({ isdonor,user }) => {
 
     const handleProfileRedirect = () => {
         handleClose();
+        console.log("------------------------ is donor");
+        console.log(isdonor);
+        console.log("------------------------");
         if (isdonor) {
             router.push(`/donorprofile`); // Redirect to donor profile with the user's ID as the slug
         } else {

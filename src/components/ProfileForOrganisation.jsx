@@ -48,26 +48,31 @@ const ProfileForOrganisation = ({ islogged }) => {
       { id: 15, amount: '$2000', date: '2024-03-10' },
     ],
     mapLink: 'https://maps.app.goo.gl/X9yj6RURE2A6zNLr7',
+    gallery: [
+      { id: 1, src: '/path-to-image1.jpg', alt: 'Image 1' },
+      { id: 2, src: '/path-to-image2.jpg', alt: 'Image 2' },
+      { id: 3, src: '/path-to-image3.jpg', alt: 'Image 3' },
+    ],
   };
 
   const [currentPage, setCurrentPage] = useState(1);
   const [currentNeedsPage, setCurrentNeedsPage] = useState(1);
+  const [editingNeed, setEditingNeed] = useState(null);
+  const [needs, setNeeds] = useState(orgData.currentNeeds);
+
   const donationsPerPage = 10;
   const NeedsPerPage = 10;
   const totalDonations = orgData.pastDonations.length;
   const totalPages = Math.ceil(totalDonations / donationsPerPage);
-  const totalNeeds = orgData.currentNeeds.length;
+  const totalNeeds = needs.length;
   const totalNeedsPages = Math.ceil(totalNeeds / NeedsPerPage);
-  
 
   const handleAddNeeds = () => {
-    // Add logic for handling "Add Needs"
     alert('Redirect to Needs page for adding needs?');
     Router.push('/needs');
   };
 
   const handleEditDetails = () => {
-    // Add logic for handling "Edit Details"
     alert('Edit Details button clicked');
   };
 
@@ -79,15 +84,30 @@ const ProfileForOrganisation = ({ islogged }) => {
     setCurrentNeedsPage(pageNumber);
   };
 
-  // Calculate the current page's donations
+  const handleEditNeed = (need) => {
+    setEditingNeed(need);
+  };
+
+  const handleCompleteNeed = (needId) => {
+    setNeeds(needs.filter((need) => need.id !== needId));
+  };
+
+  const handleSaveEdit = () => {
+    // Update logic here
+    setEditingNeed(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingNeed(null);
+  };
+
   const indexOfLastDonation = currentPage * donationsPerPage;
   const indexOfFirstDonation = indexOfLastDonation - donationsPerPage;
   const indexOfLastNeeds = currentNeedsPage * NeedsPerPage;
   const indexOfFirstNeeds = indexOfLastNeeds - NeedsPerPage;
   const currentDonations = orgData.pastDonations.slice(indexOfFirstDonation, indexOfLastDonation);
-  const currentNeeds = orgData.currentNeeds.slice(indexOfFirstNeeds, indexOfLastNeeds);
+  const currentNeeds = needs.slice(indexOfFirstNeeds, indexOfLastNeeds);
 
-  // Encode the address for use in the URL
   const encodedAddress = encodeURIComponent(orgData.address);
   const mapEmbedLink = `https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${encodedAddress}`;
 
@@ -121,97 +141,115 @@ const ProfileForOrganisation = ({ islogged }) => {
           </div>
         )}
       </div>
+
       <div>
         <h2 className="text-2xl font-semibold mb-4">The Current Needs</h2>
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-300">
+          <table className="min-w-full divide-y divide-gray-200">
             <thead>
-              <tr className="bg-dark-blue text-white">
-                <th className="py-2 px-4 border-b">ID</th>
-                <th className="py-2 px-4 border-b">Amount</th>
-                <th className="py-2 px-4 border-b">Date</th>
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
               {currentNeeds.map((need) => (
                 <tr key={need.id}>
-                  <td className="py-2 px-4 border-b">{need.id}</td>
-                  <td className="py-2 px-4 border-b">{need.amount}</td>
-                  <td className="py-2 px-4 border-b">{need.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{need.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{need.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button
+                      onClick={() => handleEditNeed(need)}
+                      className="bg-blue text-white py-1 px-3 rounded hover:bg-blue-700 mr-2"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleCompleteNeed(need.id)}
+                      className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-700"
+                    >
+                      Complete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <div className="flex justify-between mt-4">
+        <div className="mt-4 flex justify-between">
           <button
-            onClick={() => handleNeedsPageChange(currentNeedsPage - 1)}
             disabled={currentNeedsPage === 1}
-            className="bg-blue text-white py-2 px-4 rounded hover:bg-dark-blue-700"
+            onClick={() => handleNeedsPageChange(currentNeedsPage - 1)}
+            className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
           >
             Previous
           </button>
-          <span>Page {currentNeedsPage} of {totalNeedsPages}</span>
+          <span className="text-gray-700">
+            Page {currentNeedsPage} of {totalNeedsPages}
+          </span>
           <button
-            onClick={() => handleNeedsPageChange(currentNeedsPage + 1)}
             disabled={currentNeedsPage === totalNeedsPages}
-            className="bg-blue text-white py-2 px-4 rounded hover:bg-dark-blue-700"
+            onClick={() => handleNeedsPageChange(currentNeedsPage + 1)}
+            className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
           >
             Next
           </button>
         </div>
       </div>
+
       <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">Past Donations</h2>
+        <h2 className="text-2xl font-semibold">Past Donations</h2>
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-300">
+          <table className="min-w-full divide-y divide-gray-200">
             <thead>
-              <tr className="bg-dark-blue text-white">
-                <th className="py-2 px-4 border-b">ID</th>
-                <th className="py-2 px-4 border-b">Amount</th>
-                <th className="py-2 px-4 border-b">Date</th>
-                <th className="py-2 px-4 border-b">Donor</th>
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Donor</th>
               </tr>
             </thead>
             <tbody>
               {currentDonations.map((donation) => (
                 <tr key={donation.id}>
-                  <td className="py-2 px-4 border-b">{donation.id}</td>
-                  <td className="py-2 px-4 border-b">{donation.amount}</td>
-                  <td className="py-2 px-4 border-b">{donation.date}</td>
-                  <td className="py-2 px-4 border-b">{donation.donor}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{donation.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{donation.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{donation.donor}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <div className="flex justify-between mt-4">
+        <div className="mt-4 flex justify-between">
           <button
-            onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="bg-blue text-white py-2 px-4 rounded hover:bg-dark-blue-700"
+            onClick={() => handlePageChange(currentPage - 1)}
+            className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
           >
             Previous
           </button>
-          <span>Page {currentPage} of {totalPages}</span>
+          <span className="text-gray-700">
+            Page {currentPage} of {totalPages}
+          </span>
           <button
-            onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="bg-blue text-white py-2 px-4 rounded hover:bg-dark-blue-700"
+            onClick={() => handlePageChange(currentPage + 1)}
+            className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
           >
             Next
           </button>
         </div>
       </div>
+
       <div className="mt-8">
-        <h2 className="text-2xl font-semibold">Location</h2>
+        <h2 className="text-2xl font-semibold mb-4">Location</h2>
         <div className="flex-grow flex justify-center">
-            <a href={orgData.mapLink} target="_blank" rel="noopener noreferrer">
+          <a href={orgData.mapLink} target="_blank" rel="noopener noreferrer">
             <button className="bg-blue text-white font-semibold mb-5 py-2 px-4 rounded hover:bg-blue-700">
-                Click here to view on Google Maps
+              Click here to view on Google Maps
             </button>
-            </a>
-        </div>  
+          </a>
+        </div>
         <iframe
           title="Google Map"
           width="100%"
@@ -222,6 +260,57 @@ const ProfileForOrganisation = ({ islogged }) => {
           src={mapEmbedLink}
         ></iframe>
       </div>
+
+      {/* Gallery Section */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
+        <div className="flex flex-wrap">
+          {orgData.gallery.map((image) => (
+            <div key={image.id} className="w-1/3 p-2">
+              <Image src={image.src} alt={image.alt} width={400} height={300} layout="responsive" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Edit Popup */}
+      {editingNeed && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-4 rounded shadow-lg">
+            <h3 className="text-xl mb-2">Edit Need</h3>
+            <div>
+              <label className="block mb-2">Amount</label>
+              <input
+                type="text"
+                defaultValue={editingNeed.amount}
+                className="border p-2 w-full"
+                onChange={(e) => setEditingNeed({ ...editingNeed, amount: e.target.value })}
+              />
+              <label className="block mb-2 mt-2">Date</label>
+              <input
+                type="text"
+                defaultValue={editingNeed.date}
+                className="border p-2 w-full"
+                onChange={(e) => setEditingNeed({ ...editingNeed, date: e.target.value })}
+              />
+            </div>
+            <div className="mt-4">
+              <button
+                onClick={handleSaveEdit}
+                className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
+              >
+                Save
+              </button>
+              <button
+                onClick={handleCancelEdit}
+                className="bg-red-500 text-white py-2 px-4 rounded ml-2 hover:bg-red-700"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

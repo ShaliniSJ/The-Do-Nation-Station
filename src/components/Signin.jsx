@@ -22,14 +22,16 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     try {
-      const token = await signIn(data.get("email"), data.get("password"));
+      const { session, is_donor } = await signIn(
+        data.get("email"),
+        data.get("password")
+      );
       // localStorage.setItem('token', token); // Store the token in localStorage
       localStorage.setItem("islogged", true);
       const user = await getCurrentUser();
-      if(user.is_donor){
+      if (user.is_donor) {
         window.location.href = "/";
-      }
-      else{
+      } else {
         window.location.href = "/";
       }
       router.push("/"); // Redirect to homepage after successful sign-in

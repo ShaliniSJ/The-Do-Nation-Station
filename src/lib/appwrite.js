@@ -23,6 +23,7 @@ const USERS = process.env.NEXT_PUBLIC_USERS_COLLECTION;
 const ORGANIZATIONS = process.env.NEXT_PUBLIC_ORGANIZATIONS_COLLECTION;
 const DONORS = process.env.NEXT_PUBLIC_DONARS_COLLECTION;
 const NEEDS = process.env.NEXT_PUBLIC_NEEDS_COLLECTION;
+const DONATIONS = process.env.NEXT_PUBLIC_DONATIONS_COLLECTION;
 
 export const Config = {
   endpoint: BASE_URL,
@@ -176,8 +177,19 @@ export const getNeeds = async () => {
     const needs = await databases.listDocuments(databaseId, NEEDS, [
       Query.equal("organisation_id", organisation.organisation_id),
     ]);
-    console.log(needs);
     return needs.documents;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const getPastDonations = async () => {
+  try {
+    const organisation = await getCurrentUser(false);
+    const donations = await databases.listDocuments(databaseId, DONATIONS, [
+      Query.equal("organisation_id", organisation.organisation_id),
+    ]);
+    return donations.documents;
   } catch (e) {
     throw new Error(e);
   }

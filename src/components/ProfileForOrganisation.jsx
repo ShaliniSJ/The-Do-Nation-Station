@@ -3,7 +3,7 @@ import Image from "next/image";
 import BlueLogo from "../assets/the-do-nation-station-high-resolution-logo.png";
 import Router from "next/router";
 import { router } from "next/router";
-import { getNeeds } from "../lib/appwrite";
+import { getCurrentUser, getNeeds, getPastDonations } from "../lib/appwrite";
 
 // Define your Google Maps API key here
 const API_KEY = process.env.GOOGLE_MAP_API_KEY;
@@ -61,7 +61,13 @@ const ProfileForOrganisation = ({ islogged }) => {
   };
 
   useEffect(async () => {
+    // for needs
     console.log(await getNeeds());
+    // for donations
+    console.log(await getPastDonations());
+    // for organisation details
+    // since it is organisation the parameter is false
+    console.log(await getCurrentUser(false));
   }, []);
 
   const [currentPage, setCurrentPage] = useState(1);

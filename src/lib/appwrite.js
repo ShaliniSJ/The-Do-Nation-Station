@@ -37,6 +37,7 @@ const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
 const today = new Date().toISOString();
+
 export const createUser = async (email, password, username, isDonor) => {
   try {
     const newAccount = await account.create(
@@ -48,9 +49,7 @@ export const createUser = async (email, password, username, isDonor) => {
     if (!newAccount) {
       throw new Error("Account creation failed");
     }
-
     const avatarUrl = avatars.getInitials(username);
-    await signIn(email, password);
     const newUser = await databases.createDocument(
       databaseId,
       USERS,
@@ -75,6 +74,7 @@ export const createUser = async (email, password, username, isDonor) => {
           avatar_url: avatarUrl,
         }
       );
+      await signIn(email, password);
       return newDonor;
     } else {
       const newOrganization = await databases.createDocument(
@@ -88,6 +88,7 @@ export const createUser = async (email, password, username, isDonor) => {
           avatar_url: avatarUrl,
         }
       );
+      await signIn(email, password);
       return newOrganization;
     }
   } catch (e) {
@@ -99,7 +100,6 @@ export const createUser = async (email, password, username, isDonor) => {
 export const signIn = async (email, password) => {
   try {
     const session = await account.createEmailPasswordSession(email, password);
-    console.log(session);
     const is_donor = await databases.listDocuments(
       databaseId,
       USERS,

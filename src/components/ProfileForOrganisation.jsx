@@ -98,7 +98,7 @@ const ProfileForOrganisation = ({ islogged }) => {
           <Image src={BlueLogo} alt="Organization Logo" width={400} height={400} />
           <div className="ml-4">
             <h1 className="text-3xl font-bold">{orgData.name}</h1>
-            <p>{orgData.description}</p>
+            <p><strong>Description:</strong> {orgData.description}</p>
             <p><strong>Impacts:</strong> {orgData.impacts}</p>
             <p><strong>Type:</strong> {orgData.type}</p>
             <p><strong>Address:</strong> {orgData.address}</p>
@@ -207,7 +207,7 @@ const ProfileForOrganisation = ({ islogged }) => {
         <h2 className="text-2xl font-semibold">Location</h2>
         <div className="flex-grow flex justify-center">
             <a href={orgData.mapLink} target="_blank" rel="noopener noreferrer">
-            <button className="bg-blue text-white font-semibold py-2 px-4 rounded hover:bg-blue-700">
+            <button className="bg-blue text-white font-semibold mb-5 py-2 px-4 rounded hover:bg-blue-700">
                 Click here to view on Google Maps
             </button>
             </a>

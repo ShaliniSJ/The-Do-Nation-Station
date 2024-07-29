@@ -30,8 +30,10 @@ export default function SignUp() {
       );
       localStorage.setItem("islogged", true);
       if(data.get("userType") === "Donor"){
+        localStorage.setItem("isdonar",true)
         router.push("/");
       } else {
+        localStorage.setItem("isdonar",false)
         router.push("/orgdetails");
       }
       // router.push("/signin"); // Redirect to sign-in page after successful sign-up

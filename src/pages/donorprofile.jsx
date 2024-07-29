@@ -80,7 +80,7 @@ export default function Page() {
 
   return (
     <>
-      <Navbar islogged={isLogged}  isdonor={isdonor}/>
+      <Navbar islogged={isLogged}  />
       <div className="flex flex-col min-h-[80vh] md:flex-row gap-4 md:gap-16">
         <div className="flex flex-col bg-blue-200/50 gap-8 p-6 md:pr-16">
           <div className="flex flex-row items-center gap-8">

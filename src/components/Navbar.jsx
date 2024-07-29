@@ -3,11 +3,22 @@ import { IoSearchSharp } from 'react-icons/io5';
 import Image from 'next/image';
 import BlueLogo from '../assets/blue-image-logo.png';
 import IconLogo from '../assets/apple-touch-icon.png';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import ProfileButton from './ProfileButton';
+import { typographyClasses } from '@mui/material';
 
-const Navbar = ({islogged,isdonor}) => {
-  // console.log(is_donor)
+
+const Navbar = ({islogged}) => {
+ 
+  const [isdonor,setIsdonor]=useState(false);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isDonor = localStorage.getItem('isdonor');
+      setIsdonor(Boolean(isDonor));
+    }
+    
+  }, []);
+ console.log(isdonor)
   
   return (
     <nav className="top-0 left-0 w-full p-4 md:p-6 flex items-center transition ease-out backdrop-blur-sm bg-primary text-text-light shadow-md">

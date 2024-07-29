@@ -22,19 +22,19 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     try {
-      const  session  = await signIn(
+      const { session,is_donor}  = await signIn(
         data.get("email"),
         data.get("password")
       );
-      // localStorage.setItem('token', token); // Store the token in localStorage
+      
       localStorage.setItem("islogged", true);
-      const user = await getCurrentUser();
-      console.log(user)
-      // if (user.is_donor) {
-      //   router.push("/");
-      // } else {
-      //   router.push("/");
-      // }
+      if(is_donor){
+        localStorage.setItem("isdonar",true)
+      }
+      else{
+        localStorage.setItem("isdonar",false)
+      }
+     
       router.push("/")
     } catch (e) {
       console.log(e);

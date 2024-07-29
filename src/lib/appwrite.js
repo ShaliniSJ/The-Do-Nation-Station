@@ -37,6 +37,7 @@ const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
 const today = new Date().toISOString();
+
 export const createUser = async (email, password, username, isDonor) => {
   try {
     const newAccount = await account.create(
@@ -48,9 +49,7 @@ export const createUser = async (email, password, username, isDonor) => {
     if (!newAccount) {
       throw new Error("Account creation failed");
     }
-
     const avatarUrl = avatars.getInitials(username);
-    await signIn(email, password);
     const newUser = await databases.createDocument(
       databaseId,
       USERS,
@@ -75,6 +74,7 @@ export const createUser = async (email, password, username, isDonor) => {
           avatar_url: avatarUrl,
         }
       );
+      await signIn(email, password);
       return newDonor;
     } else {
       const newOrganization = await databases.createDocument(
@@ -88,6 +88,7 @@ export const createUser = async (email, password, username, isDonor) => {
           avatar_url: avatarUrl,
         }
       );
+      await signIn(email, password);
       return newOrganization;
     }
   } catch (e) {
@@ -99,7 +100,6 @@ export const createUser = async (email, password, username, isDonor) => {
 export const signIn = async (email, password) => {
   try {
     const session = await account.createEmailPasswordSession(email, password);
-    console.log(session);
     const is_donor = await databases.listDocuments(
       databaseId,
       USERS,
@@ -113,21 +113,22 @@ export const signIn = async (email, password) => {
   } catch (e) {
     console.log(e);
     throw new Error(e);
-  }
+}   
 };
 
 export const getCurrentUser = async () => {
   try {
     const currentAccount = await account.get();
+    console.log(currentAccount)
     if (!currentAccount) {
       throw Error;
     }
-    const CurrentUser = await databases.listDocuments(databaseId, USERS, [
-      Query.equal("appwrite_id", currentAccount.$id),
-    ]);
+    const CurrentUser = await databases.listDocuments(databaseId, USERS, 
+      [Query.equal("appwrite_id", currentAccount.userId)]);
     if (!CurrentUser) {
       throw Error;
     }
+    console.log(CurrentUser);
     return CurrentUser.documents[0];
   } catch (error) {
     console.log(error);
@@ -146,6 +147,20 @@ export const getHistory = async () => {
     throw new Error(e);
   }
 };
+
+export const signOut = async () => {
+  try{
+    const session= await account.deleteSession('current');
+
+    return session;
+
+  }
+  catch(e){
+      throw new Error(e);
+  }
+}
+
+
 
 export const getAllPosts = async () => {
   try {
@@ -191,15 +206,7 @@ export const getUserPosts = async (userId) => {
   }
 };
 
-export const signOut = async () => {
-  try {
-    const session = await account.deleteSession("current");
 
-    return session;
-  } catch (e) {
-    throw new Error(e);
-  }
-};
 
 export const getFilePreview = async (fileId, type) => {
   let fileUrl;

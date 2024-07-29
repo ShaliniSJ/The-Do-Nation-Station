@@ -15,31 +15,21 @@ export default function Home() {
     const fetchUserData = async () => {
       if (typeof window !== 'undefined') {
         const islogged = localStorage.getItem('islogged');
-        setIsLogged(Boolean(islogged));
-      }
-
-      if (isLogged) {
-        setShowAfterLogin(true);
-        try {
-          const currentUser = await getCurrentUser();
-          setUser(currentUser);
-          setIsdonor(user.is_donor)
-          // setIsdonor(true)
-          
-        } catch (error) {
-          console.error('Failed to fetch current user:', error);
+        if(islogged === 'true') {
+          setIsLogged(true);
+        }
+        else{
+          setIsLogged(false);
         }
       }
     };
-  
-  
     // Call the async function
     fetchUserData();
   }, [isLogged]);
 
   return (
     <div>
-      <Navbar islogged={isLogged}  isdonor={isdonor} user={user}/>
+      <Navbar islogged={isLogged}   />
       <ProfileForOrganisation islogged={isLogged}/>
     </div>
   );

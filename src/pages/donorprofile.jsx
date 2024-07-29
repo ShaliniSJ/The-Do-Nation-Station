@@ -35,19 +35,11 @@ export default function Page() {
     const fetchUserData = async () => {
       if (typeof window !== 'undefined') {
         const islogged = localStorage.getItem('islogged');
-        setIsLogged(Boolean(islogged));
-      }
-
-      if (isLogged) {
-        setShowAfterLogin(true);
-        try {
-          const currentUser = await getCurrentUser();
-          setUser(currentUser);
-          setIsdonor(user.is_donor)
-          // setIsdonor(true)
-          
-        } catch (error) {
-          console.error('Failed to fetch current user:', error);
+        if(islogged === 'true') {
+          setIsLogged(true);
+        }
+        else{
+          setIsLogged(false);
         }
       }
     };
@@ -80,7 +72,7 @@ export default function Page() {
 
   return (
     <>
-      <Navbar islogged={isLogged}  isdonor={isdonor} user={user}/>
+      <Navbar islogged={isLogged}  />
       <div className="flex flex-col min-h-[80vh] md:flex-row gap-4 md:gap-16">
         <div className="flex flex-col bg-blue-200/50 gap-8 p-6 md:pr-16">
           <div className="flex flex-row items-center gap-8">

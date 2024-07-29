@@ -38,7 +38,7 @@ export default function aboutUs() {
 
   return (
     <div>
-      <Navbar islogged={isLogged}  isdonor={isdonor} user={user}/>
+      <Navbar islogged={isLogged}  isdonor={isdonor} />
       <AboutUs />
     </div>
   );

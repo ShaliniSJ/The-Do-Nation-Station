@@ -97,37 +97,29 @@ export const createUser = async (email, password, username, isDonor) => {
 };
 
 export const signIn = async (email, password) => {
-  try {
-    const session = await account.createEmailPasswordSession(email, password);
-    console.log(session);
-    const is_donor = await databases.listDocuments(
-      databaseId,
-      USERS,
-      // appwrite_id equal to session.account.$id and is_donor equal to 1
-      [
-        Query.equal("appwrite_id", session.userId), //this userId is in the users table
-        Query.equal("is_donor", true),
-      ]
-    );
-    return { session, is_donor: is_donor.documents.length > 0 };
-  } catch (e) {
+  try{
+    const session=await account.createEmailPasswordSession(email,password);
+    return session;
+}
+catch(e){
     console.log(e);
     throw new Error(e);
-  }
+}   
 };
 
 export const getCurrentUser = async () => {
   try {
     const currentAccount = await account.get();
+    console.log(currentAccount)
     if (!currentAccount) {
       throw Error;
     }
-    const CurrentUser = await databases.listDocuments(databaseId, USERS, [
-      Query.equal("appwrite_id", currentAccount.$id),
-    ]);
+    const CurrentUser = await databases.listDocuments(databaseId, USERS, 
+      [Query.equal("appwrite_id", currentAccount.userId)]);
     if (!CurrentUser) {
       throw Error;
     }
+    console.log(CurrentUser);
     return CurrentUser.documents[0];
   } catch (error) {
     console.log(error);
@@ -146,6 +138,20 @@ export const getHistory = async () => {
     throw new Error(e);
   }
 };
+
+export const signOut = async () => {
+  try{
+    const session= await account.deleteSession('current');
+
+    return session;
+
+  }
+  catch(e){
+      throw new Error(e);
+  }
+}
+
+
 
 export const getAllPosts = async () => {
   try {
@@ -191,15 +197,7 @@ export const getUserPosts = async (userId) => {
   }
 };
 
-export const signOut = async () => {
-  try {
-    const session = await account.deleteSession("current");
 
-    return session;
-  } catch (e) {
-    throw new Error(e);
-  }
-};
 
 export const getFilePreview = async (fileId, type) => {
   let fileUrl;

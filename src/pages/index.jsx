@@ -23,6 +23,7 @@ export default function Home() {
           const currentUser = await getCurrentUser();
           setUser(currentUser);
           setIsdonor(user.is_donor)
+          console.log(user)
           // setIsdonor(true)
           
         } catch (error) {
@@ -31,14 +32,14 @@ export default function Home() {
       }
     };
   
-  
-    // Call the async function
+// Call the async function
     fetchUserData();
-  }, [isLogged]);
+    console.log(user)
+  }, [])
   
   return (
     <div>
-      <Navbar islogged={isLogged}  isdonor={isdonor} user={user}/>
+      <Navbar islogged={isLogged}  isdonor={isdonor} />
       {showAfterLogin ? <HomeWithLogin /> : <HomeWithOutLogin />}
     </div>
   );

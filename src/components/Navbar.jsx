@@ -6,7 +6,7 @@ import IconLogo from '../assets/apple-touch-icon.png';
 import { useState } from 'react';
 import ProfileButton from './ProfileButton';
 
-const Navbar = ({islogged,isdonor,user}) => {
+const Navbar = ({islogged,isdonor}) => {
   // console.log(is_donor)
   
   return (
@@ -42,7 +42,7 @@ const Navbar = ({islogged,isdonor,user}) => {
 
       <div className="mx-5">
         {islogged ? (
-          <ProfileButton isdonor={isdonor} user={user}/>
+          <ProfileButton isdonor={isdonor}/>
         ) : (
           <a href="/signin">
             <button

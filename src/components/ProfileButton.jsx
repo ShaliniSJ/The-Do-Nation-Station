@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { IconButton, Menu, MenuItem, Avatar, Tooltip, Divider } from '@mui/material';
 import { AccountCircle, Logout } from '@mui/icons-material';
 import { useRouter } from 'next/router';
-
-const ProfileButton = ({ isdonor,user }) => {
-    
+import { signOut } from '../lib/appwrite';
+const ProfileButton = ({ isdonor }) => {
+    console.log(isdonor)
+    const [log,SetLog]=useState([false])
     
     const [anchorEl, setAnchorEl] = useState(null);
     const router = useRouter();
@@ -16,11 +17,12 @@ const ProfileButton = ({ isdonor,user }) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
+   
     const handleLogout = () => {
         localStorage.clear();
-        console.log('Logout clicked');
         router.push('/')
+        signOut();
+        // console.log('Logout clicked');
         handleClose();
     };
 

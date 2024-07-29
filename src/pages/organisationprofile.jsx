@@ -39,7 +39,7 @@ export default function Home() {
 
   return (
     <div>
-      <Navbar islogged={isLogged}  isdonor={isdonor} user={user}/>
+      <Navbar islogged={isLogged}  isdonor={isdonor} />
       <ProfileForOrganisation islogged={isLogged}/>
     </div>
   );

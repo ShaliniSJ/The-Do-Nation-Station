@@ -89,7 +89,7 @@ const Leaderboard = () => {
 
   return (
     <>
-      <Navbar islogged={isLogged}  isdonor={isdonor} user={user}/>
+      <Navbar islogged={isLogged}  isdonor={isdonor} />
       <Container>
         <h1 className="text-3xl font-bold text-center my-8">Top Donors</h1>
         <TableContainer component={Paper}>

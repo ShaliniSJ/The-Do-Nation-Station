@@ -22,20 +22,19 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     try {
-      const { session,is_donor}  = await signIn(
+      const { session, is_donor } = await signIn(
         data.get("email"),
         data.get("password")
       );
-      
+
       localStorage.setItem("islogged", true);
-      if(is_donor){
-        localStorage.setItem("isdonar",true)
+      if (is_donor) {
+        localStorage.setItem("isdonar", true);
+      } else {
+        localStorage.setItem("isdonar", false);
       }
-      else{
-        localStorage.setItem("isdonar",false)
-      }
-     
-      router.push("/")
+
+      router.push("/");
     } catch (e) {
       console.log(e);
       alert(e);
@@ -119,4 +118,3 @@ export default function SignIn() {
     </ThemeProvider>
   );
 }
-

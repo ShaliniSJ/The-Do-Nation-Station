@@ -24,7 +24,7 @@ const History = () => {
     // const addRow = () => setNbRows((x) => Math.min(history.length, x + 1));
 
     const columns = [
-        { field: 'organisation_id', headerName: 'Organization ID', width: 250 },
+        { field: 'organisation_name', headerName: 'Organization Name', width: 250 },
         { field: 'total_amt', headerName: 'Amount Needed', width: 250 },
         { field: 'collected_amt', headerName: 'Amount Collected', width: 250 },
     ];

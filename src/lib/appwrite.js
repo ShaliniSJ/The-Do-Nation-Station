@@ -138,12 +138,9 @@ export const getHistory = async () => {
   try {
     
     const data = await databases.listDocuments(databaseId, NEEDS,
-      [
-        
-            Query.equal('completed', true)
-    ]
+      [ Query.equal('completed', true)]
 );
-console.log('Data fetched:',data);
+
     return data.documents;
   } catch (e) {
     throw new Error(e);

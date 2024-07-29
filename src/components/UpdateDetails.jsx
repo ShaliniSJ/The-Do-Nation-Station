@@ -34,7 +34,7 @@ const UpdateDetails = () => {
         Router.push('/needs');
       };
     return (
-        <Container component="main" className='mt-20 w-[40%]'>
+        <Container component="main" className='mt-20 w-[40%]' >
       <Paper elevation={6} className='p-16 rounded-lg'>
         <Typography component="h1" variant="h5" align="center">
             Updates on the Donations

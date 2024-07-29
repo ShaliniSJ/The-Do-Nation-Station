@@ -23,7 +23,7 @@ const Navbar = ({islogged}) => {
         <li className="ml-5"><a href="/" className="hover:underline focus:underline">Home</a></li>
         <li className="ml-5"><a href="/aboutUs" className="hover:underline focus:underline">About</a></li>
         <li className="ml-5"><a href="#" className="hover:underline focus:underline">Leaderboard</a></li>
-        <li className="ml-5"><a href="#" className="hover:underline focus:underline">History</a></li>
+        <li className="ml-5"><a href="/history" className="hover:underline focus:underline">History</a></li>
       </ul>
       <div className='mx-5'>
         {islogged ? (<button className="bg-blue rounded-full 

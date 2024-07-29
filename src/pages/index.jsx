@@ -15,8 +15,9 @@ export default function Home() {
     if (typeof window !== 'undefined') {
       const islogged = localStorage.getItem('islogged');
       setIsLogged(Boolean(islogged));
+    
     }
-    if (isLogged=="true") {
+    if (isLogged==true) {
       setShowAfterLogin(true);
       const currentUser = getCurrentUser();
       setUser(currentUser);

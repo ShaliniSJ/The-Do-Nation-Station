@@ -13,7 +13,12 @@ export default function Home() {
   useEffect(() => {
   if(typeof window !== 'undefined'){
         const islogged = localStorage.getItem('islogged');
-        setIsLogged(Boolean(islogged));
+        if(islogged === 'true') {
+          setIsLogged(true);
+        }
+        else{
+          setIsLogged(false);
+        }
       }
   if(isLogged){
     setShowAfterLogin(true);

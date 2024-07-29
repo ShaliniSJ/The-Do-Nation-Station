@@ -14,19 +14,12 @@ export default function aboutUs() {
     const fetchUserData = async () => {
       if (typeof window !== 'undefined') {
         const islogged = localStorage.getItem('islogged');
-        setIsLogged(Boolean(islogged));
-      }
-
-      if (isLogged) {
-        setShowAfterLogin(true);
-        try {
-          const currentUser = await getCurrentUser();
-          setUser(currentUser);
-          setIsdonor(user.is_donor)
-          // setIsdonor(true)
-          
-        } catch (error) {
-          console.error('Failed to fetch current user:', error);
+        // setIsLogged(Boolean(islogged));
+        if(islogged === 'true') {
+          setIsLogged(true);
+        }
+        else{
+          setIsLogged(false);
         }
       }
     };

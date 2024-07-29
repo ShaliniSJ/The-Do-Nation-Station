@@ -22,14 +22,17 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     try {
-      const { session, is_donor } = await signIn(
-        data.get("email"),
-        data.get("password")
-      );
-      localStorage.setItem("token", session); // Store the token in localStorage
-      // the is_donar is boolean value, if 1 donar else organisation redirect it such that
-      if(is_donor)router.push("/index"); // Redirect to homepage after successful sign-in
-      else router.push("/orgdetails");
+      const token = await signIn(data.get("email"), data.get("password"));
+      // localStorage.setItem('token', token); // Store the token in localStorage
+      localStorage.setItem("islogged", true);
+      const user = await getCurrentUser();
+      if(user.is_donor){
+        window.location.href = "/";
+      }
+      else{
+        window.location.href = "/";
+      }
+      router.push("/"); // Redirect to homepage after successful sign-in
     } catch (e) {
       console.log(e);
       alert(e);

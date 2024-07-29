@@ -15,14 +15,12 @@ export default function Home() {
         const islogged = localStorage.getItem('islogged');
         if(islogged === 'true') {
           setIsLogged(true);
+          setShowAfterLogin(true);
         }
         else{
           setIsLogged(false);
         }
       }
-  if(isLogged){
-    setShowAfterLogin(true);
-  }
 },[]);
  
 

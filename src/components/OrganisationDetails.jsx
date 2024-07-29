@@ -3,6 +3,7 @@ import { Container, Paper, Box, Typography } from '@mui/material';
 import CustomButton from './CustomButton';
 import InputField from './InputField';
 import FileInput from './FileInput';
+import { router } from 'next/router';
 
 const Organisation = () => {
   const [formValues, setFormValues] = useState({
@@ -34,7 +35,7 @@ const Organisation = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // console.log(formValues);
-    Router.push('/needs');
+    router.push('/needs');
   };
 
   return (

@@ -1,6 +1,9 @@
 // ---------------------
-// 1 - donor 0
+// 1 - donor
 // 0 - organisation
+// in needs table
+// 1 - cash
+// 2 - in-kind
 // ---------------------
 
 import {
@@ -113,22 +116,32 @@ export const signIn = async (email, password) => {
   } catch (e) {
     console.log(e);
     throw new Error(e);
-}   
+  }
 };
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (is_donor) => {
   try {
     const currentAccount = await account.get();
-    console.log(currentAccount)
+    console.log(currentAccount);
     if (!currentAccount) {
       throw Error;
     }
-    const CurrentUser = await databases.listDocuments(databaseId, USERS, 
-      [Query.equal("appwrite_id", currentAccount.userId)]);
-    if (!CurrentUser) {
-      throw Error;
+    let CurrentUser;
+    if (is_donor) {
+      CurrentUser = await databases.listDocuments(databaseId, USERS, [
+        Query.equal("appwrite_id", currentAccount.$id),
+      ]);
+      if (!CurrentUser) {
+        throw Error;
+      }
+    } else {
+      CurrentUser = await databases.listDocuments(databaseId, ORGANIZATIONS, [
+        Query.equal("organisation_id", currentAccount.$id),
+      ]);
+      if (!CurrentUser) {
+        throw Error;
+      }
     }
-    console.log(CurrentUser);
     return CurrentUser.documents[0];
   } catch (error) {
     console.log(error);
@@ -137,10 +150,9 @@ export const getCurrentUser = async () => {
 
 export const getHistory = async () => {
   try {
-    
-    const data = await databases.listDocuments(databaseId, NEEDS,
-      [ Query.equal('completed', true)]
-);
+    const data = await databases.listDocuments(databaseId, NEEDS, [
+      Query.equal("completed", true),
+    ]);
 
     return data.documents;
   } catch (e) {
@@ -149,25 +161,23 @@ export const getHistory = async () => {
 };
 
 export const signOut = async () => {
-  try{
-    const session= await account.deleteSession('current');
+  try {
+    const session = await account.deleteSession("current");
 
     return session;
-
+  } catch (e) {
+    throw new Error(e);
   }
-  catch(e){
-      throw new Error(e);
-  }
-}
+};
 
-
-
-export const getAllPosts = async () => {
+export const getNeeds = async () => {
   try {
-    const post = await databases.listDocuments(databaseId, videoCollectionId, [
-      Query.orderDesc("$createdAt"),
+    const organisation = await getCurrentUser(false);
+    const needs = await databases.listDocuments(databaseId, NEEDS, [
+      Query.equal("organisation_id", organisation.organisation_id),
     ]);
-    return post.documents;
+    console.log(needs);
+    return needs.documents;
   } catch (e) {
     throw new Error(e);
   }
@@ -205,8 +215,6 @@ export const getUserPosts = async (userId) => {
     throw new Error(e);
   }
 };
-
-
 
 export const getFilePreview = async (fileId, type) => {
   let fileUrl;

@@ -1,6 +1,6 @@
 // ---------------------
-// 1 - donor 0 
-// 0 - organisation 
+// 1 - donor 0
+// 0 - organisation
 // ---------------------
 
 import {
@@ -19,7 +19,6 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const USERS = process.env.NEXT_PUBLIC_USERS_COLLECTION;
 const ORGANIZATIONS = process.env.NEXT_PUBLIC_ORGANIZATIONS_COLLECTION;
 const DONORS = process.env.NEXT_PUBLIC_DONARS_COLLECTION;
-
 
 export const Config = {
   endpoint: BASE_URL,
@@ -56,7 +55,7 @@ export const createUser = async (email, password, username, isDonor) => {
       ID.unique(),
       {
         appwrite_id: newAccount.$id,
-        is_donor: isDonor === "Donor" ,
+        is_donor: isDonor === "Donor",
       }
     );
     if (!newUser) {
@@ -98,7 +97,17 @@ export const createUser = async (email, password, username, isDonor) => {
 export const signIn = async (email, password) => {
   try {
     const session = await account.createEmailPasswordSession(email, password);
-    return session;
+    console.log(session)
+    const is_donor = await databases.listDocuments(
+      databaseId,
+      USERS,
+      // appwrite_id equal to session.account.$id and is_donor equal to 1
+      [
+        Query.equal("appwrite_id", session.userId),//this userId is in the users table
+        Query.equal("is_donor", true),
+      ]
+    );
+    return { session, is_donor: is_donor.documents.length > 0 };
   } catch (e) {
     console.log(e);
     throw new Error(e);
@@ -112,11 +121,9 @@ export const getCurrentUser = async () => {
     if (!currentAccount) {
       throw Error;
     }
-    const CurrentUser = await databases.listDocuments(
-      databaseId,
-      USERS,
-      [Query.equal("appwrite_id", currentAccount.$id)]
-    );
+    const CurrentUser = await databases.listDocuments(databaseId, USERS, [
+      Query.equal("appwrite_id", currentAccount.$id),
+    ]);
     if (!CurrentUser) {
       throw Error;
     }

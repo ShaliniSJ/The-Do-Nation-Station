@@ -11,7 +11,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import backgroundImage from "../assets/the-do-nation-station-high-resolution-logo.png";
-import { signIn,getCurrentUser } from "../lib/appwrite.js";
+import { signIn } from "../lib/appwrite.js";
 
 const defaultTheme = createTheme();
 
@@ -22,17 +22,18 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     try {
-      const token = await signIn(data.get("email"), data.get("password"));
+      const { session, is_donor } = await signIn(
+        data.get("email"),
+        data.get("password")
+      );
       // localStorage.setItem('token', token); // Store the token in localStorage
       localStorage.setItem("islogged", true);
       const user = await getCurrentUser();
-      if(user.is_donor){
-        window.location.href = "/";
+      if (user.is_donor) {
+        router.push("/");
+      } else {
+        router.push("/");
       }
-      else{
-        window.location.href = "/";
-      }
-      router.push("/"); // Redirect to homepage after successful sign-in
     } catch (e) {
       console.log(e);
       alert(e);
@@ -92,7 +93,7 @@ export default function SignIn() {
                   sx={{ mt: 1, mb: 2 }}
                 />
               </FormControl>
-             
+
               <Button
                 type="submit"
                 fullWidth
@@ -104,7 +105,10 @@ export default function SignIn() {
               </Button>
               <div className="flex justify-center">
                 <div className="font-normal">New User?</div>
-                <a href="/signup" className="font-semibold text-blue-100"> Sign Up</a>
+                <a href="/signup" className="font-semibold text-blue-100">
+                  {" "}
+                  Sign Up
+                </a>
               </div>
             </Box>
           </Box>

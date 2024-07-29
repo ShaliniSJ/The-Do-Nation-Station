@@ -20,8 +20,8 @@ useEffect(() => {
       try {
         const currentUser = await getCurrentUser();
         setUser(currentUser);
-        // setIsdonor(user.is_donor)
-        setIsdonor(true)
+        setIsdonor(user.is_donor)
+        // setIsdonor(true)
         
       } catch (error) {
         console.error('Failed to fetch current user:', error);

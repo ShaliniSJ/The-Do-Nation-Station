@@ -22,7 +22,7 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     try {
-      const { session, is_donor } = await signIn(
+      const { session } = await signIn(
         data.get("email"),
         data.get("password")
       );

@@ -19,6 +19,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const USERS = process.env.NEXT_PUBLIC_USERS_COLLECTION;
 const ORGANIZATIONS = process.env.NEXT_PUBLIC_ORGANIZATIONS_COLLECTION;
 const DONORS = process.env.NEXT_PUBLIC_DONARS_COLLECTION;
+const NEEDS = process.env.NEXT_PUBLIC_NEEDS_COLLECTION;
 
 export const Config = {
   endpoint: BASE_URL,
@@ -35,6 +36,7 @@ client
 const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
+const today = new Date().toISOString();
 export const createUser = async (email, password, username, isDonor) => {
   try {
     const newAccount = await account.create(
@@ -97,13 +99,13 @@ export const createUser = async (email, password, username, isDonor) => {
 export const signIn = async (email, password) => {
   try {
     const session = await account.createEmailPasswordSession(email, password);
-    console.log(session)
+    console.log(session);
     const is_donor = await databases.listDocuments(
       databaseId,
       USERS,
       // appwrite_id equal to session.account.$id and is_donor equal to 1
       [
-        Query.equal("appwrite_id", session.userId),//this userId is in the users table
+        Query.equal("appwrite_id", session.userId), //this userId is in the users table
         Query.equal("is_donor", true),
       ]
     );
@@ -114,7 +116,6 @@ export const signIn = async (email, password) => {
   }
 };
 
- 
 export const getCurrentUser = async () => {
   try {
     const currentAccount = await account.get();
@@ -130,6 +131,22 @@ export const getCurrentUser = async () => {
     return CurrentUser.documents[0];
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getHistory = async () => {
+  try {
+    
+    const data = await databases.listDocuments(databaseId, NEEDS,
+      [
+        
+            Query.equal('completed', true)
+    ]
+);
+console.log('Data fetched:',data);
+    return data.documents;
+  } catch (e) {
+    throw new Error(e);
   }
 };
 

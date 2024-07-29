@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import BlueLogo from '../assets/the-do-nation-station-high-resolution-logo.png';
 import Router from 'next/router';
+import {router} from 'next/router';
 
 // Define your Google Maps API key here
 const API_KEY = process.env.GOOGLE_MAP_API_KEY;
@@ -74,7 +75,8 @@ const ProfileForOrganisation = ({ islogged }) => {
   };
 
   const handleEditDetails = () => {
-    alert('Edit Details button clicked');
+    router.push('/orgdetails');
+    // alert('Edit Details button clicked');
   };
 
   const handlePageChange = (pageNumber) => {

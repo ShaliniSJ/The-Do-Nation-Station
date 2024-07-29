@@ -9,6 +9,7 @@ const Organisation = () => {
     desc: '',
     license: '',
     location: '',
+    address:'',
     phno: '',
     files: null,
     fileURL: '',
@@ -37,7 +38,7 @@ const Organisation = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs" className='mt-10'>
+    <Container component="main"  className='mt-10 w-[50%]'>
       <Paper elevation={6} className='p-16 rounded-lg'>
         <Typography component="h1" variant="h5" align="center">
             Organisation Details
@@ -62,6 +63,7 @@ const Organisation = () => {
 
           <InputField title="License ID" holder="Enter your license id" type="text" name="license" id="license" handleChange={handleChange} />
           <InputField title="Location" holder="www.google.com/maps" type="text" name="location" id="location" handleChange={handleChange} />
+          <InputField title="Address" holder="Enter your address" type="text" name="address" id="address" handleChange={handleChange} />
           <InputField title="Phone Number" holder="+91 9956867412" type="text" name="phno" id="phno" handleChange={handleChange} />
 
           <CustomButton title="Next" />

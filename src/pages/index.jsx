@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import HomeWithLogin from '../components/HomeWithLogin';
 import HomeWithOutLogin from '../components/HomeWithOutLogin';
-import { getCurrentUser } from '../lib/appwrite';
 import { idID } from '@mui/material/locale';
 
 export default function Home() {

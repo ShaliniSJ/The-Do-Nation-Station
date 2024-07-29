@@ -11,7 +11,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import backgroundImage from "../assets/the-do-nation-station-high-resolution-logo.png";
-import { signIn, getCurrentUser } from "../lib/appwrite.js";
+import { signIn } from "../lib/appwrite.js";
 
 const defaultTheme = createTheme();
 

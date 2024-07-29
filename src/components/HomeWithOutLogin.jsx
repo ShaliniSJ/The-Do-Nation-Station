@@ -15,7 +15,7 @@ const HomeWithOutLogin = () => {
           The platform should also be responsible and transparent by showing the government licenses, audits, details, and photographs of registered orphanages, NGOs, hospitals, foundations, and old age homes.
           The donors will be able to see how, where, and by whom their money and kind are being utilized. There is also a need to show a leaderboard in specific locations among donors in order to encourage their donation.
         </p>
-        <button className="bg-blue text-white rounded py-3 mt-4 px-6 text-lg font-medium hover:bg-blue">LOGIN TO DONATE OR TO GET DONATIONS</button>
+        <a href='/signin'><button className="bg-blue text-white rounded py-3 mt-4 px-6 text-lg font-medium hover:bg-blue">LOGIN TO DONATE OR TO GET DONATIONS</button></a>
       </header>
       <section className="flex flex-col items-center p-10 bg-white mt-0">
         <div className="relative w-full h-80 mb-4">
@@ -41,7 +41,7 @@ const HomeWithOutLogin = () => {
               <li className="text-lg mb-2">06    |    AI based verification of Charitable Organizations</li>  
               <li className="text-lg mb-2">07    |    Platform to donate for hospitals, orphanages, old age homes, NGOs, etc</li>
             </ul>
-            <button className="bg-blue text-white rounded py-3 px-6 text-lg font-medium hover:bg-blue">Donate Now</button>
+            <a href='/signin'><button className="bg-blue text-white rounded py-3 px-6 text-lg font-medium hover:bg-blue">Donate Now</button></a>
           </div>
           <div className="md:w-1/2 mt-10 md:mt-0">
             <Image

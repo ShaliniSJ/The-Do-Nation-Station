@@ -30,11 +30,10 @@ export default function SignIn() {
       localStorage.setItem("islogged", true);
       const user = await getCurrentUser();
       if (user.is_donor) {
-        window.location.href = "/";
+        router.push("/");
       } else {
-        window.location.href = "/";
+        router.push("/");
       }
-      router.push("/"); // Redirect to homepage after successful sign-in
     } catch (e) {
       console.log(e);
       alert(e);

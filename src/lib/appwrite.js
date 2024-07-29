@@ -24,6 +24,7 @@ const ORGANIZATIONS = process.env.NEXT_PUBLIC_ORGANIZATIONS_COLLECTION;
 const DONORS = process.env.NEXT_PUBLIC_DONARS_COLLECTION;
 const NEEDS = process.env.NEXT_PUBLIC_NEEDS_COLLECTION;
 const DONATIONS = process.env.NEXT_PUBLIC_DONATIONS_COLLECTION;
+const STORAGE_ID = process.env.NEXT_PUBLIC_STORAGE_ID;
 
 export const Config = {
   endpoint: BASE_URL,
@@ -40,6 +41,7 @@ client
 const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
+const storage = new Storage(client);
 const today = new Date().toISOString();
 
 export const createUser = async (email, password, username, isDonor) => {
@@ -195,6 +197,28 @@ export const getPastDonations = async () => {
   }
 };
 
+export const postOrganisationDetails = async (form) => {
+  try {
+    const organisation = await getCurrentUser(false);
+    console.log(form)
+    const updateOrganisation = await databases.updateDocument(
+      databaseId,
+      ORGANIZATIONS,
+      organisation.$id,
+      {
+        description: form.desc,
+        license_id: form.license,
+        location: form.location,
+        address: form.address,
+        ph_no: form.phno,
+        photos: "http://localhost.com",
+      }
+    );
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 export const getLatestPost = async () => {
   try {
     const post = await databases.listDocuments(databaseId, videoCollectionId, [
@@ -235,7 +259,7 @@ export const getFilePreview = async (fileId, type) => {
       fileUrl = storage.getfileView(storageId, fileId);
     } else if (type == "image") {
       fileUrl = storage.getFilePreview(
-        storageId,
+        STORAGE_ID,
         fileId,
         2000,
         2000,

@@ -4,6 +4,7 @@ import CustomButton from './CustomButton';
 import InputField from './InputField';
 import FileInput from './FileInput';
 import { router } from 'next/router';
+import { postOrganisationDetails } from '../lib/appwrite';
 
 const Organisation = () => {
   const [formValues, setFormValues] = useState({
@@ -32,9 +33,9 @@ const Organisation = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
-    // console.log(formValues);
+    console.log(await postOrganisationDetails(formValues));
     router.push('/needs');
   };
 

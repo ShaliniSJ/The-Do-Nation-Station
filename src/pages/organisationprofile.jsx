@@ -9,22 +9,37 @@ export default function Home() {
   const [showAfterLogin, setShowAfterLogin] = useState(false);
   const [user, setUser] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
+  const [isdonor,setIsdonor]=useState(false);
     
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const islogged = localStorage.getItem('islogged');
-      setIsLogged(Boolean(islogged));
-    }
-    if (isLogged == true) {
-      setShowAfterLogin(true);
-      const currentUser = getCurrentUser();
-      setUser(currentUser);
-    }
+    const fetchUserData = async () => {
+      if (typeof window !== 'undefined') {
+        const islogged = localStorage.getItem('islogged');
+        setIsLogged(Boolean(islogged));
+      }
+
+      if (isLogged) {
+        setShowAfterLogin(true);
+        try {
+          const currentUser = await getCurrentUser();
+          setUser(currentUser);
+          // setIsdonor(user.is_donor)
+          setIsdonor(true)
+          
+        } catch (error) {
+          console.error('Failed to fetch current user:', error);
+        }
+      }
+    };
+  
+  
+    // Call the async function
+    fetchUserData();
   }, [isLogged]);
 
   return (
     <div>
-      <Navbar islogged={isLogged}/>
+      <Navbar islogged={isLogged}  isdonor={isdonor} user={user}/>
       <ProfileForOrganisation islogged={isLogged}/>
     </div>
   );

@@ -3,7 +3,7 @@ import { IconButton, Menu, MenuItem, Avatar, Tooltip, Divider } from '@mui/mater
 import { AccountCircle, Logout } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 
-const ProfileButton = ({ is_donor,user }) => {
+const ProfileButton = ({ isdonor,user }) => {
     
     
     const [anchorEl, setAnchorEl] = useState(null);
@@ -26,8 +26,8 @@ const ProfileButton = ({ is_donor,user }) => {
 
     const handleProfileRedirect = () => {
         handleClose();
-        if (is_donor) {
-            router.push(`/donor/${user.appwrite_id}`); // Redirect to donor profile with the user's ID as the slug
+        if (isdonor) {
+            router.push(`/donorprofile`); // Redirect to donor profile with the user's ID as the slug
         } else {
             router.push('/organisationprofile'); // Redirect to organisation profile
         }

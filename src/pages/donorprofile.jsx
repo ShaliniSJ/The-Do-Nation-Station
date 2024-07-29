@@ -25,6 +25,37 @@ export default function Page() {
       updated_at: "2023-08-02",
     },
   ]);
+  const [showAfterLogin, setShowAfterLogin] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isLogged, setIsLogged] = useState(false);
+  const [isdonor,setIsdonor]=useState(false);
+
+  useEffect(() => {
+    // Define an async function to handle the async operation
+    const fetchUserData = async () => {
+      if (typeof window !== 'undefined') {
+        const islogged = localStorage.getItem('islogged');
+        setIsLogged(Boolean(islogged));
+      }
+
+      if (isLogged) {
+        setShowAfterLogin(true);
+        try {
+          const currentUser = await getCurrentUser();
+          setUser(currentUser);
+          // setIsdonor(user.is_donor)
+          setIsdonor(true)
+          
+        } catch (error) {
+          console.error('Failed to fetch current user:', error);
+        }
+      }
+    };
+  
+  
+    // Call the async function
+    fetchUserData();
+  }, [isLogged]);
 
   const contributionsList = [];
   pastContributions.forEach((contrib) => {
@@ -49,7 +80,7 @@ export default function Page() {
 
   return (
     <>
-      <Navbar />
+      <Navbar islogged={isLogged}  isdonor={isdonor} user={user}/>
       <div className="flex flex-col min-h-[80vh] md:flex-row gap-4 md:gap-16">
         <div className="flex flex-col bg-blue-200/50 gap-8 p-6 md:pr-16">
           <div className="flex flex-row items-center gap-8">

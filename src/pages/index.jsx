@@ -11,7 +11,6 @@ export default function Home() {
   const [isdonor,setIsdonor]=useState(false);
 
   useEffect(() => {
-    // Define an async function to handle the async operation
     const fetchUserData = async () => {
       if (typeof window !== 'undefined') {
         const islogged = localStorage.getItem('islogged');
@@ -23,8 +22,8 @@ export default function Home() {
         try {
           const currentUser = await getCurrentUser();
           setUser(currentUser);
-          setIsdonor(user.is_donor)
-          
+          // setIsdonor(user.is_donor)
+          setIsdonor(true)
           
         } catch (error) {
           console.error('Failed to fetch current user:', error);
@@ -39,7 +38,7 @@ export default function Home() {
   
   return (
     <div>
-      <Navbar islogged={isLogged}  is_donor={isdonor} user={user}/>
+      <Navbar islogged={isLogged}  isdonor={isdonor} user={user}/>
       {showAfterLogin ? <HomeWithLogin /> : <HomeWithOutLogin />}
     </div>
   );

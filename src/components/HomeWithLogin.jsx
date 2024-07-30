@@ -169,12 +169,12 @@ const HomeWithLogin = () => {
                     Date: {need.date}
                   </Typography>
                   <Typography color="textSecondary">
-                    Amount: ${need.amount}
+                    Amount: Rs.{need.amount}
                   </Typography>
                   <Typography color="textSecondary">
                     Impact: {need.impact} people
                   </Typography>
-                  <Typography variant="body2">{need.description}</Typography>
+                  <Typography variant="body1">{need.description}</Typography>
                   <Box display="flex" justifyContent="center" mt={2}>
                     <Button
                       className="px-8"

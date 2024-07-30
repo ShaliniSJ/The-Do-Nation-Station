@@ -21,10 +21,10 @@ const Navbar = ({ islogged }) => {
 
   return (
     <nav className="top-0 left-0 sticky z-10 w-full md:px-6 p-4 flex items-center transition ease-out backdrop-blur-3xl bg-primary/90 text-text-light shadow-md">
-      <a href="#">
+      <a href="/">
         <Image src={IconLogo} alt="The Do-Nation Station Icon" width={43} />
       </a>
-      <a href="#">
+      <a href="/">
         <Image src={BlueLogo} alt="The Do-Nation Station" width={250} />
       </a>
       <ul className="list-none ml-auto hidden md:flex jost md:text-lg gap-4">

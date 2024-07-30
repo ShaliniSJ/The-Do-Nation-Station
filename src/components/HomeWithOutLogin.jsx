@@ -4,6 +4,8 @@ import donationImage from "../assets/donation-image.jpg";
 import solutionImage from "../assets/the-do-nation-station-high-resolution-logo.png";
 import statisticsImage from "../assets/statistics.png";
 
+import Footer from "@/src/components/Footer";
+
 const HomeWithOutLogin = () => {
   return (
     <div>
@@ -261,7 +263,7 @@ const HomeWithOutLogin = () => {
         </div>
       </section>
 
-      <footer className="bg-gray-100 text-center p-6 mt-auto">
+      {/* <footer className="bg-gray-100 text-center p-6 mt-auto">
         <p>Thank you for your support!</p>
         <p>
           For feedback or to work with us, contact us at{" "}
@@ -272,7 +274,9 @@ const HomeWithOutLogin = () => {
             pranav9176@gmail.com
           </a>
         </p>
-      </footer>
+      </footer> */}
+
+      <Footer />
     </div>
   );
 };

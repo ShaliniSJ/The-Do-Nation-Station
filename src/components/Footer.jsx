@@ -4,7 +4,7 @@ import BlueLogo from "../assets/blue-image-logo.png";
 
 export default function Page() {
   return (
-    <footer className="flex flex-col min-h-60 bg-primary-blue text-secondary-blue rounded-3xl m-4 md:m-6 p-4 md:p-10">
+    <footer className="flex flex-col min-h-60 bg-primary-blue text-secondary-blue rounded-3xl m-4 md:m-6 md:mt-16 p-4 md:p-10">
       <div className="flex flex-row justify-between">
         <div className="flex flex-col gap-4">
           <div className="flex flex-row">

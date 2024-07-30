@@ -11,6 +11,7 @@ import {
   Box,
 } from "@mui/material";
 import DonationModal from "./DonationModal"; // Ensure correct path
+import Footer from "@/src/components/Footer";
 
 // Sample data function
 const getSampleNeeds = () =>
@@ -72,121 +73,132 @@ const HomeWithLogin = () => {
   };
 
   return (
-    <div className="mt-0 p-4">
-      <h1 className="text-4xl font-bold mb-4 text-blue">
-        Search for Donation Needs
-      </h1>
-      <Box sx={{ mb: 4 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={3}>
-            <TextField
-              fullWidth
-              label="Location"
-              variant="outlined"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
+    <div className="mt-0 py-4 ">
+      <div className="md:mx-6">
+        <h2 className="text-4xl jost font-bold mb-8 text-primary-blue">
+          Search for Donation Needs
+        </h2>
+        <Box sx={{ mb: 4 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={3}>
+              <TextField
+                fullWidth
+                label="Location"
+                variant="outlined"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <TextField
+                fullWidth
+                type="date"
+                label="End Date"
+                variant="outlined"
+                InputLabelProps={{ shrink: true }}
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <TextField
+                fullWidth
+                label="Amount"
+                variant="outlined"
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <TextField
+                fullWidth
+                label="Impact People"
+                variant="outlined"
+                type="number"
+                value={impact}
+                onChange={(e) => setImpact(e.target.value)}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={3}>
-            <TextField
-              fullWidth
-              type="date"
-              label="End Date"
-              variant="outlined"
-              InputLabelProps={{ shrink: true }}
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <TextField
-              fullWidth
-              label="Amount"
-              variant="outlined"
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <TextField
-              fullWidth
-              label="Impact People"
-              variant="outlined"
-              type="number"
-              value={impact}
-              onChange={(e) => setImpact(e.target.value)}
-            />
-          </Grid>
+        </Box>
+
+        <Box display="flex" justifyContent="center" mt={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSearch}
+            sx={{ backgroundColor: "#172554" }}
+          >
+            Search
+          </Button>
+        </Box>
+
+        {showSection && (
+          <section className="flex flex-col items-center py-10 bg-white mt-0">
+            <div className="relative w-full h-80 mb-4">
+              <Image
+                src={donationImage}
+                alt="Donation"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-lg"
+              />
+            </div>
+          </section>
+        )}
+
+        <h2 className="text-4xl jost font-semibold mb-4 text-primary-blue">
+          Needs List
+        </h2>
+        <Grid container spacing={2} className="nunito">
+          {needs.map((need) => (
+            <Grid item xs={12} sm={6} md={4} key={need.id}>
+              <div
+                variant="outlined"
+                className="bg-secondary-blue/20 border-2 border-secondary-blue/10 nunito"
+              >
+                <CardContent>
+                  <Typography variant="h5" component="div">
+                    {need.organization}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Location: {need.location}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Date: {need.date}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Amount: ${need.amount}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Impact: {need.impact} people
+                  </Typography>
+                  <Typography variant="body2">{need.description}</Typography>
+                  <Box display="flex" justifyContent="center" mt={2}>
+                    <Button
+                      className="px-8"
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleDonate(need)}
+                      sx={{ backgroundColor: "#172554", paddingX: "2rem" }}
+                    >
+                      Donate
+                    </Button>
+                  </Box>
+                </CardContent>
+              </div>
+            </Grid>
+          ))}
         </Grid>
-      </Box>
 
-      <Box display="flex" justifyContent="center" mt={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSearch}
-          sx={{ backgroundColor: "#172554" }}
-        >
-          Search
-        </Button>
-      </Box>
-
-      {showSection && (
-        <section className="flex flex-col items-center p-10 bg-white mt-0">
-          <div className="relative w-full h-80 mb-4">
-            <Image
-              src={donationImage}
-              alt="Donation"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-lg"
-            />
-          </div>
-        </section>
-      )}
-
-      <h2 className="text-2xl font-semibold mb-4 text-blue">Needs List</h2>
-      <Grid container spacing={2}>
-        {needs.map((need) => (
-          <Grid item xs={12} sm={6} md={4} key={need.id}>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="h6" component="div">
-                  {need.organization}
-                </Typography>
-                <Typography color="textSecondary">
-                  Location: {need.location}
-                </Typography>
-                <Typography color="textSecondary">Date: {need.date}</Typography>
-                <Typography color="textSecondary">
-                  Amount: ${need.amount}
-                </Typography>
-                <Typography color="textSecondary">
-                  Impact: {need.impact} people
-                </Typography>
-                <Typography variant="body2">{need.description}</Typography>
-                <Box display="flex" justifyContent="center" mt={2}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleDonate(need)}
-                    sx={{ backgroundColor: "#172554" }}
-                  >
-                    Donate
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      <DonationModal
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        need={selectedNeed}
-      />
+        <DonationModal
+          open={isModalOpen}
+          onClose={handleCloseModal}
+          need={selectedNeed}
+        />
+      </div>
+      <Footer />
     </div>
   );
 };

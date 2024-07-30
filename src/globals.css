@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,6 +8,16 @@
   --foreground-rgb: 5, 37, 96; /* Light text color */
   --background-start-rgb: 255, 255, 255; /* White background start color */
   --background-end-rgb: 255, 255, 255; /* White background end color */
+}
+
+.jost {
+  font-family: "Jost", sans-serif;
+  font-optical-sizing: auto;
+}
+
+.nunito {
+  font-family: "Nunito Sans", sans-serif;
+  font-optical-sizing: auto;
 }
 
 @media (prefers-color-scheme: dark) {

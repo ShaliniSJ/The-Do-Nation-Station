@@ -49,7 +49,7 @@ export default function SignIn() {
           <img
             src={backgroundImage.src}
             alt="background"
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
         </Grid>
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -62,7 +62,7 @@ export default function SignIn() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <Avatar sx={{ m: 1, bgcolor: "#052560" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -104,7 +104,7 @@ export default function SignIn() {
               >
                 Sign In
               </Button>
-              <div className="flex justify-center">
+              <div className="flex gap-1 justify-center">
                 <div className="font-normal">New User?</div>
                 <a href="/signup" className="font-semibold text-blue-100">
                   {" "}

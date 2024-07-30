@@ -9,16 +9,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        "primary-blue": "#052560",
+        "primary-yellow": "#F4D35E",
         primary: "#ffffff", // Main background color for primary areas (white background)
         secondary: {
           DEFAULT: "#161622", // Dark background for secondary areas
           100: "#FF9001", // Highlight color
           200: "#FF8E01", // Secondary highlight color
         },
-        blue:{
+        blue: {
           DEFAULT: "#052560", // Primary blue color
           100: "#2E5DFF",
-          skyblue:'#55CEFF'// Secondary blue color
+          skyblue: "#55CEFF", // Secondary blue color
         },
         black: {
           DEFAULT: "#000000", // Absolute black
@@ -37,9 +39,9 @@ module.exports = {
           light: "#052560", // Text color
           dark: "#E0E0E0", // Dark text color for contrast on light backgrounds
         },
-        background:{
-          DEFAULT:'#e4e8f2'
-        }
+        background: {
+          DEFAULT: "#e4e8f2",
+        },
       },
     },
   },

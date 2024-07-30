@@ -1,35 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { IoSearchSharp } from 'react-icons/io5';
-import Image from 'next/image';
-import BlueLogo from '../assets/blue-image-logo.png';
-import IconLogo from '../assets/apple-touch-icon.png';
-import ProfileButton from './ProfileButton';
+import React, { useState, useEffect } from "react";
+import { IoSearchSharp } from "react-icons/io5";
+import Image from "next/image";
+import BlueLogo from "../assets/blue-image-logo.png";
+import IconLogo from "../assets/apple-touch-icon.png";
+import ProfileButton from "./ProfileButton";
 
 const Navbar = ({ islogged }) => {
   const [isdonor, setIsdonor] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const isDonor = localStorage.getItem('isdonar');
-      if(isDonor === 'true') {
+    if (typeof window !== "undefined") {
+      const isDonor = localStorage.getItem("isdonar");
+      if (isDonor === "true") {
         setIsdonor(true);
-      }
-      else{
+      } else {
         setIsdonor(false);
       }
-
     }
   }, []);
 
   return (
-    <nav className="top-0 left-0 w-full p-4 md:p-6 flex items-center transition ease-out backdrop-blur-sm bg-primary text-text-light shadow-md">
-      <a href="#">
+    <nav className="top-0 left-0 sticky z-10 w-full md:px-6 p-4 flex items-center transition ease-out backdrop-blur-3xl bg-primary/90 text-text-light shadow-md">
+      <a href="/">
         <Image src={IconLogo} alt="The Do-Nation Station Icon" width={43} />
       </a>
-      <a href="#">
+      <a href="/">
         <Image src={BlueLogo} alt="The Do-Nation Station" width={250} />
       </a>
-      <ul className="list-none ml-auto hidden md:flex">
+      <ul className="list-none ml-auto hidden md:flex jost md:text-lg gap-4">
         <li className="ml-5">
           <a href="/" className="hover:underline focus:underline">
             Home
@@ -45,7 +43,7 @@ const Navbar = ({ islogged }) => {
             Leaderboard
           </a>
         </li>
-        <li className="ml-5">
+        <li className="mx-5">
           <a href="/history" className="hover:underline focus:underline">
             History
           </a>

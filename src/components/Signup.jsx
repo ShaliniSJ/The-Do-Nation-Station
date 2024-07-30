@@ -29,11 +29,11 @@ export default function SignUp() {
         data.get("userType")
       );
       localStorage.setItem("islogged", true);
-      if(data.get("userType") === "Donor"){
-        localStorage.setItem("isdonar",true)
+      if (data.get("userType") === "Donor") {
+        localStorage.setItem("isdonar", true);
         router.push("/");
       } else {
-        localStorage.setItem("isdonar",false)
+        localStorage.setItem("isdonar", false);
         router.push("/orgdetails");
       }
       // router.push("/signin"); // Redirect to sign-in page after successful sign-up
@@ -51,7 +51,7 @@ export default function SignUp() {
           <img
             src={backgroundImage.src}
             alt="background"
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
         </Grid>
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -64,7 +64,7 @@ export default function SignUp() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <Avatar sx={{ m: 1, bgcolor: "#052560" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -131,9 +131,12 @@ export default function SignUp() {
               >
                 Sign Up
               </Button>
-              <div className="flex justify-center">
+              <div className="flex gap-1 justify-center">
                 <div className="font-normal">Not New?</div>
-                <a href="/signin" className="font-semibold text-blue-100"> Sign In</a>
+                <a href="/signin" className="font-semibold text-blue-100">
+                  {" "}
+                  Sign In
+                </a>
               </div>
             </Box>
           </Box>

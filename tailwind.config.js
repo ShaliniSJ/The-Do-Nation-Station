@@ -10,6 +10,7 @@ module.exports = {
     extend: {
       colors: {
         "primary-blue": "#052560",
+        "secondary-blue": "#B4C5E4",
         "primary-yellow": "#F4D35E",
         primary: "#ffffff", // Main background color for primary areas (white background)
         secondary: {

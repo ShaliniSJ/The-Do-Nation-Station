@@ -7,43 +7,45 @@ import statisticsImage from "../assets/statistics.png";
 const HomeWithOutLogin = () => {
   return (
     <div>
-      <header className="flex flex-col items-center w-full h-[100vh] gap-2">
-        <div className="-mt-32 bg-primary-yellow/50 rounded-full blur-3xl w-1/2 h-1/2"></div>
-        <h2 className="-mt-8 relative text-6xl text-center md:w-1/2 font-semibold jost">
+      <header className="flex flex-col items-center text-center w-full h-[100vh] gap-2">
+        <div className="-mt-32 bg-secondary-blue/50 rounded-full blur-3xl w-1/2 h-1/2"></div>
+        <h2 className="-mt-8 relative text-4xl md:text-6xl md:w-1/2 font-semibold jost">
           One Platform for All Your Charitable Donations
         </h2>
-        <p className="nunito text-xl">
+        <p className="nunito text-base md:text-xl">
           Support Causes Based on Urgency, Location, and Need
         </p>
         <div className="my-8 flex flex-row gap-4">
           <a
             href="/signin"
-            className="p-2 text-lg px-8 bg-primary-blue hover:opacity-80 text-white rounded-full"
+            className="p-2 text-base md:text-lg px-8 bg-primary-blue hover:opacity-80 text-white rounded-full"
           >
             Donate Now
           </a>
           <a
             href="#"
-            className="p-2 text-lg px-8 border-2 border-primary-blue hover:bg-primary-yellow text-primary-blue rounded-full"
+            className="p-2 text-base md:text-lg px-8 border-2 border-primary-blue hover:bg-secondary-blue text-primary-blue rounded-full"
           >
             Watch Demo
           </a>
         </div>
-        <div className="relative w-full h-80 my-4">
-          <Image
-            src={donationImage}
-            alt="Donation"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-lg"
-          />
-        </div>
+        <section className="relative flex flex-col items-center w-full p-4 md:p-6 bg-white mt-0">
+          <div className="relative w-full h-64 my-4">
+            <Image
+              src={donationImage}
+              alt="Donation"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-2xl"
+            />
+          </div>
+        </section>
       </header>
-      <section className="bg-gray-100 text-center p-10">
-        <h1 className="text-4xl font-bold mb-4 text-primary-blue">
-          Why do we exist?
+      {/* <section className="flex flex-col items-center bg-gray-100 rounded-3xl text-center m-4 md:m-6 p-4 md:p-10 md:px-32">
+        <h1 className="text-4xl jost font-bold mb-4 text-primary-blue">
+          Why Do We Exist?
         </h1>
-        <p className="text-lg text-blue">
+        <p className="text-sm md:text-lg nunito text-blue">
           Many orphanages, NGOs, hospitals, foundations, and old age homes have
           their own websites through which donors make donations in the form of
           kind and money. But there lacks a central platform through which all
@@ -59,12 +61,112 @@ const HomeWithOutLogin = () => {
           their donation.
         </p>
         <a href="/signin">
-          <button className="bg-blue text-white rounded py-3 mt-4 px-6 text-lg font-medium hover:bg-blue">
+          <button className="mt-8 p-2 text-base md:text-lg px-8 bg-primary-blue hover:opacity-80 text-white rounded-full hover:bg-blue">
             LOGIN TO DONATE OR TO GET DONATIONS
           </button>
         </a>
+      </section> */}
+
+      <section className="flex flex-col bg-secondary-blue/20 rounded-3xl m-4 md:m-6 p-4 md:p-10">
+        <div className="flex flex-col-reverse text-center md:text-left items-center md:flex-row gap-8">
+          <div className="flex flex-col grow">
+            <h3 className="text-4xl jost font-bold mb-4 text-primary-blue">
+              Why Do We Exist?
+            </h3>
+            <p className="text-sm md:text-lg nunito text-blue">
+              Many orphanages, NGOs, hospitals, foundations, and old age homes
+              have their own websites through which donors make donations in the
+              form of kind and money. But there lacks a central platform through
+              which all orphanages, NGOs, hospitals, foundations, and old age
+              homes can register themselves in the platform and donors can
+              easily donate to the needy based on urgency, location, date,
+              timings, population, and requirements. The platform should also be
+              responsible and transparent by showing the government licenses,
+              audits, details, and photographs of registered orphanages, NGOs,
+              hospitals, foundations, and old age homes. The donors will be able
+              to see how, where, and by whom their money and kind are being
+              utilized. There is also a need to show a leaderboard in specific
+              locations among donors in order to encourage their donation.
+            </p>
+            <a href="/signin">
+              <button className="mt-8 p-2 text-base md:text-lg px-8 bg-primary-blue hover:opacity-80 text-white rounded-full hover:bg-blue">
+                LOGIN TO DONATE OR TO GET DONATIONS
+              </button>
+            </a>
+          </div>
+          <Image
+            src={solutionImage}
+            alt="Solution"
+            layout="responsive"
+            width={500}
+            height={500}
+            className="rounded-lg md:max-w-[50%]"
+          />
+        </div>
       </section>
-      <section className="flex flex-col items-center p-10 bg-white mt-0">
+
+      <section className="md:mt-16 bg-secondary-blue/20 gap-8 flex flex-col rounded-3xl m-4 md:m-6 p-4 md:p-10">
+        <div className="grow">
+          <h3 className="text-4xl text-left jost font-bold mb-4 text-primary-blue">
+            Our Solution
+          </h3>
+          <p className="text-sm md:text-lg nunito mb-6 text-left">
+            To address this challenge, we propose the development of a
+            comprehensive donation platform that seamlessly connects donors with
+            charitable organizations in need of support. This platform will
+            serve as a central hub for all charitable organizations to register
+            and showcase their work, allowing donors to easily search, filter,
+            and donate to causes that align with their values.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 min-w-[33%] nunito text-primary-blue flex-wrap">
+          <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
+            <p className="text-2xl md:text-5xl opacity-50">01</p>
+            <p className="text-sm md:text-lg">
+              Centralized Registration for all Charitable Organizations
+            </p>
+          </div>
+          <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
+            <p className="text-2xl md:text-5xl opacity-50">02</p>
+            <p className="text-sm md:text-lg">
+              Enhanced Search Functionality based on Location and Cause
+            </p>
+          </div>
+          <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
+            <p className="text-2xl md:text-5xl opacity-50">03</p>
+            <p className="text-sm md:text-lg">
+              Impact Tracking and Visualization for each Donor
+            </p>
+          </div>
+          <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
+            <p className="text-2xl md:text-5xl opacity-50">04</p>
+            <p className="text-sm md:text-lg">
+              Leaderboard and Recognition System among Donors
+            </p>
+          </div>
+          <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
+            <p className="text-2xl md:text-5xl opacity-50">05</p>
+            <p className="textext-sm md:t-lg">
+              Transparency and Accountability
+            </p>
+          </div>
+          <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
+            <p className="text-2xl md:text-5xl opacity-50">06</p>
+            <p className="text-sm md:text-lg">
+              AI based verification of Charitable Organizations
+            </p>
+          </div>
+          <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
+            <p className="text-2xl md:text-5xl opacity-50">07</p>
+            <p className="text-sm md:text-lg">
+              Platform to donate for hospitals, orphanages, old age homes, NGOs,
+              etc
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* <section className="flex flex-col items-center p-10 bg-white mt-0">
         <div className="relative w-full h-80 mb-4">
           <Image
             src={donationImage}
@@ -129,15 +231,15 @@ const HomeWithOutLogin = () => {
             />
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="flex flex-col items-center p-10 bg-white mt-0">
         <div className="bg-gray-100 p-10 mt-0 flex flex-col md:flex-row items-start justify-between">
           <div className="pr-10">
-            <h1 className="text-4xl font-bold mb-4 text-blue text-center md:text-centre">
+            <h1 className="text-4xl font-bold mb-4 text-blue text-center md:text-centre jost">
               Our Impact
             </h1>
-            <p className="text-lg mb-6 text-center md:text-centre">
+            <p className="text-lg mb-6 text-center md:text-centre nunito">
               India and the world have a vast network of orphanages, NGOs,
               hospitals, foundations, and old age homes dedicated to addressing
               various social, economic, and environmental challenges. In 2022,

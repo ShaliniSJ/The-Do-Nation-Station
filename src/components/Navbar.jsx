@@ -20,7 +20,7 @@ const Navbar = ({ islogged }) => {
   }, []);
 
   return (
-    <nav className="top-0 left-0 sticky z-10 w-full px-6 md:p-4 flex items-center transition ease-out backdrop-blur-3xl bg-primary/80 text-text-light shadow-md">
+    <nav className="top-0 left-0 sticky z-10 w-full md:px-6 p-4 flex items-center transition ease-out backdrop-blur-3xl bg-primary/90 text-text-light shadow-md">
       <a href="#">
         <Image src={IconLogo} alt="The Do-Nation Station Icon" width={43} />
       </a>

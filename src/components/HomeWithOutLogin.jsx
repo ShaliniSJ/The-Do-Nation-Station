@@ -276,8 +276,6 @@ const HomeWithOutLogin = () => {
           </a>
         </p>
       </footer> */}
-
-      <Footer />
     </div>
   );
 };

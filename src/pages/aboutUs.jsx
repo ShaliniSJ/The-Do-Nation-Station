@@ -32,7 +32,6 @@ export default function aboutUs() {
     <div>
       <Navbar islogged={isLogged} />
       <AboutUs />
-      <Footer />
     </div>
   );
 }

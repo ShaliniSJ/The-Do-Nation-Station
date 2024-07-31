@@ -232,8 +232,6 @@ const HomeWithLogin = () => {
         onClose={handleCloseModal}
         need={selectedNeed}
       />
-
-      <Footer />
     </div>
     // <Footer />
     // </div>

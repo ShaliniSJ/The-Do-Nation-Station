@@ -6,7 +6,7 @@ import { router } from "next/router";
 import { getCurrentUser, getNeeds, getPastDonations } from "../lib/appwrite";
 
 // Define your Google Maps API key here
-const API_KEY = process.env.GOOGLE_MAP_API_KEY;
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
 
 const ProfileForOrganisation = ({ islogged }) => {
   const [NeedDetails, setNeedDetails] = useState([]);
@@ -30,39 +30,75 @@ const ProfileForOrganisation = ({ islogged }) => {
   const [needs, setNeeds] = useState(orgDat.currentNeeds);
   const [orgData, setOrgData] = useState(orgDat);
   const [pastDonation, setPastDonation] = useState([]);
-  useEffect(async () => {
-    // for needs
-    // console.log(await getNeeds());
-    setNeedDetails(await getNeeds());
-    // for donations
-    // console.log(await getPastDonations());
-    setDonationDetails(await getPastDonations());
-    // for organisation details
-    // since it is organisation the parameter is false
-    // console.log(await getCurrentUser(false));
-    setUser(await getCurrentUser(false));
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [needs, donations, user] = await Promise.all([
+          getNeeds(),
+          getPastDonations(),
+          getCurrentUser(false),
+        ]);
+
+        setNeedDetails(needs);
+        setDonationDetails(donations);
+        setUser(user);
+
+        setOrgData({
+          name: user.organisation_name,
+          description: user.description,
+          impacts: user.impact,
+          type: user.type,
+          address: user.address,
+          pastDonations: donations,
+          currentNeeds: needs,
+          mapLink: user.location,
+          gallery: [{ id: 1, src: user.photos, alt: "Image 1" }],
+        });
+
+        setNeeds(needs);
+        setPastDonation(donations);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchData();
   }, []);
-  useEffect(() => {
-    setOrgData({
-      name: User.organisation_name,
-      description: User.description,
-      impacts: User.impact,
-      type: User.type,
-      address: User.address,
-      pastDonations: DonationDetails,
-      currentNeeds: NeedDetails,
-      mapLink: User.location,
-      gallery: [{ id: 1, src: User.photos, alt: "Image 1" }],
-    });
-  }, [User]);
-  useEffect(() => {
-    // console.log(orgData, User);
-    setNeeds(orgData.currentNeeds);
-    // console.log(needs)
-    setPastDonation(orgData.pastDonations);
-    // console.log(pastDonation)
-    console.log(orgData.gallery);
-  }, [orgData, User]);
+
+  // useEffect(async () => {
+  //   // for needs
+  //   // console.log(await getNeeds());
+  //   setNeedDetails(await getNeeds());
+  //   // for donations
+  //   // console.log(await getPastDonations());
+  //   setDonationDetails(await getPastDonations());
+  //   // for organisation details
+  //   // since it is organisation the parameter is false
+  //   // console.log(await getCurrentUser(false));
+  //   setUser(await getCurrentUser(false));
+  // }, []);
+  // useEffect(() => {
+  //   setOrgData({
+  //     name: User.organisation_name,
+  //     description: User.description,
+  //     impacts: User.impact,
+  //     type: User.type,
+  //     address: User.address,
+  //     pastDonations: DonationDetails,
+  //     currentNeeds: NeedDetails,
+  //     mapLink: User.location,
+  //     gallery: [{ id: 1, src: User.photos, alt: "Image 1" }],
+  //   });
+  // }, [User]);
+  // useEffect(() => {
+  //   // console.log(orgData, User);
+  //   setNeeds(orgData.currentNeeds);
+  //   // console.log(needs)
+  //   setPastDonation(orgData.pastDonations);
+  //   // console.log(pastDonation)
+  //   console.log(orgData.gallery);
+  // }, [orgData, User]);
 
   console.log(needs);
   const donationsPerPage = 10;
@@ -121,17 +157,62 @@ const ProfileForOrganisation = ({ islogged }) => {
   const mapEmbedLink = `https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${encodedAddress}`;
 
   return (
+    // <div className="min-h-screen bg-white text-dark-blue p-6">
+    //   <div className="flex justify-between items-center mb-6">
+    //     <div className="flex items-center">
+    //       <Image
+    //         src={BlueLogo}
+    //         alt="Organization Logo"
+    //         width={400}
+    //         height={400}
+    //       />
+    //       <div className="ml-4">
+    //         <h1 className="text-3xl font-bold">{orgData.name}</h1>
+    //         <p>
+    //           <strong>Description:</strong> {orgData.description}
+    //         </p>
+    //         <p>
+    //           <strong>Impacts:</strong> {orgData.impacts}
+    //         </p>
+    //         <p>
+    //           <strong>Type:</strong> {orgData.type}
+    //         </p>
+    //         <p>
+    //           <strong>Address:</strong> {orgData.address}
+    //         </p>
+    //       </div>
+    //     </div>
+    //     {islogged && (
+    //       <div>
+    //         <button
+    //           onClick={handleAddNeeds}
+    //           className="bg-blue text-white font-bold py-2 px-4 rounded m-2 hover:bg-dark-blue-700"
+    //         >
+    //           ADD NEEDS
+    //         </button>
+    //         <button
+    //           onClick={handleEditDetails}
+    //           className="bg-blue text-white font-bold py-2 px-4 rounded m-2 hover:bg-dark-blue-700"
+    //         >
+    //           EDIT DETAILS
+    //         </button>
+    //       </div>
+    //     )}
+    //   </div>
     <div className="min-h-screen bg-white text-dark-blue p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center">
+      <div className="flex justify-between items-center mb-6 bg-secondary-blue/50 rounded-3xl">
+        <div className="flex flex-col md:flex-row items-center gap-8">
           <Image
+            className="rounded-l-3xl"
             src={BlueLogo}
             alt="Organization Logo"
             width={400}
             height={400}
           />
-          <div className="ml-4">
-            <h1 className="text-3xl font-bold">{orgData.name}</h1>
+          <div className="flex flex-col p-4 gap-2 jost md:text-xl md:ml-4">
+            <h2 className="text-3xl md:text-6xl capitalize font-bold">
+              {orgData.name}
+            </h2>
             <p>
               <strong>Description:</strong> {orgData.description}
             </p>
@@ -145,23 +226,23 @@ const ProfileForOrganisation = ({ islogged }) => {
               <strong>Address:</strong> {orgData.address}
             </p>
           </div>
+          {islogged && (
+            <div className="flex flex-col gap-8">
+              <button
+                onClick={handleAddNeeds}
+                className="bg-blue text-white rounded-full py-2 px-4 enabled:hover:bg-blue-700 disabled:opacity-20"
+              >
+                ADD NEEDS
+              </button>
+              <button
+                onClick={handleEditDetails}
+                className="bg-blue text-white rounded-full py-2 px-4 enabled:hover:bg-blue-700 disabled:opacity-20"
+              >
+                EDIT DETAILS
+              </button>
+            </div>
+          )}
         </div>
-        {islogged && (
-          <div>
-            <button
-              onClick={handleAddNeeds}
-              className="bg-blue text-white font-bold py-2 px-4 rounded m-2 hover:bg-dark-blue-700"
-            >
-              ADD NEEDS
-            </button>
-            <button
-              onClick={handleEditDetails}
-              className="bg-blue text-white font-bold py-2 px-4 rounded m-2 hover:bg-dark-blue-700"
-            >
-              EDIT DETAILS
-            </button>
-          </div>
-        )}
       </div>
 
       <div>

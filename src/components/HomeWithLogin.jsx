@@ -11,6 +11,8 @@ import {
   Box,
 } from "@mui/material";
 import DonationModal from "./DonationModal"; // Ensure correct path
+import Link from '@mui/material/Link';
+
 
 // Sample data function
 const getSampleNeeds = () =>
@@ -153,7 +155,9 @@ const HomeWithLogin = () => {
             <Card variant="outlined">
               <CardContent>
                 <Typography variant="h6" component="div">
-                  {need.organization}
+                  <Link href="/organProfileShownToDonorsFromNeeds" underline="none">
+                    {need.organization}
+                  </Link>
                 </Typography>
                 <Typography color="textSecondary">
                   Location: {need.location}

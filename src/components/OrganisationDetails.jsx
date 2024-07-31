@@ -36,6 +36,7 @@ const Organisation = () => {
   const handleSubmit = async(event) => {
     event.preventDefault();
     // console.log(formValues);
+    console.log(await postOrganisationDetails(formValues));
     router.push('/bank');
   };
 

@@ -241,6 +241,32 @@ export const postOrganisationDetails = async (form) => {
   }
 };
 
+export const postNeeds=async(form)=>{
+  try{
+  const organisation = await getCurrentUser(false);
+  // console.log(form,organisation)
+  const insertNeeds= await databases.createDocument(
+    databaseId,
+    NEEDS,
+    ID.unique(),
+    {
+     organisation_id:organisation.organisation_id,
+     total_amt:form.amount,
+     type:form.iscash,
+     kind:form.kindtype,
+     description:form.purpose,
+     date:form.tillDate['$d'],
+     completed:false,
+     organisation_name:organisation.organisation_name,
+     quantity:form.quantity
+    }
+  );
+}
+catch(e){
+  throw new Error(e)
+}
+}
+
 export const getLatestPost = async () => {
   try {
     const post = await databases.listDocuments(databaseId, videoCollectionId, [

@@ -3,15 +3,18 @@ import { Container, Paper, Box, TextField, Typography, FormControl, FormLabel, S
 import dayjs from 'dayjs';
 import CustomButton from './CustomButton';
 import InputField from './InputField';
+import { postNeeds } from '../lib/appwrite';
 
 const Needs = () => {
   const [formValues, setFormValues] = useState({
     tillDate: dayjs(),
     type: '',
     purpose: '',
-    amount: '',
+    amount: 0,
     kind: '',
     kindtype: '',
+    quantity:0,
+    iscash:''
   });
   const [isKind, setIsKind] = useState(false);
   const [isCash, setIsCash] = useState(false);
@@ -21,15 +24,23 @@ const Needs = () => {
     if (formValues.type === 'Kind') {
       setIsKind(true);
       setIsCash(false);
+      setFormValues((prevValues)=>({
+        ...prevValues,
+        iscash:false
+      }))
     } else if (formValues.type === 'Cash') {
       setIsCash(true);
       setIsKind(false);
+      setFormValues((prevValues)=>({
+        ...prevValues,
+        iscash:true
+      }))
     } else {
       setIsKind(false);
       setIsCash(false);
     }
   }, [formValues.type]);
-
+  
   useEffect(() => {
     if (formValues.kindtype && formValues.kindtype !== 'Clothing' && formValues.kindtype !== 'Toys') {
       setShowQuantity(true);
@@ -49,13 +60,14 @@ const Needs = () => {
     const { name, value } = event.target;
     setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: value,
+      [name]: (name === 'amount' || name === 'quantity') ? parseInt(value, 10) : value,
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
-    console.log(formValues);
+    const data=await postNeeds(formValues);
+    // console.log(formValues);
   };
 
   return (

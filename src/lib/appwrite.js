@@ -151,6 +151,17 @@ export const getCurrentUser = async (is_donor) => {
   }
 };
 
+export const getOrganisationUser = async (organisation_id) => {
+  try {
+      const organisation = await databases.listDocuments(databaseId, ORGANIZATIONS, [
+        Query.equal("organisation_id", organisation_id),
+      ]);
+    return organisation.documents[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getHistory = async () => {
   try {
     const data = await databases.listDocuments(databaseId, NEEDS, [

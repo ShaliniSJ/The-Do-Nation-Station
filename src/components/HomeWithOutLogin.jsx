@@ -15,7 +15,8 @@ const HomeWithOutLogin = () => {
           One Platform for All Your Charitable Donations
         </h2>
         <p className="nunito text-base md:text-xl">
-          Support Causes Based on Urgency, Location, and Need
+          Support Causes Based on Urgency, Location, and Need <br></br>
+          Ideal for orphanages, NGOs, hospitals, foundations, and old age homes
         </p>
         <div className="my-8 flex flex-row gap-4">
           <a

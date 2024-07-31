@@ -1,53 +1,45 @@
 import Navbar from "@/src/components/Navbar";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { getCurrentUser } from "@/src/lib/appwrite";
 
 export default function Page() {
   const router = useRouter();
-  const [donor, setDonor] = useState({
-    name: "John Doe",
-    total_amount: 25000,
-    user_id: "username",
-    avatar_url: "https://avatars.githubusercontent.com/u/68324620?v=4",
-  });
-
-  const [pastContributions, setPastContributions] = useState([
-    {
-      organisation_id: "something",
-      name: "Organization 1",
-      donation_amt: 200,
-      updated_at: "2023-07-29",
-    },
-    {
-      organisation_id: "nothing",
-      name: "Organization 2",
-      donation_amt: 250,
-      updated_at: "2023-08-02",
-    },
-  ]);
-  const [showAfterLogin, setShowAfterLogin] = useState(false);
-  const [user, setUser] = useState(null);
+  const [donor, setDonor] = useState(null);
+  const [pastContributions, setPastContributions] = useState([]);
   const [isLogged, setIsLogged] = useState(false);
-  const [isdonor,setIsdonor]=useState(false);
 
   useEffect(() => {
-    // Define an async function to handle the async operation
     const fetchUserData = async () => {
       if (typeof window !== 'undefined') {
         const islogged = localStorage.getItem('islogged');
-        if(islogged === 'true') {
-          setIsLogged(true);
-        }
-        else{
-          setIsLogged(false);
+        setIsLogged(islogged === 'true');
+
+        if (islogged === 'true') {
+          try {
+            const user = await getCurrentUser(true);
+            console.log("---------------------------");
+            console.log(user);
+            console.log("---------------------------");
+            setDonor({
+              name: user.name,
+              total_amount: user.total_amount || 0, // Adjust based on your data structure
+              user_id: user.user_id,
+              //avatar_url: user.avatar_url,
+            });
+            // Fetch past contributions
+            // Assuming you have a function to get past contributions
+            const contributions = await getPastContributions(user.user_id);
+            setPastContributions(contributions);
+          } catch (error) {
+            console.error("Failed to fetch user data", error);
+          }
         }
       }
     };
-  
-  
-    // Call the async function
+
     fetchUserData();
-  }, [isLogged]);
+  }, []);
 
   const contributionsList = [];
   pastContributions.forEach((contrib) => {
@@ -78,7 +70,7 @@ export default function Page() {
           <div className="flex flex-row items-center gap-8">
             <img
               className="w-32 h-32 rounded-full"
-              src={donor.avatar_url}
+              //src={donor.avatar_url}
               alt={donor.name}
             />
             <div className="flex flex-col">

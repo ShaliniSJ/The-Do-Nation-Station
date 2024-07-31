@@ -227,7 +227,7 @@ const ProfileForOrganisation = ({ islogged }) => {
             </p>
           </div>
           {islogged && (
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-4 p-8 w-1/4">
               <button
                 onClick={handleAddNeeds}
                 className="bg-blue text-white rounded-full py-2 px-4 enabled:hover:bg-blue-700 disabled:opacity-20"
@@ -245,44 +245,40 @@ const ProfileForOrganisation = ({ islogged }) => {
         </div>
       </div>
 
-      <div>
-        <h2 className="text-2xl font-semibold mb-4">The Current Needs</h2>
+      <div className="flex flex-col mt-8 md:mt-20">
+        <h2 className="text-2xl md:text-4xl jost font-semibold mb-4">
+          The Current Needs
+        </h2>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Amount
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody>
               {currentNeeds.map((need) => (
-                <tr key={need.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <tr key={need.id} className="even:bg-secondary-blue/20">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
                     {need.total_amt}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
                     {need.date}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
                     <button
-                      onClick={() => handleEditNeed(need)}
-                      className="bg-blue text-white py-1 px-3 rounded hover:bg-blue-700 mr-2"
+                      onClick={() => handleDonate()}
+                      className="bg-primary-blue rounded-full text-white py-2 px-6 hover:bg-blue-700 mr-2"
                     >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleCompleteNeed(need.id)}
-                      className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-700"
-                    >
-                      Complete
+                      Donate
                     </button>
                   </td>
                 </tr>
@@ -290,91 +286,88 @@ const ProfileForOrganisation = ({ islogged }) => {
             </tbody>
           </table>
         </div>
-        <div className="mt-4 flex justify-between">
+        <div className="mt-4 px-3 flex justify-between">
           <button
             disabled={currentNeedsPage === 1}
             onClick={() => handleNeedsPageChange(currentNeedsPage - 1)}
-            className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
+            className="bg-blue text-white rounded-full py-2 px-4 enabled:hover:bg-blue-700 disabled:opacity-20"
           >
             Previous
           </button>
-          <span className="text-gray-700">
+          <span className="text-black/80">
             Page {currentNeedsPage} of {totalNeedsPages}
           </span>
           <button
             disabled={currentNeedsPage === totalNeedsPages}
             onClick={() => handleNeedsPageChange(currentNeedsPage + 1)}
-            className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
+            className="bg-blue text-white rounded-full py-2 px-4 enabled:hover:bg-blue-700 disabled:opacity-20"
           >
             Next
           </button>
         </div>
       </div>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold">Past Donations</h2>
+      <div className="mt-8 md:mt-20">
+        <h2 className="text-2xl md:text-4xl jost font-semibold mb-4">
+          Past Donations
+        </h2>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Amount
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Donor
                 </th>
               </tr>
             </thead>
             <tbody>
-              {DonationDetails.map((donation) => (
-                <tr key={donation.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {donation.donation_amt}
+              {currentDonations.map((donation) => (
+                <tr key={donation.id} className="even:bg-secondary-blue/20">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
+                    {donation.total_amt}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {donation.updated_at}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
+                    {donation.date}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {donation.donor_id}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
+                    {donation.description}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <div className="mt-4 flex justify-between">
+        <div className="mt-4 px-3 flex justify-between">
           <button
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
-            className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
+            className="bg-blue text-white rounded-full py-2 px-4 enabled:hover:bg-blue-700 disabled:opacity-20"
           >
             Previous
           </button>
-          <span className="text-gray-700">
+          <span className="text-black/80">
             Page {currentPage} of {totalPages}
           </span>
           <button
             disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
-            className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
+            className="bg-blue text-white rounded-full py-2 px-4 enabled:hover:bg-blue-700 disabled:opacity-20"
           >
             Next
           </button>
         </div>
       </div>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">Location</h2>
-        <div className="flex-grow flex justify-center">
-          <a href={orgData.mapLink} target="_blank" rel="noopener noreferrer">
-            <button className="bg-blue text-white font-semibold mb-5 py-2 px-4 rounded hover:bg-blue-700">
-              Click here to view on Google Maps
-            </button>
-          </a>
-        </div>
+      <div className="mt-8 md:mt-20 flex flex-col gap-4">
+        <h2 className="text-2xl md:text-4xl jost font-semibold mb-4">
+          Location
+        </h2>
         <iframe
           title="Google Map"
           width="100%"
@@ -384,10 +377,17 @@ const ProfileForOrganisation = ({ islogged }) => {
           allowFullScreen
           src={mapEmbedLink}
         ></iframe>
+        <div className="flex-grow flex justify-center">
+          <a href={orgData.mapLink} target="_blank" rel="noopener noreferrer">
+            <button className="bg-blue text-white rounded-full py-2 px-4 enabled:hover:bg-blue-700 disabled:opacity-20">
+              Get Directions in Google Maps
+            </button>
+          </a>
+        </div>
       </div>
 
-      {/* Gallery Section */}
-      {/* <div className="mt-8">
+      {/* Gallery Section
+      <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
         <div className="flex flex-wrap">
           {orgData.gallery.map((image) => (
@@ -404,7 +404,7 @@ const ProfileForOrganisation = ({ islogged }) => {
         </div>
       </div> */}
 
-      {/* Edit Popup*/}
+      {/* Edit Popup */}
       {editingNeed && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-4 rounded shadow-lg">
@@ -431,13 +431,13 @@ const ProfileForOrganisation = ({ islogged }) => {
             </div>
             <div className="mt-4">
               <button
-                onClick={handleSaveEdit}
+                onClick={handleSaveDonate}
                 className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
               >
                 Save
               </button>
               <button
-                onClick={handleCancelEdit}
+                onClick={handleCancelDonate}
                 className="bg-red-500 text-white py-2 px-4 rounded ml-2 hover:bg-red-700"
               >
                 Cancel
@@ -449,6 +449,210 @@ const ProfileForOrganisation = ({ islogged }) => {
     </div>
   );
 };
+//       <div>
+//         <h2 className="text-2xl font-semibold mb-4">The Current Needs</h2>
+//         <div className="overflow-x-auto">
+//           <table className="min-w-full divide-y divide-gray-200">
+//             <thead>
+//               <tr>
+//                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                   Amount
+//                 </th>
+//                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                   Date
+//                 </th>
+//                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                   Actions
+//                 </th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {currentNeeds.map((need) => (
+//                 <tr key={need.id}>
+//                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+//                     {need.total_amt}
+//                   </td>
+//                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+//                     {need.date}
+//                   </td>
+//                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+//                     <button
+//                       onClick={() => handleEditNeed(need)}
+//                       className="bg-blue text-white py-1 px-3 rounded hover:bg-blue-700 mr-2"
+//                     >
+//                       Edit
+//                     </button>
+//                     <button
+//                       onClick={() => handleCompleteNeed(need.id)}
+//                       className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-700"
+//                     >
+//                       Complete
+//                     </button>
+//                   </td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </div>
+//         <div className="mt-4 flex justify-between">
+//           <button
+//             disabled={currentNeedsPage === 1}
+//             onClick={() => handleNeedsPageChange(currentNeedsPage - 1)}
+//             className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
+//           >
+//             Previous
+//           </button>
+//           <span className="text-gray-700">
+//             Page {currentNeedsPage} of {totalNeedsPages}
+//           </span>
+//           <button
+//             disabled={currentNeedsPage === totalNeedsPages}
+//             onClick={() => handleNeedsPageChange(currentNeedsPage + 1)}
+//             className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
+//           >
+//             Next
+//           </button>
+//         </div>
+//       </div>
+
+//       <div className="mt-8">
+//         <h2 className="text-2xl font-semibold">Past Donations</h2>
+//         <div className="overflow-x-auto">
+//           <table className="min-w-full divide-y divide-gray-200">
+//             <thead>
+//               <tr>
+//                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                   Amount
+//                 </th>
+//                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                   Date
+//                 </th>
+//                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                   Donor
+//                 </th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {DonationDetails.map((donation) => (
+//                 <tr key={donation.id}>
+//                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+//                     {donation.donation_amt}
+//                   </td>
+//                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+//                     {donation.updated_at}
+//                   </td>
+//                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+//                     {donation.donor_id}
+//                   </td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </div>
+//         <div className="mt-4 flex justify-between">
+//           <button
+//             disabled={currentPage === 1}
+//             onClick={() => handlePageChange(currentPage - 1)}
+//             className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
+//           >
+//             Previous
+//           </button>
+//           <span className="text-gray-700">
+//             Page {currentPage} of {totalPages}
+//           </span>
+//           <button
+//             disabled={currentPage === totalPages}
+//             onClick={() => handlePageChange(currentPage + 1)}
+//             className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
+//           >
+//             Next
+//           </button>
+//         </div>
+//       </div>
+
+//       <div className="mt-8">
+//         <h2 className="text-2xl font-semibold mb-4">Location</h2>
+//         <div className="flex-grow flex justify-center">
+//           <a href={orgData.mapLink} target="_blank" rel="noopener noreferrer">
+//             <button className="bg-blue text-white font-semibold mb-5 py-2 px-4 rounded hover:bg-blue-700">
+//               Click here to view on Google Maps
+//             </button>
+//           </a>
+//         </div>
+//         <iframe
+//           title="Google Map"
+//           width="100%"
+//           height="450"
+//           style={{ border: 0 }}
+//           loading="lazy"
+//           allowFullScreen
+//           src={mapEmbedLink}
+//         ></iframe>
+//       </div>
+
+//       {/* Gallery Section */}
+//       {/* <div className="mt-8">
+//         <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
+//         <div className="flex flex-wrap">
+//           {orgData.gallery.map((image) => (
+//             <div key={image.id} className="w-1/3 p-2">
+//               <Image
+//                 src={image.src}
+//                 alt={image.alt}
+//                 width={400}
+//                 height={300}
+//                 layout="responsive"
+//               />
+//             </div>
+//           ))}
+//         </div>
+//       </div> */}
+
+//       {/* Edit Popup*/}
+//       {editingNeed && (
+//         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+//           <div className="bg-white p-4 rounded shadow-lg">
+//             <h3 className="text-xl mb-2">Edit Need</h3>
+//             <div>
+//               <label className="block mb-2">Amount</label>
+//               <input
+//                 type="text"
+//                 defaultValue={editingNeed.amount}
+//                 className="border p-2 w-full"
+//                 onChange={(e) =>
+//                   setEditingNeed({ ...editingNeed, amount: e.target.value })
+//                 }
+//               />
+//               <label className="block mb-2 mt-2">Date</label>
+//               <input
+//                 type="text"
+//                 defaultValue={editingNeed.date}
+//                 className="border p-2 w-full"
+//                 onChange={(e) =>
+//                   setEditingNeed({ ...editingNeed, date: e.target.value })
+//                 }
+//               />
+//             </div>
+//             <div className="mt-4">
+//               <button
+//                 onClick={handleSaveEdit}
+//                 className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
+//               >
+//                 Save
+//               </button>
+//               <button
+//                 onClick={handleCancelEdit}
+//                 className="bg-red-500 text-white py-2 px-4 rounded ml-2 hover:bg-red-700"
+//               >
+//                 Cancel
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 
 export default ProfileForOrganisation;
 

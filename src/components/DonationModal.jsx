@@ -54,7 +54,7 @@ const DonationModal = ({ open, onClose, need }) => {
           <Grid item xs={6}>
             {isCost ? (
               <Button variant="contained" color="primary" fullWidth>
-                <a href="payment-link" target="_blank" style={{ textDecoration: 'none', color: 'white' }}>Pay</a>
+                <a href="/donate" target="_blank" style={{ textDecoration: 'none', color: 'white' }}>Pay</a>
               </Button>
             ) : (
               <Button variant="contained" color="primary" fullWidth>

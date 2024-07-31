@@ -29,8 +29,10 @@ const ProfileForOrganisationFromNeeds = () => {
   useEffect(() => {
     const fetchData = async () => {
       const url = new URL(window.location.href);
-      const userId = url.pathname.split('/').pop();
-      
+      console.log(url)
+      const userId = url.href.split('?').pop();
+      console.log(userId)
+
       // Ensure userId is not empty or undefined
       if (userId) {
         const fetchedNeeds = await getNeeds();
@@ -267,7 +269,7 @@ const ProfileForOrganisationFromNeeds = () => {
         ></iframe>
       </div>
 
-      {/* Gallery Section */}
+      {/* Gallery Section
       <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
         <div className="flex flex-wrap">
@@ -283,7 +285,7 @@ const ProfileForOrganisationFromNeeds = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Edit Popup */}
       {editingNeed && (

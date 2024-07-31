@@ -208,6 +208,46 @@ export const getAllNeeds = async () => {
   }
 };
 
+export const getAllNeedsOrganisation = async (userId) => {
+  try {
+    const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
+      Query.and([
+        Query.equal('completed', false),
+        Query.equal('organisation_id', userId)
+      ])
+    ]);
+    
+    // Log the response to verify structure (for debugging)
+    console.log('Fetched Needs:', allNeeds);
+    
+    return allNeeds.documents; // Ensure this matches your data structure
+  } catch (e) {
+    // Handle and log the error more explicitly
+    console.error('Error fetching needs:', e.message || e);
+    throw e; // Rethrow to propagate error
+  }
+};
+
+export const getAllPastDonationsForStatic = async (userId) => {
+  try {
+    const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
+      Query.and([
+        Query.equal('completed', true),
+        Query.equal('organisation_id', userId)
+      ])
+    ]);
+    
+    // Log the response to verify structure (for debugging)
+    console.log('Fetched Needs:', allNeeds);
+    
+    return allNeeds.documents; // Ensure this matches your data structure
+  } catch (e) {
+    // Handle and log the error more explicitly
+    console.error('Error fetching needs:', e.message || e);
+    throw e; // Rethrow to propagate error
+  }
+};
+
 export const organisationDetailsForNeeds = async () => {
   try {
     const details = await databases.listDocuments(databaseId, ORGANIZATIONS);

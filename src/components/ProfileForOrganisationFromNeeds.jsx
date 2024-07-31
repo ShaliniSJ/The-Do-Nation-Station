@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import BlueLogo from "../assets/the-do-nation-station-high-resolution-logo.png";
-import { getOrganisationUser, getNeeds, getPastDonations } from "../lib/appwrite";
+import { getOrganisationUser, getAllNeedsOrganisation, getAllPastDonationsForStatic } from "../lib/appwrite";
 
 // Define your Google Maps API key here
 const API_KEY = process.env.GOOGLE_MAP_API_KEY;
@@ -35,8 +35,8 @@ const ProfileForOrganisationFromNeeds = () => {
 
       // Ensure userId is not empty or undefined
       if (userId) {
-        const fetchedNeeds = await getNeeds();
-        const fetchedDonations = await getPastDonations();
+        const fetchedNeeds = await getAllNeedsOrganisation(userId);
+        const fetchedDonations = await getAllPastDonationsForStatic(userId);
         const fetchedUser = await getOrganisationUser(userId);
 
         setNeedDetails(fetchedNeeds);

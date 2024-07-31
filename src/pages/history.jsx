@@ -12,7 +12,6 @@ useEffect(() => {
   const fetchUserData = async () => {
     if (typeof window !== 'undefined') {
       const islogged = localStorage.getItem('islogged');
-      
       if(islogged === 'true') {
         setIsLogged(true);
       }
@@ -20,11 +19,12 @@ useEffect(() => {
         setIsLogged(false);
       }
     }
+  };
 
-  // Call the async function
+
   fetchUserData();
-}}, []);
-
+  }, [isLogged]);
+  console.log(isLogged)
   
     return( 
         <div>

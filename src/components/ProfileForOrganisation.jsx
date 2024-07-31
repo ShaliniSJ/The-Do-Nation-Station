@@ -9,18 +9,16 @@ import { getCurrentUser, getNeeds, getPastDonations } from "../lib/appwrite";
 const API_KEY = process.env.GOOGLE_MAP_API_KEY;
 
 const ProfileForOrganisation = ({ islogged }) => {
-  const [NeedDetails,setNeedDetails] = useState([]);
-  const [DonationDetails,setDonationDetails] = useState([]);
-  const [User,setUser] = useState([]);
+  const [NeedDetails, setNeedDetails] = useState([]);
+  const [DonationDetails, setDonationDetails] = useState([]);
+  const [User, setUser] = useState([]);
   // Fake data
   const orgDat = {
     name: "",
-    description:
-      "",
+    description: "",
     impacts: "",
     type: "",
-    address:
-      "",
+    address: "",
     pastDonations: [],
     currentNeeds: [],
     mapLink: "",
@@ -39,21 +37,23 @@ const ProfileForOrganisation = ({ islogged }) => {
     // since it is organisation the parameter is false
     // console.log(await getCurrentUser(false));
     setUser(await getCurrentUser(false));
-    setOrgData({
-      name:User.organisation_name,
-      description:User.description,
-      impacts:'0+ people',
-      type:'NGO',
-      address:User.address,
-      pastDonations:DonationDetails,
-      currentNeeds:NeedDetails,
-      mapLink:User.location,
-      gallery:[
-        { id: 1, src: User.photos, alt: "Image 1" },
-      ]});
   }, []);
-  
-
+  useEffect(() => {
+    setOrgData({
+      name: User.organisation_name,
+      description: User.description,
+      impacts: "0+ people",
+      type: "NGO",
+      address: User.address,
+      pastDonations: DonationDetails,
+      currentNeeds: NeedDetails,
+      mapLink: User.location,
+      gallery: [{ id: 1, src: User.photos, alt: "Image 1" }],
+    });
+  }, [User]);
+  useEffect(()=>{
+    console.log(orgData, User);
+  },[orgData])
   const [currentPage, setCurrentPage] = useState(1);
   const [currentNeedsPage, setCurrentNeedsPage] = useState(1);
   const [editingNeed, setEditingNeed] = useState(null);
@@ -300,7 +300,7 @@ const ProfileForOrganisation = ({ islogged }) => {
       </div>
 
       {/* Gallery Section */}
-      <div className="mt-8">
+      {/* <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
         <div className="flex flex-wrap">
           {orgData.gallery.map((image) => (
@@ -315,7 +315,7 @@ const ProfileForOrganisation = ({ islogged }) => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Edit Popup */}
       {editingNeed && (
@@ -364,7 +364,6 @@ const ProfileForOrganisation = ({ islogged }) => {
 };
 
 export default ProfileForOrganisation;
-
 
 // const orgDat = {
 //   name: "The Do-Nation Station",

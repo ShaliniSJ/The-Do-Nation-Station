@@ -14,24 +14,6 @@ import DonationModal from "./DonationModal"; // Ensure correct path
 import Link from '@mui/material/Link';
 import { getAllNeeds } from "../lib/appwrite";
 
-// Sample data function
-const getSampleNeeds = () =>
-  Array.from({ length: 50 }, (_, index) => ({
-    id: index,
-    organization: `Organization ${index + 1}`,
-    location: `Location ${Math.floor(Math.random() * 10) + 1}`,
-    date: new Date(
-      new Date().setDate(new Date().getDate() - Math.floor(Math.random() * 30))
-    )
-      .toISOString()
-      .split("T")[0],
-    amount: Math.floor(Math.random() * 1000) + 100,
-    impact: Math.floor(Math.random() * 500) + 50,
-    description: `Need description for organization ${
-      index + 1
-    }. They require assistance with various needs including financial support, resources, and volunteer help.`,
-  }));
-
 var showSection = true;
 
 const HomeWithLogin = () => {
@@ -44,13 +26,20 @@ const HomeWithLogin = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    // Generate sample data on the client-side
-    setNeeds(getSampleNeeds());
+    const fetchNeeds = async () => {
+      try {
+        const needsData = await getAllNeeds();
+        setNeeds(needsData);
+      } catch (error) {
+        console.error("Error fetching needs:", error);
+      }
+    };
+    fetchNeeds();
   }, []);
 
   const handleSearch = () => {
     showSection = false;
-    const filteredNeeds = getSampleNeeds().filter((need) => {
+    const filteredNeeds = needs.filter((need) => {
       const matchesLocation = location ? need.location === location : true;
       const matchesDate = endDate
         ? new Date(need.date) <= new Date(endDate)
@@ -67,10 +56,6 @@ const HomeWithLogin = () => {
     setSelectedNeed(need);
     setIsModalOpen(true);
   };
-
-  useEffect(async()=>{
-    console.log(await getAllNeeds());
-  },[])
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -152,7 +137,7 @@ const HomeWithLogin = () => {
         </section>
       )}
 
-      <h2 className="text-2xl font-semibold mb-4 text-blue">Needs List</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-blue">List of Needs</h2>
       <Grid container spacing={2}>
         {needs.map((need) => (
           <Grid item xs={12} sm={6} md={4} key={need.id}>

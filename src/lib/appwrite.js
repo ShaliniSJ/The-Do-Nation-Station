@@ -235,6 +235,8 @@ export const postOrganisationDetails = async (form) => {
         address: form.address,
         ph_no: form.phno,
         photos: "http://localhost.com",
+        type:form.type,
+        impact:form.impact
       }
     );
   } catch (e) {
@@ -290,6 +292,54 @@ export const postBankDetails=async(form)=>{
     throw new Error(e)
   }
 }
+export const getFilePreview = async (fileId, type) => {
+  let fileUrl;
+  try {
+    if (type === "video") {
+      fileUrl = storage.getFileView(STORAGE_ID, fileId);
+    } else if (type === "image") {
+      fileUrl = storage.getFilePreview(
+        STORAGE_ID,
+        fileId,
+        2000,
+        2000,
+        "top",
+        100
+      );
+    } else {
+      throw new Error("Invalid file type");
+    }
+    return fileUrl;
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
+export const uploadFile = async (file, type) => {
+  if (!file) return;
+
+  try {
+    const uploadedFile = await storage.createFile(
+      STORAGE_ID,
+      ID.unique(),
+      file
+    );
+    const fileUrl = await getFilePreview(uploadedFile.$id, type);
+    return fileUrl;
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
+
+
+
+
+
+
+
+
+
 export const getLatestPost = async () => {
   try {
     const post = await databases.listDocuments(databaseId, videoCollectionId, [
@@ -323,52 +373,52 @@ export const getUserPosts = async (userId) => {
   }
 };
 
-export const getFilePreview = async (fileId, type) => {
-  let fileUrl;
-  try {
-    if (type == "video") {
-      fileUrl = storage.getfileView(storageId, fileId);
-    } else if (type == "image") {
-      fileUrl = storage.getFilePreview(
-        STORAGE_ID,
-        fileId,
-        2000,
-        2000,
-        "top",
-        100
-      );
-    } else {
-      throw new Error("Invalid file type");
-    }
-    if (!fileUrl) {
-      throw Error;
-    }
-    return fileUrl;
-  } catch (e) {
-    throw new Error(e);
-  }
-};
+// export const getFilePreview = async (fileId, type) => {
+//   let fileUrl;
+//   try {
+//     if (type == "video") {
+//       fileUrl = storage.getfileView(storageId, fileId);
+//     } else if (type == "image") {
+//       fileUrl = storage.getFilePreview(
+//         STORAGE_ID,
+//         fileId,
+//         2000,
+//         2000,
+//         "top",
+//         100
+//       );
+//     } else {
+//       throw new Error("Invalid file type");
+//     }
+//     if (!fileUrl) {
+//       throw Error;
+//     }
+//     return fileUrl;
+//   } catch (e) {
+//     throw new Error(e);
+//   }
+// };
 
-export const uploadFile = async (file, type) => {
-  if (!file) return;
+// export const uploadFile = async (file, type) => {
+//   if (!file) return;
 
-  const assest = {
-    name: file.fileName,
-    type: file.mimeType,
-    size: file.fileSize,
-    uri: file.uri,
-  };
-  try {
-    const uploadedFile = await storageId.createFile(
-      storageId,
-      ID.unique(),
-      assest
-    );
-    const fileUrl = await getFilePreview(uploadedFile.$id, type);
-  } catch (e) {
-    throw new Error(e);
-  }
-};
+//   const assest = {
+//     name: file.fileName,
+//     type: file.mimeType,
+//     size: file.fileSize,
+//     uri: file.uri,
+//   };
+//   try {
+//     const uploadedFile = await storageId.createFile(
+//       storageId,
+//       ID.unique(),
+//       assest
+//     );
+//     const fileUrl = await getFilePreview(uploadedFile.$id, type);
+//   } catch (e) {
+//     throw new Error(e);
+//   }
+// };
 
 export const createVideo = async (form) => {
   try {

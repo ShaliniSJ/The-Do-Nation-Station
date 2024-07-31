@@ -46,8 +46,8 @@ const ProfileForOrganisation = ({ islogged }) => {
     setOrgData({
       name: User.organisation_name,
       description: User.description,
-      impacts: "0+ people",
-      type: "NGO",
+      impacts: User.impact,
+      type: User.type,
       address: User.address,
       pastDonations: DonationDetails,
       currentNeeds: NeedDetails,
@@ -56,12 +56,13 @@ const ProfileForOrganisation = ({ islogged }) => {
     });
   }, [User]);
   useEffect(()=>{
-    console.log(orgData, User);
+    // console.log(orgData, User);
     setNeeds(orgData.currentNeeds)
-    console.log(needs)
+    // console.log(needs)
     setPastDonation(orgData.pastDonations)
-    console.log(pastDonation)
-  },[orgData])
+    // console.log(pastDonation)
+    console.log(orgData.gallery)
+  },[orgData,User])
   
   console.log(needs)
   const donationsPerPage = 10;
@@ -306,7 +307,7 @@ const ProfileForOrganisation = ({ islogged }) => {
         ></iframe>
       </div>
 
-      {/* Gallery Section */}
+      {/* Gallery Section */} 
       {/* <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
         <div className="flex flex-wrap">
@@ -324,7 +325,7 @@ const ProfileForOrganisation = ({ islogged }) => {
         </div>
       </div> */}
 
-      {/* Edit Popup */}
+      {/* Edit Popup*/}
       {editingNeed && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-4 rounded shadow-lg">

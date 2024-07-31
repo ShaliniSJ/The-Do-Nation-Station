@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Container, Paper, Box, Typography } from '@mui/material';
+import { Container, Paper, Box, Typography, FormControl, FormLabel, Select, MenuItem } from '@mui/material';
 import CustomButton from './CustomButton';
 import InputField from './InputField';
 import FileInput from './FileInput';
 import { router } from 'next/router';
-import { postOrganisationDetails } from '../lib/appwrite';
+import { postOrganisationDetails,uploadFile } from '../lib/appwrite';
+
 
 const Organisation = () => {
   const [formValues, setFormValues] = useState({
@@ -15,6 +16,8 @@ const Organisation = () => {
     phno: '',
     files: null,
     fileURL: '',
+    impact:'',
+    type:''
   });
 
   const handleChange = (event) => {
@@ -30,6 +33,28 @@ const Organisation = () => {
         ...prevValues,
         [name]: value
       }));
+    }
+  };
+  
+  const handlefileUpload = async (event) => {
+    const { name, files } = event.target;
+    const file = files[0];
+
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: file,
+      fileURL: URL.createObjectURL(file),
+    }));
+
+    try {
+      const fileUrl = await uploadFile(file);
+      console.log(fileUrl)
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        fileURL: fileUrl,
+      }));
+    } catch (error) {
+      console.error('Error uploading file:', error.message);
     }
   };
 
@@ -55,7 +80,7 @@ const Organisation = () => {
           <InputField title="Description" holder="Write about your organisation" type="textarea" name="desc" id="desc" handleChange={handleChange} />
             <Typography variant="subtitle1">Upload Photo</Typography>
             <div className='justify-center align-middle ml-[20%] mt-4 mb-4'>
-          <FileInput handleChange={handleChange} />
+          <FileInput handleChange={handlefileUpload} />
           {formValues.fileURL && (
             <Box mt={2} textAlign="center">
               <Typography variant="subtitle1">Uploaded Photo</Typography>
@@ -63,7 +88,23 @@ const Organisation = () => {
             </Box>
           )}
           </div>
-
+           <FormControl fullWidth margin="normal" variant="outlined">
+            <FormLabel>Type</FormLabel>
+            <Select
+              name="type"
+              value={formValues.type}
+              onChange={handleChange}
+              required
+              sx={{ mt: 1, mb: 2 }}
+            >
+              <MenuItem value="NGO">NGO</MenuItem>
+              <MenuItem value="Hospitals">Hospitals</MenuItem>
+              <MenuItem value="Orphanage">Orphanage</MenuItem>
+              <MenuItem value="Oldage Home">Oldage Home</MenuItem>
+              <MenuItem value="Others">Others</MenuItem>
+            </Select>
+          </FormControl>
+          <InputField title="No.of Peoples Impacted" holder="5000+ people" type="text" name="impact" id="impact" handleChange={handleChange} />
           <InputField title="License ID" holder="Enter your license id" type="text" name="license" id="license" handleChange={handleChange} />
           <InputField title="Location" holder="www.google.com/maps" type="text" name="location" id="location" handleChange={handleChange} />
           <InputField title="Address" holder="Enter your address" type="text" name="address" id="address" handleChange={handleChange} />

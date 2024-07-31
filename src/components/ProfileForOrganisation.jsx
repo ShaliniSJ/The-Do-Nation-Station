@@ -24,8 +24,12 @@ const ProfileForOrganisation = ({ islogged }) => {
     mapLink: "",
     gallery: [],
   };
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentNeedsPage, setCurrentNeedsPage] = useState(1);
+  const [editingNeed, setEditingNeed] = useState(null);
+  const [needs, setNeeds] = useState(orgDat.currentNeeds);
   const [orgData, setOrgData] = useState(orgDat);
+  const [pastDonation,setPastDonation]=useState([]);
   useEffect(async () => {
     // for needs
     // console.log(await getNeeds());
@@ -53,12 +57,13 @@ const ProfileForOrganisation = ({ islogged }) => {
   }, [User]);
   useEffect(()=>{
     console.log(orgData, User);
+    setNeeds(orgData.currentNeeds)
+    console.log(needs)
+    setPastDonation(orgData.pastDonations)
+    console.log(pastDonation)
   },[orgData])
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentNeedsPage, setCurrentNeedsPage] = useState(1);
-  const [editingNeed, setEditingNeed] = useState(null);
-  const [needs, setNeeds] = useState(orgData.currentNeeds);
-
+  
+  console.log(needs)
   const donationsPerPage = 10;
   const NeedsPerPage = 10;
   const totalDonations = orgData.pastDonations.length;
@@ -176,10 +181,11 @@ const ProfileForOrganisation = ({ islogged }) => {
               </tr>
             </thead>
             <tbody>
+            
               {currentNeeds.map((need) => (
                 <tr key={need.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {need.amount}
+                    {need.total_amt}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {need.date}
@@ -242,16 +248,17 @@ const ProfileForOrganisation = ({ islogged }) => {
               </tr>
             </thead>
             <tbody>
-              {currentDonations.map((donation) => (
+            
+              {DonationDetails.map((donation) => (
                 <tr key={donation.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {donation.amount}
+                    {donation.donation_amt}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {donation.date}
+                    {donation.updated_at}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {donation.donor}
+                    {donation.donor_id}
                   </td>
                 </tr>
               ))}

@@ -224,6 +224,7 @@ export const getPastDonations = async () => {
     const donations = await databases.listDocuments(databaseId, DONATIONS, [
       Query.equal("organisation_id", organisation.organisation_id),
     ]);
+    
     return donations.documents;
   } catch (e) {
     throw new Error(e);

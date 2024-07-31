@@ -3,8 +3,8 @@ import { Modal, Box, Typography, Button, Grid } from '@mui/material';
 
 const DonationModal = ({ open, onClose, need }) => {
   if (!need) return null;
-
-  const isCost = need.amount > 0;
+  const remainingAmount = need.total_amt - need.collected_amt;
+  const isCost = remainingAmount > 0;
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -31,7 +31,7 @@ const DonationModal = ({ open, onClose, need }) => {
           End Date: {need.date}
         </Typography>
         <Typography sx={{ mt: 2 }}>
-          Amount: ${need.amount}
+          Amount: ${remainingAmount}
         </Typography>
         <Typography sx={{ mt: 2 }}>
           Impact: {need.impact} people

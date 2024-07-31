@@ -190,10 +190,18 @@ export const getAllNeeds = async () => {
     const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
       Query.equal("completed", false),
     ]);
-    console.log("-----------------------------")
-    console.log(allNeeds)
-    console.log("-----------------------------")
+    console.log(allNeeds);
     return allNeeds.documents;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const organisationDetailsForNeeds = async () => {
+  try {
+    const details = await databases.listDocuments(databaseId, ORGANIZATIONS);
+    console.log(details);
+    return details.documents;    
   } catch (e) {
     throw new Error(e);
   }

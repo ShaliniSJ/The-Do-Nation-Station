@@ -1,14 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IconButton, Menu, MenuItem, Avatar, Tooltip, Divider } from '@mui/material';
 import { AccountCircle, Logout } from '@mui/icons-material';
 import { useRouter } from 'next/router';
-import { signOut } from '../lib/appwrite';
+import { signOut,getCurrentUser } from '../lib/appwrite';
+
 const ProfileButton = ({ isdonor }) => {
-    console.log(isdonor)
+    
     const [log,SetLog]=useState([false])
     
     const [anchorEl, setAnchorEl] = useState(null);
+    const [image, setImage] = useState('https://www.gravatar.com/avatar?d=mp');
     const router = useRouter();
+    useEffect(( ) => {
+        const fetchUserProfile=async()=>{
+        if (isdonor) {
+            const user=await getCurrentUser(true);
+            
+
+
+        } else {
+            const user=await getCurrentUser(false);
+            setImage(user.avatar_url)
+        }
+        
+    }
+    fetchUserProfile()
+},[])
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -18,19 +35,26 @@ const ProfileButton = ({ isdonor }) => {
         setAnchorEl(null);
     };
    
-    const handleLogout = () => {
-        localStorage.clear();
-        router.push('/')
-        signOut();
-        // console.log('Logout clicked');
-        handleClose();
+    const handleLogout = async () => {
+        try {
+            await signOut();
+            localStorage.clear();
+            router.push('/');
+            window.location.reload(); 
+        } catch (error) {
+            console.error('Failed to logout', error);
+            alert('Logout failed. Please try again.');
+        } finally {
+            handleClose();
+        }
     };
 
     const handleProfileRedirect = () => {
         handleClose();
         console.log(isdonor);
         if (isdonor) {
-            router.push(`/donorprofile`); // Redirect to donor profile with the user's ID as the slug
+            router.push(`/donorprofile`);
+            // Redirect to donor profile with the user's ID as the slug
         } else {
             router.push('/organisationprofile'); // Redirect to organisation profile
         }
@@ -52,7 +76,7 @@ const ProfileButton = ({ isdonor }) => {
                 >
                     <Avatar
                         alt="Profile Picture"
-                        src="https://cloud.appwrite.io/v1/avatars/initials?name=WorldVisionIndia&width=96&height=96&project=console" // Replace with your avatar source
+                        src={image} // Replace with your avatar source
                         sx={{ width: 56, height: 56 }}
                     />
                 </IconButton>

@@ -35,7 +35,7 @@ const Organisation = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // console.log(formValues);
-    router.push('/needs');
+    router.push('/bank');
   };
 
   return (

@@ -1,5 +1,5 @@
-import React, { useState,useEffect } from 'react';
-import { Container, Paper, Box, TextField, Button, Typography, FormControl, FormLabel, Select, MenuItem } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Container, Paper, Box, TextField, Typography, FormControl, FormLabel, Select, MenuItem } from '@mui/material';
 import dayjs from 'dayjs';
 import CustomButton from './CustomButton';
 import InputField from './InputField';
@@ -11,11 +11,12 @@ const Needs = () => {
     purpose: '',
     amount: '',
     kind: '',
-    kindtype:''
+    kindtype: '',
   });
   const [isKind, setIsKind] = useState(false);
   const [isCash, setIsCash] = useState(false);
   const [showQuantity, setShowQuantity] = useState(false);
+
   useEffect(() => {
     if (formValues.type === 'Kind') {
       setIsKind(true);
@@ -40,7 +41,7 @@ const Needs = () => {
   const handleDateChange = (event) => {
     setFormValues((prevValues) => ({
       ...prevValues,
-      tillDate: event.target.value,
+      tillDate: dayjs(event.target.value),
     }));
   };
 
@@ -58,17 +59,12 @@ const Needs = () => {
   };
 
   return (
-    <Container component="main" maxWidth="sm" className='mt-10'>
-      <Paper elevation={6} className='p-16 rounded-lg'>
+    <Container component="main" maxWidth="sm" className="mt-10">
+      <Paper elevation={6} className="p-16 rounded-lg">
         <Typography component="h1" variant="h5" align="center">
           Needs
         </Typography>
-        <Box
-          component="form"
-          noValidate
-          sx={{ mt: 3 }}
-          onSubmit={handleSubmit}
-        >
+        <Box component="form" noValidate sx={{ mt: 3 }} onSubmit={handleSubmit}>
           <TextField
             fullWidth
             type="date"
@@ -94,33 +90,30 @@ const Needs = () => {
           </FormControl>
           {isKind && (
             <FormControl fullWidth margin="normal" variant="outlined">
-            <FormLabel>Type of Kind needed</FormLabel>
-            <Select
-              name="kindtype"
-              value={formValues.kindtype}
-              onChange={handleChange}
-              required
-              sx={{ mt: 1, mb: 2 }}
-            >
-              <MenuItem value="Food">Biscuit</MenuItem>
-              <MenuItem value="Clothing">Clothing</MenuItem>
-              <MenuItem value="Books">Books</MenuItem>
-              <MenuItem value="Toys">Toys</MenuItem>
-              <MenuItem value="Furniture">Chairs</MenuItem>
-              {/* <MenuItem value="Electronics">Electronics</MenuItem> */}
-              <MenuItem value="Medical Supplies">Medical Supplies</MenuItem>
-              <MenuItem value="Stationery">Stationery</MenuItem>
-              <MenuItem value="Hygiene Products">Hygiene Products</MenuItem>
-              {/* <MenuItem value="Bedding">Bedding</MenuItem> */}
-              {/* <MenuItem value="Household Items">Household Items</MenuItem> */}
-              <MenuItem value="Sports Equipment">Sports Equipment</MenuItem>
-              <MenuItem value="Art Supplies">Art Supplies</MenuItem>
-              <MenuItem value="School Supplies">School Supplies</MenuItem>
-              <MenuItem value="Tools and Hardware">Tools and Hardware</MenuItem>
-            </Select>
-          </FormControl>
+              <FormLabel>Type of Kind needed</FormLabel>
+              <Select
+                name="kindtype"
+                value={formValues.kindtype}
+                onChange={handleChange}
+                required
+                sx={{ mt: 1, mb: 2 }}
+              >
+                <MenuItem value="Food">Biscuit</MenuItem>
+                <MenuItem value="Clothing">Clothing</MenuItem>
+                <MenuItem value="Books">Books</MenuItem>
+                <MenuItem value="Toys">Toys</MenuItem>
+                <MenuItem value="Furniture">Chairs</MenuItem>
+                <MenuItem value="Medical Supplies">Medical Supplies</MenuItem>
+                <MenuItem value="Stationery">Stationery</MenuItem>
+                <MenuItem value="Hygiene Products">Hygiene Products</MenuItem>
+                <MenuItem value="Sports Equipment">Sports Equipment</MenuItem>
+                <MenuItem value="Art Supplies">Art Supplies</MenuItem>
+                <MenuItem value="School Supplies">School Supplies</MenuItem>
+                <MenuItem value="Tools and Hardware">Tools and Hardware</MenuItem>
+              </Select>
+            </FormControl>
           )}
-           {showQuantity && (
+          {showQuantity && (
             <TextField
               fullWidth
               label="Quantity"

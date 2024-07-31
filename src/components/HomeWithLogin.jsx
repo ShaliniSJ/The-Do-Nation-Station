@@ -22,6 +22,7 @@ const HomeWithLogin = () => {
   const [amount, setAmount] = useState("");
   const [impact, setImpact] = useState("");
   const [needs, setNeeds] = useState([]);
+  const [allNeeds, setAllNeeds] = useState([]); // Store the original list of needs
   const [selectedNeed, setSelectedNeed] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [organisations, setOrganisations] = useState({});
@@ -36,6 +37,7 @@ const HomeWithLogin = () => {
           return map;
         }, {});
         setNeeds(needsData);
+        setAllNeeds(needsData); // Store the original list of needs
         setOrganisations(orgMap);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -46,17 +48,34 @@ const HomeWithLogin = () => {
 
   const handleSearch = () => {
     showSection = false;
-    const filteredNeeds = needs.filter((need) => {
-      const matchesLocation = location ? organisations[need.organisation_id]?.location === location : true;
+    const filteredNeeds = allNeeds.filter((need) => {
+      const org = organisations[need.organisation_id];
+      const matchesLocation = location
+        ? org && org.address && org.address.toLowerCase().startsWith(location.toLowerCase())
+        : true;
       const matchesDate = endDate
         ? new Date(need.date) <= new Date(endDate)
         : true;
-      const matchesAmount = amount ? need.total_amount - need.collected_amount <= parseFloat(amount) : true;
-      const matchesImpact = impact ? need.impact >= parseInt(impact) : true;
-      return matchesLocation && matchesDate && matchesAmount && matchesImpact;
+      const matchesAmount = amount
+        ? need.total_amt - need.collected_amt >= parseFloat(amount)
+        : true;
+      const matchesOrganisation = impact
+        ? org && org.organisation_name.toLowerCase().startsWith(impact.toLowerCase())
+        : true;
+      return matchesLocation && matchesDate && matchesAmount && matchesOrganisation;
     });
-
+  
     setNeeds(filteredNeeds);
+  };
+  
+
+  const handleClear = () => {
+    setLocation("");
+    setEndDate("");
+    setAmount("");
+    setImpact("");
+    setNeeds(allNeeds); // Reset to the original list of needs
+    showSection = true;
   };
 
   const handleDonate = (need) => {
@@ -68,7 +87,7 @@ const HomeWithLogin = () => {
     setIsModalOpen(false);
     setSelectedNeed(null);
   };
-  
+
   return (
     <div className="mt-0 p-4">
       <h1 className="text-4xl font-bold mb-4 text-blue">
@@ -109,9 +128,8 @@ const HomeWithLogin = () => {
           <Grid item xs={12} md={3}>
             <TextField
               fullWidth
-              label="Impact People"
+              label="Organisation Name"
               variant="outlined"
-              type="number"
               value={impact}
               onChange={(e) => setImpact(e.target.value)}
             />
@@ -119,7 +137,7 @@ const HomeWithLogin = () => {
         </Grid>
       </Box>
 
-      <Box display="flex" justifyContent="center" mt={2}>
+      <Box display="flex" justifyContent="center" mt={2} gap={2}>
         <Button
           variant="contained"
           color="primary"
@@ -127,6 +145,13 @@ const HomeWithLogin = () => {
           sx={{ backgroundColor: "#172554" }}
         >
           Search
+        </Button>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={handleClear}
+        >
+          Clear
         </Button>
       </Box>
 
@@ -155,7 +180,7 @@ const HomeWithLogin = () => {
                 <CardContent>
                   <Typography variant="h6" component="div">
                     <Link href={`/organProfileShownToDonorsFromNeeds?${need.organisation_id}`} underline="none">
-                    Organization Name: {org ? org.organisation_name : "Unknown"}
+                      Organization Name: {org ? org.organisation_name : "Unknown"}
                     </Link>
                   </Typography>
                   <Typography color="textSecondary">
@@ -164,17 +189,13 @@ const HomeWithLogin = () => {
                   <Typography color="textSecondary">Date: {need.date}</Typography>
                   {need.type && <Typography color="textSecondary">
                       Amount: ${remainingAmount}
-                    </Typography>
-                  }
-                  {!(need.type) && <Typography color="textSecondary">
+                    </Typography>}
+                  {!need.type && <Typography color="textSecondary">
                       Kind: {need.kind}
-                    </Typography>
-                  }
-                  {
-                    !(need.type) && <Typography color="textSecondary">
+                    </Typography>}
+                  {!need.type && <Typography color="textSecondary">
                     Quantity: {need.quantity}
-                  </Typography>
-                  }
+                  </Typography>}
                   <Typography variant="body2">{need.description}</Typography>
                   <Box display="flex" justifyContent="center" mt={2}>
                     <Button

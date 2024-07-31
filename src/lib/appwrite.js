@@ -151,6 +151,17 @@ export const getCurrentUser = async (is_donor) => {
   }
 };
 
+export const getOrganisationUser = async (organisation_id) => {
+  try {
+      const organisation = await databases.listDocuments(databaseId, ORGANIZATIONS, [
+        Query.equal("organisation_id", organisation_id),
+      ]);
+    return organisation.documents[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getHistory = async () => {
   try {
     const data = await databases.listDocuments(databaseId, NEEDS, [
@@ -194,6 +205,46 @@ export const getAllNeeds = async () => {
     return allNeeds.documents;
   } catch (e) {
     throw new Error(e);
+  }
+};
+
+export const getAllNeedsOrganisation = async (userId) => {
+  try {
+    const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
+      Query.and([
+        Query.equal('completed', false),
+        Query.equal('organisation_id', userId)
+      ])
+    ]);
+    
+    // Log the response to verify structure (for debugging)
+    console.log('Fetched Needs:', allNeeds);
+    
+    return allNeeds.documents; // Ensure this matches your data structure
+  } catch (e) {
+    // Handle and log the error more explicitly
+    console.error('Error fetching needs:', e.message || e);
+    throw e; // Rethrow to propagate error
+  }
+};
+
+export const getAllPastDonationsForStatic = async (userId) => {
+  try {
+    const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
+      Query.and([
+        Query.equal('completed', true),
+        Query.equal('organisation_id', userId)
+      ])
+    ]);
+    
+    // Log the response to verify structure (for debugging)
+    console.log('Fetched Needs:', allNeeds);
+    
+    return allNeeds.documents; // Ensure this matches your data structure
+  } catch (e) {
+    // Handle and log the error more explicitly
+    console.error('Error fetching needs:', e.message || e);
+    throw e; // Rethrow to propagate error
   }
 };
 

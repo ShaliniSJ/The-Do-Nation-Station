@@ -1,69 +1,69 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import BlueLogo from "../assets/the-do-nation-station-high-resolution-logo.png";
-import Router from "next/router";
-import { router } from "next/router";
-import { getCurrentUser, getNeeds, getPastDonations } from "../lib/appwrite";
-
-
-// This page is static organisation details to be displayed when donors want to check the organisations profile before donating 
+import { getOrganisationUser, getAllNeedsOrganisation, getAllPastDonationsForStatic } from "../lib/appwrite";
 
 // Define your Google Maps API key here
 const API_KEY = process.env.GOOGLE_MAP_API_KEY;
 
 const ProfileForOrganisationFromNeeds = () => {
-  const [NeedDetails,setNeedDetails] = useState([]);
-  const [DonationDetails,setDonationDetails] = useState([]);
-  const [User,setUser] = useState([]);
-  // Fake data
-  const orgDat = {
+  const [NeedDetails, setNeedDetails] = useState([]);
+  const [DonationDetails, setDonationDetails] = useState([]);
+  const [User, setUser] = useState(null); // Changed from array to null initially
+  const [orgData, setOrgData] = useState({
     name: "",
-    description:
-      "",
+    description: "",
     impacts: "",
     type: "",
-    address:
-      "",
+    address: "",
     pastDonations: [],
     currentNeeds: [],
     mapLink: "",
     gallery: [],
-  };
-  
-  const [orgData, setOrgData] = useState(orgDat);
-  const [needs, setNeeds] = useState(orgData.currentNeeds);
-  useEffect(async () => {
-    // for needs
-    // console.log(await getNeeds());
-    setNeedDetails(await getNeeds());
-    // for donations
-    // console.log(await getPastDonations());
-    setDonationDetails(await getPastDonations());
-    // for organisation details
-    // since it is organisation the parameter is false
-    // console.log(await getCurrentUser(false));
-    setUser(await getCurrentUser(false));
-    setOrgData({
-      name:User.organisation_name,
-      description:User.description,
-      impacts:'0+ people',
-      type:'NGO',
-      address:User.address,
-      pastDonations:DonationDetails,
-      currentNeeds:NeedDetails,
-      mapLink:User.location,
-      gallery:[
-        { id: 1, src: User.photos, alt: "Image 1" },
-      ]});
-  }, []);
-  
-
-  // This page is static organisation details to be displayed when donors want to check the organisations profile before donating
-
+  });
+  const [needs, setNeeds] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentNeedsPage, setCurrentNeedsPage] = useState(1);
   const [editingNeed, setEditingNeed] = useState(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const url = new URL(window.location.href);
+      console.log(url)
+      const userId = url.href.split('?').pop();
+      console.log(userId)
+
+      // Ensure userId is not empty or undefined
+      if (userId) {
+        const fetchedNeeds = await getAllNeedsOrganisation(userId);
+        const fetchedDonations = await getAllPastDonationsForStatic(userId);
+        const fetchedUser = await getOrganisationUser(userId);
+
+        setNeedDetails(fetchedNeeds);
+        setDonationDetails(fetchedDonations);
+        setUser(fetchedUser);
+
+        // Update orgData after fetching the user data
+        setOrgData({
+          name: fetchedUser.organisation_name || "",
+          description: fetchedUser.description || "",
+          impacts: '0+ people',
+          type: 'NGO',
+          address: fetchedUser.address || "",
+          pastDonations: fetchedDonations,
+          currentNeeds: fetchedNeeds,
+          mapLink: fetchedUser.location || "",
+          gallery: [
+            { id: 1, src: fetchedUser.photos || "", alt: "Image 1" },
+          ],
+        });
+
+        setNeeds(fetchedNeeds);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const donationsPerPage = 10;
   const NeedsPerPage = 10;
@@ -79,8 +79,6 @@ const ProfileForOrganisationFromNeeds = () => {
   const handleNeedsPageChange = (pageNumber) => {
     setCurrentNeedsPage(pageNumber);
   };
-
-  // This page is static organisation details to be displayed when donors want to check the organisations profile before donating
 
   const handleDonate = () => {
     setEditingNeed(null);
@@ -107,8 +105,6 @@ const ProfileForOrganisationFromNeeds = () => {
 
   const encodedAddress = encodeURIComponent(orgData.address);
   const mapEmbedLink = `https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${encodedAddress}`;
-
-  // This page is static organisation details to be displayed when donors want to check the organisations profile before donating
 
   return (
     <div className="min-h-screen bg-white text-dark-blue p-6">
@@ -273,7 +269,7 @@ const ProfileForOrganisationFromNeeds = () => {
         ></iframe>
       </div>
 
-      {/* Gallery Section */}
+      {/* Gallery Section
       <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
         <div className="flex flex-wrap">
@@ -289,7 +285,7 @@ const ProfileForOrganisationFromNeeds = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Edit Popup */}
       {editingNeed && (
@@ -318,13 +314,13 @@ const ProfileForOrganisationFromNeeds = () => {
             </div>
             <div className="mt-4">
               <button
-                onClick={handleSaveEdit}
+                onClick={handleSaveDonate}
                 className="bg-blue text-white py-2 px-4 rounded hover:bg-blue-700"
               >
                 Save
               </button>
               <button
-                onClick={handleCancelEdit}
+                onClick={handleCancelDonate}
                 className="bg-red-500 text-white py-2 px-4 rounded ml-2 hover:bg-red-700"
               >
                 Cancel
@@ -337,56 +333,4 @@ const ProfileForOrganisationFromNeeds = () => {
   );
 };
 
-// This page is static organisation details to be displayed when donors want to check the organisations profile before donating
 export default ProfileForOrganisationFromNeeds;
-
-
-// const orgDat = {
-//   name: "The Do-Nation Station",
-//   description:
-//     "Many orphanages, NGOs, hospitals, foundations, and old age homes have their own websites through which donors make donations in the form of kind and money. But there lacks a central platform through which all orphanages, NGOs, hospitals, foundations, and old age homes can register themselves in the platform and donors can easily donate to the needy based on urgency, location, date, timings, population, and requirements. The platform should also be responsible and transparent by showing the government licenses, audits, details, and photographs of registered orphanages, NGOs, hospitals, foundations, and old age homes. The donors will be able to see how, where, and by whom their money and kind are being utilized. There is also a need to show a leaderboard in specific locations among donors in order to encourage their donation.",
-//   impacts: "5000+ people",
-//   type: "NGO",
-//   address:
-//     "Chennai Institute of Technology, Sarathy Nagar, Kundrathur, Chennai, Tamil Nadu 600069",
-//   pastDonations: [
-//     { id: 1, amount: "$1000", date: "2024-01-15", donor: "John Doe" },
-//     { id: 2, amount: "$500", date: "2024-02-20", donor: "Jane Doe" },
-//     { id: 3, amount: "$2000", date: "2024-03-10", donor: "John Doe" },
-//     { id: 4, amount: "$1000", date: "2024-01-15", donor: "John Doe" },
-//     { id: 5, amount: "$500", date: "2024-02-20", donor: "Jane Doe" },
-//     { id: 6, amount: "$2000", date: "2024-03-10", donor: "John Doe" },
-//     { id: 7, amount: "$1000", date: "2024-01-15", donor: "John Doe" },
-//     { id: 8, amount: "$500", date: "2024-02-20", donor: "Jane Doe" },
-//     { id: 9, amount: "$2000", date: "2024-03-10", donor: "John Doe" },
-//     { id: 10, amount: "$1000", date: "2024-01-15", donor: "John Doe" },
-//     { id: 11, amount: "$500", date: "2024-02-20", donor: "Jane Doe" },
-//     { id: 12, amount: "$2000", date: "2024-03-10", donor: "John Doe" },
-//     { id: 13, amount: "$1000", date: "2024-01-15", donor: "John Doe" },
-//     { id: 14, amount: "$500", date: "2024-02-20", donor: "Jane Doe" },
-//     { id: 15, amount: "$2000", date: "2024-03-10", donor: "John Doe" },
-//   ],
-//   currentNeeds: [
-//     { id: 1, amount: "$1000", date: "2024-01-15" },
-//     { id: 2, amount: "$500", date: "2024-02-20" },
-//     { id: 3, amount: "$2000", date: "2024-03-10" },
-//     { id: 4, amount: "$1000", date: "2024-01-15" },
-//     { id: 5, amount: "$500", date: "2024-02-20" },
-//     { id: 6, amount: "$2000", date: "2024-03-10" },
-//     { id: 7, amount: "$1000", date: "2024-01-15" },
-//     { id: 8, amount: "$500", date: "2024-02-20" },
-//     { id: 9, amount: "$2000", date: "2024-03-10" },
-//     { id: 10, amount: "$1000", date: "2024-01-15" },
-//     { id: 11, amount: "$500", date: "2024-02-20" },
-//     { id: 12, amount: "$2000", date: "2024-03-10" },
-//     { id: 13, amount: "$1000", date: "2024-01-15" },
-//     { id: 14, amount: "$500", date: "2024-02-20" },
-//     { id: 15, amount: "$2000", date: "2024-03-10" },
-//   ],
-//   mapLink: "https://maps.app.goo.gl/X9yj6RURE2A6zNLr7",
-//   gallery: [
-//     { id: 1, src: "/path-to-image1.jpg", alt: "Image 1" },
-//     { id: 2, src: "/path-to-image2.jpg", alt: "Image 2" },
-//     { id: 3, src: "/path-to-image3.jpg", alt: "Image 3" },
-//   ],
-// };

@@ -43,11 +43,9 @@ const Needs = () => {
   }, [formValues.type]);
   
   useEffect(() => {
-    if (formValues.kindtype && formValues.kindtype !== 'Clothing' && formValues.kindtype !== 'Toys') {
+    if (formValues.kindtype ) {
       setShowQuantity(true);
-    } else {
-      setShowQuantity(false);
-    }
+    } 
   }, [formValues.kindtype]);
 
   const handleDateChange = (event) => {

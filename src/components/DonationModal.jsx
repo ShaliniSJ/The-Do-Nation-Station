@@ -3,8 +3,8 @@ import { Modal, Box, Typography, Button, Grid } from '@mui/material';
 
 const DonationModal = ({ open, onClose, need }) => {
   if (!need) return null;
-
-  const isCost = need.amount > 0;
+  const remainingAmount = need.total_amt - need.collected_amt;
+  const isCost = remainingAmount > 0;
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -22,27 +22,33 @@ const DonationModal = ({ open, onClose, need }) => {
         }}
       >
         <Typography variant="h6" component="h2">
-          {need.organization}
-        </Typography>
-        <Typography sx={{ mt: 2 }}>
-          Location: {need.location}
+          Organisation Name: {need.organisation_name}
         </Typography>
         <Typography sx={{ mt: 2 }}>
           End Date: {need.date}
         </Typography>
+        {isCost &&
         <Typography sx={{ mt: 2 }}>
-          Amount: ${need.amount}
+          Amount: ${remainingAmount}
         </Typography>
+        }
+        {!(isCost) &&
         <Typography sx={{ mt: 2 }}>
-          Impact: {need.impact} people
+          Kind: {need.kind}
         </Typography>
+        }
+        {!(isCost) &&
+        <Typography sx={{ mt: 2 }}>
+          Quantity: {need.quantity}
+        </Typography>
+        }
         <Typography sx={{ mt: 2 }}>
           Description: {need.description}
         </Typography>
         <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid item xs={6}>
             <Button variant="contained" color="primary" fullWidth>
-              <a href="organization-profile-link" target="_blank" style={{ textDecoration: 'none', color: 'white' }}>Profile</a>
+              <a href={`/organProfileShownToDonorsFromNeeds?${need.organisation_id}`} target="_blank" style={{ textDecoration: 'none', color: 'white' }}>Profile</a>
             </Button>
           </Grid>
           <Grid item xs={6}>

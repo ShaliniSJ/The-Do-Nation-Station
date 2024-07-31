@@ -24,6 +24,7 @@ const ORGANIZATIONS = process.env.NEXT_PUBLIC_ORGANIZATIONS_COLLECTION;
 const DONORS = process.env.NEXT_PUBLIC_DONARS_COLLECTION;
 const NEEDS = process.env.NEXT_PUBLIC_NEEDS_COLLECTION;
 const DONATIONS = process.env.NEXT_PUBLIC_DONATIONS_COLLECTION;
+const STORAGE_ID = process.env.NEXT_PUBLIC_STORAGE_ID;
 
 export const Config = {
   endpoint: BASE_URL,
@@ -40,7 +41,8 @@ client
 const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
-const today = new Date().toISOString();
+const storage = new Storage(client);
+
 
 export const createUser = async (email, password, username, isDonor) => {
   try {
@@ -123,7 +125,7 @@ export const signIn = async (email, password) => {
 export const getCurrentUser = async (is_donor) => {
   try {
     const currentAccount = await account.get();
-    console.log(currentAccount);
+    // console.log(currentAccount);
     if (!currentAccount) {
       throw Error;
     }
@@ -144,6 +146,17 @@ export const getCurrentUser = async (is_donor) => {
       }
     }
     return CurrentUser.documents[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getOrganisationUser = async (organisation_id) => {
+  try {
+      const organisation = await databases.listDocuments(databaseId, ORGANIZATIONS, [
+        Query.equal("organisation_id", organisation_id),
+      ]);
+    return organisation.documents[0];
   } catch (error) {
     console.log(error);
   }
@@ -183,17 +196,200 @@ export const getNeeds = async () => {
   }
 };
 
+export const getAllNeeds = async () => {
+  try {
+    const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
+      Query.equal("completed", false),
+    ]);
+    console.log(allNeeds);
+    return allNeeds.documents;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const getAllNeedsOrganisation = async (userId) => {
+  try {
+    const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
+      Query.and([
+        Query.equal('completed', false),
+        Query.equal('organisation_id', userId)
+      ])
+    ]);
+    
+    // Log the response to verify structure (for debugging)
+    console.log('Fetched Needs:', allNeeds);
+    
+    return allNeeds.documents; // Ensure this matches your data structure
+  } catch (e) {
+    // Handle and log the error more explicitly
+    console.error('Error fetching needs:', e.message || e);
+    throw e; // Rethrow to propagate error
+  }
+};
+
+export const getAllPastDonationsForStatic = async (userId) => {
+  try {
+    const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
+      Query.and([
+        Query.equal('completed', true),
+        Query.equal('organisation_id', userId)
+      ])
+    ]);
+    
+    // Log the response to verify structure (for debugging)
+    console.log('Fetched Needs:', allNeeds);
+    
+    return allNeeds.documents; // Ensure this matches your data structure
+  } catch (e) {
+    // Handle and log the error more explicitly
+    console.error('Error fetching needs:', e.message || e);
+    throw e; // Rethrow to propagate error
+  }
+};
+
+export const organisationDetailsForNeeds = async () => {
+  try {
+    const details = await databases.listDocuments(databaseId, ORGANIZATIONS);
+    console.log(details);
+    return details.documents;    
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 export const getPastDonations = async () => {
   try {
     const organisation = await getCurrentUser(false);
     const donations = await databases.listDocuments(databaseId, DONATIONS, [
       Query.equal("organisation_id", organisation.organisation_id),
     ]);
+    
     return donations.documents;
   } catch (e) {
     throw new Error(e);
   }
 };
+
+export const postOrganisationDetails = async (form) => {
+  try {
+    const organisation = await getCurrentUser(false);
+    console.log(form)
+    const updateOrganisation = await databases.updateDocument(
+      databaseId,
+      ORGANIZATIONS,
+      organisation.$id,
+      {
+        description: form.desc,
+        license_id: form.license,
+        location: form.location,
+        address: form.address,
+        ph_no: form.phno,
+        photos: "http://localhost.com",
+        type:form.type,
+        impact:form.impact
+      }
+    );
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const postNeeds=async(form)=>{
+  try{
+  const organisation = await getCurrentUser(false);
+  // console.log(form,organisation)
+  const insertNeeds= await databases.createDocument(
+    databaseId,
+    NEEDS,
+    ID.unique(),
+    {
+     organisation_id:organisation.organisation_id,
+     total_amt:form.amount,
+     type:form.iscash,
+     kind:form.kindtype,
+     description:form.purpose,
+     date:form.tillDate['$d'],
+     completed:false,
+     organisation_name:organisation.organisation_name,
+     quantity:form.quantity
+    }
+  );
+}
+catch(e){
+  throw new Error(e)
+}
+}
+export const postBankDetails=async(form)=>{
+  try{
+    const organisation = await getCurrentUser(false);
+    console.log(form)
+    const updateOrganisation = await databases.updateDocument(
+      databaseId,
+      ORGANIZATIONS,
+      organisation.$id,
+      {
+        account_no: form.number,
+        ifsc_code: form.code,
+        branch: form.branch,
+        account_name: form.name,
+        bank_name: form.bankname
+      }
+    );
+
+
+  }
+  catch(e){
+    throw new Error(e)
+  }
+}
+export const getFilePreview = async (fileId, type) => {
+  let fileUrl;
+  try {
+    if (type === "video") {
+      fileUrl = storage.getFileView(STORAGE_ID, fileId);
+    } else if (type === "image") {
+      fileUrl = storage.getFilePreview(
+        STORAGE_ID,
+        fileId,
+        2000,
+        2000,
+        "top",
+        100
+      );
+    } else {
+      throw new Error("Invalid file type");
+    }
+    return fileUrl;
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
+export const uploadFile = async (file, type) => {
+  if (!file) return;
+
+  try {
+    const uploadedFile = await storage.createFile(
+      STORAGE_ID,
+      ID.unique(),
+      file
+    );
+    const fileUrl = await getFilePreview(uploadedFile.$id, type);
+    return fileUrl;
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
+
+
+
+
+
+
+
+
 
 export const getLatestPost = async () => {
   try {
@@ -228,52 +424,52 @@ export const getUserPosts = async (userId) => {
   }
 };
 
-export const getFilePreview = async (fileId, type) => {
-  let fileUrl;
-  try {
-    if (type == "video") {
-      fileUrl = storage.getfileView(storageId, fileId);
-    } else if (type == "image") {
-      fileUrl = storage.getFilePreview(
-        storageId,
-        fileId,
-        2000,
-        2000,
-        "top",
-        100
-      );
-    } else {
-      throw new Error("Invalid file type");
-    }
-    if (!fileUrl) {
-      throw Error;
-    }
-    return fileUrl;
-  } catch (e) {
-    throw new Error(e);
-  }
-};
+// export const getFilePreview = async (fileId, type) => {
+//   let fileUrl;
+//   try {
+//     if (type == "video") {
+//       fileUrl = storage.getfileView(storageId, fileId);
+//     } else if (type == "image") {
+//       fileUrl = storage.getFilePreview(
+//         STORAGE_ID,
+//         fileId,
+//         2000,
+//         2000,
+//         "top",
+//         100
+//       );
+//     } else {
+//       throw new Error("Invalid file type");
+//     }
+//     if (!fileUrl) {
+//       throw Error;
+//     }
+//     return fileUrl;
+//   } catch (e) {
+//     throw new Error(e);
+//   }
+// };
 
-export const uploadFile = async (file, type) => {
-  if (!file) return;
+// export const uploadFile = async (file, type) => {
+//   if (!file) return;
 
-  const assest = {
-    name: file.fileName,
-    type: file.mimeType,
-    size: file.fileSize,
-    uri: file.uri,
-  };
-  try {
-    const uploadedFile = await storageId.createFile(
-      storageId,
-      ID.unique(),
-      assest
-    );
-    const fileUrl = await getFilePreview(uploadedFile.$id, type);
-  } catch (e) {
-    throw new Error(e);
-  }
-};
+//   const assest = {
+//     name: file.fileName,
+//     type: file.mimeType,
+//     size: file.fileSize,
+//     uri: file.uri,
+//   };
+//   try {
+//     const uploadedFile = await storageId.createFile(
+//       storageId,
+//       ID.unique(),
+//       assest
+//     );
+//     const fileUrl = await getFilePreview(uploadedFile.$id, type);
+//   } catch (e) {
+//     throw new Error(e);
+//   }
+// };
 
 export const createVideo = async (form) => {
   try {

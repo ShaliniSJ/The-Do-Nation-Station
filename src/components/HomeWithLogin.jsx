@@ -12,24 +12,8 @@ import {
 } from "@mui/material";
 import DonationModal from "./DonationModal"; // Ensure correct path
 import Footer from "@/src/components/Footer";
-
-// Sample data function
-const getSampleNeeds = () =>
-  Array.from({ length: 50 }, (_, index) => ({
-    id: index,
-    organization: `Organization ${index + 1}`,
-    location: `Location ${Math.floor(Math.random() * 10) + 1}`,
-    date: new Date(
-      new Date().setDate(new Date().getDate() - Math.floor(Math.random() * 30))
-    )
-      .toISOString()
-      .split("T")[0],
-    amount: Math.floor(Math.random() * 1000) + 100,
-    impact: Math.floor(Math.random() * 500) + 50,
-    description: `Need description for organization ${
-      index + 1
-    }. They require assistance with various needs including financial support, resources, and volunteer help.`,
-  }));
+import Link from '@mui/material/Link';
+import { getAllNeeds, organisationDetailsForNeeds } from "../lib/appwrite";
 
 var showSection = true;
 
@@ -39,27 +23,60 @@ const HomeWithLogin = () => {
   const [amount, setAmount] = useState("");
   const [impact, setImpact] = useState("");
   const [needs, setNeeds] = useState([]);
+  const [allNeeds, setAllNeeds] = useState([]); // Store the original list of needs
   const [selectedNeed, setSelectedNeed] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [organisations, setOrganisations] = useState({});
 
   useEffect(() => {
-    // Generate sample data on the client-side
-    setNeeds(getSampleNeeds());
+    const fetchNeedsAndOrganisations = async () => {
+      try {
+        const needsData = await getAllNeeds();
+        const organisationData = await organisationDetailsForNeeds();
+        const orgMap = organisationData.reduce((map, org) => {
+          map[org.organisation_id] = org;
+          return map;
+        }, {});
+        setNeeds(needsData);
+        setAllNeeds(needsData); // Store the original list of needs
+        setOrganisations(orgMap);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchNeedsAndOrganisations();
   }, []);
 
   const handleSearch = () => {
     showSection = false;
-    const filteredNeeds = getSampleNeeds().filter((need) => {
-      const matchesLocation = location ? need.location === location : true;
+    const filteredNeeds = allNeeds.filter((need) => {
+      const org = organisations[need.organisation_id];
+      const matchesLocation = location
+        ? org && org.address && org.address.toLowerCase().startsWith(location.toLowerCase())
+        : true;
       const matchesDate = endDate
         ? new Date(need.date) <= new Date(endDate)
         : true;
-      const matchesAmount = amount ? need.amount <= parseFloat(amount) : true;
-      const matchesImpact = impact ? need.impact >= parseInt(impact) : true;
-      return matchesLocation && matchesDate && matchesAmount && matchesImpact;
+      const matchesAmount = amount
+        ? need.total_amt - need.collected_amt >= parseFloat(amount)
+        : true;
+      const matchesOrganisation = impact
+        ? org && org.organisation_name.toLowerCase().startsWith(impact.toLowerCase())
+        : true;
+      return matchesLocation && matchesDate && matchesAmount && matchesOrganisation;
     });
-
+  
     setNeeds(filteredNeeds);
+  };
+  
+
+  const handleClear = () => {
+    setLocation("");
+    setEndDate("");
+    setAmount("");
+    setImpact("");
+    setNeeds(allNeeds); // Reset to the original list of needs
+    showSection = true;
   };
 
   const handleDonate = (need) => {
@@ -73,66 +90,71 @@ const HomeWithLogin = () => {
   };
 
   return (
-    <div className="mt-0 py-4 ">
-      <div className="md:mx-6">
-        <h2 className="text-4xl jost font-bold mb-8 text-primary-blue">
-          Search for Donation Needs
-        </h2>
-        <Box sx={{ mb: 4 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={3}>
-              <TextField
-                fullWidth
-                label="Location"
-                variant="outlined"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <TextField
-                fullWidth
-                type="date"
-                label="End Date"
-                variant="outlined"
-                InputLabelProps={{ shrink: true }}
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <TextField
-                fullWidth
-                label="Amount"
-                variant="outlined"
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <TextField
-                fullWidth
-                label="Impact People"
-                variant="outlined"
-                type="number"
-                value={impact}
-                onChange={(e) => setImpact(e.target.value)}
-              />
-            </Grid>
+    <div className="mt-0 p-4">
+      <h1 className="text-4xl font-bold mb-4 text-blue">
+        Search for Donation Needs
+      </h1>
+      <Box sx={{ mb: 4 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={3}>
+            <TextField
+              fullWidth
+              label="Location"
+              variant="outlined"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
           </Grid>
-        </Box>
+          <Grid item xs={12} md={3}>
+            <TextField
+              fullWidth
+              type="date"
+              label="End Date"
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <TextField
+              fullWidth
+              label="Amount"
+              variant="outlined"
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <TextField
+              fullWidth
+              label="Organisation Name"
+              variant="outlined"
+              value={impact}
+              onChange={(e) => setImpact(e.target.value)}
+            />
+          </Grid>
+        </Grid>
+      </Box>
 
-        <Box display="flex" justifyContent="center" mt={2}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSearch}
-            sx={{ backgroundColor: "#172554" }}
-          >
-            Search
-          </Button>
-        </Box>
+      <Box display="flex" justifyContent="center" mt={2} gap={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSearch}
+          sx={{ backgroundColor: "#172554" }}
+        >
+          Search
+        </Button>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={handleClear}
+        >
+          Clear
+        </Button>
+      </Box>
 
         {showSection && (
           <section className="flex flex-col items-center py-10 bg-white mt-0">
@@ -148,49 +170,50 @@ const HomeWithLogin = () => {
           </section>
         )}
 
-        <h2 className="text-4xl jost font-semibold mb-4 text-primary-blue">
-          Needs List
-        </h2>
-        <Grid container spacing={2} className="nunito">
-          {needs.map((need) => (
+      <h2 className="text-2xl font-semibold mb-4 text-blue">List of Needs</h2>
+      <Grid container spacing={2}>
+        {needs.map((need) => {
+          const remainingAmount = need.total_amt - need.collected_amt;
+          const org = organisations[need.organisation_id];
+          return (
             <Grid item xs={12} sm={6} md={4} key={need.id}>
-              <div
-                variant="outlined"
-                className="bg-secondary-blue/20 border-2 border-secondary-blue/10 nunito"
-              >
+              <Card variant="outlined">
                 <CardContent>
-                  <Typography variant="h5" component="div">
-                    {need.organization}
+                  <Typography variant="h6" component="div">
+                    <Link href={`/organProfileShownToDonorsFromNeeds?${need.organisation_id}`} underline="none">
+                      Organization Name: {org ? org.organisation_name : "Unknown"}
+                    </Link>
                   </Typography>
                   <Typography color="textSecondary">
-                    Location: {need.location}
+                    Location: {org ? org.address : "Unknown"}
                   </Typography>
-                  <Typography color="textSecondary">
-                    Date: {need.date}
-                  </Typography>
-                  <Typography color="textSecondary">
-                    Amount: Rs.{need.amount}
-                  </Typography>
-                  <Typography color="textSecondary">
-                    Impact: {need.impact} people
-                  </Typography>
-                  <Typography variant="body1">{need.description}</Typography>
+                  <Typography color="textSecondary">Date: {need.date}</Typography>
+                  {need.type && <Typography color="textSecondary">
+                      Amount: ${remainingAmount}
+                    </Typography>}
+                  {!need.type && <Typography color="textSecondary">
+                      Kind: {need.kind}
+                    </Typography>}
+                  {!need.type && <Typography color="textSecondary">
+                    Quantity: {need.quantity}
+                  </Typography>}
+                  <Typography variant="body2">{need.description}</Typography>
                   <Box display="flex" justifyContent="center" mt={2}>
                     <Button
-                      className="px-8"
                       variant="contained"
                       color="primary"
                       onClick={() => handleDonate(need)}
-                      sx={{ backgroundColor: "#172554", paddingX: "2rem" }}
+                      sx={{ backgroundColor: "#172554" }}
                     >
                       Donate
                     </Button>
                   </Box>
                 </CardContent>
-              </div>
+              </Card>
             </Grid>
-          ))}
-        </Grid>
+          );
+        })}
+      </Grid>
 
         <DonationModal
           open={isModalOpen}

@@ -4,6 +4,8 @@ import { Container, Paper, Box } from '@mui/material';
 import Input from './InputField';
 import CustomButton from './CustomButton';
 import Typography from "@mui/material/Typography";
+import { postBankDetails } from '../lib/appwrite';
+import { router } from 'next/router';
 
 
 
@@ -24,9 +26,12 @@ const BankDetails = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
-    console.log(formValues);
+    const data= await postBankDetails(formValues)
+    alert("Data Added successfully")
+    router.push('/')
+    // console.log(formValues);
   };
 
   return (

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import DonationModal from "./DonationModal"; // Ensure correct path
 import Footer from "@/src/components/Footer";
-import Link from '@mui/material/Link';
+import Link from "@mui/material/Link";
 import { getAllNeeds, organisationDetailsForNeeds } from "../lib/appwrite";
 
 var showSection = true;
@@ -52,7 +52,9 @@ const HomeWithLogin = () => {
     const filteredNeeds = allNeeds.filter((need) => {
       const org = organisations[need.organisation_id];
       const matchesLocation = location
-        ? org && org.address && org.address.toLowerCase().startsWith(location.toLowerCase())
+        ? org &&
+          org.address &&
+          org.address.toLowerCase().startsWith(location.toLowerCase())
         : true;
       const matchesDate = endDate
         ? new Date(need.date) <= new Date(endDate)
@@ -61,14 +63,16 @@ const HomeWithLogin = () => {
         ? need.total_amt - need.collected_amt >= parseFloat(amount)
         : true;
       const matchesOrganisation = impact
-        ? org && org.organisation_name.toLowerCase().startsWith(impact.toLowerCase())
+        ? org &&
+          org.organisation_name.toLowerCase().startsWith(impact.toLowerCase())
         : true;
-      return matchesLocation && matchesDate && matchesAmount && matchesOrganisation;
+      return (
+        matchesLocation && matchesDate && matchesAmount && matchesOrganisation
+      );
     });
-  
+
     setNeeds(filteredNeeds);
   };
-  
 
   const handleClear = () => {
     setLocation("");
@@ -147,28 +151,24 @@ const HomeWithLogin = () => {
         >
           Search
         </Button>
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={handleClear}
-        >
+        <Button variant="outlined" color="secondary" onClick={handleClear}>
           Clear
         </Button>
       </Box>
 
-        {showSection && (
-          <section className="flex flex-col items-center py-10 bg-white mt-0">
-            <div className="relative w-full h-80 mb-4">
-              <Image
-                src={donationImage}
-                alt="Donation"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-lg"
-              />
-            </div>
-          </section>
-        )}
+      {showSection && (
+        <section className="flex flex-col items-center py-10 bg-white mt-0">
+          <div className="relative w-full h-80 mb-4">
+            <Image
+              src={donationImage}
+              alt="Donation"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg"
+            />
+          </div>
+        </section>
+      )}
 
       <h2 className="text-2xl font-semibold mb-4 text-blue">List of Needs</h2>
       <Grid container spacing={2}>
@@ -180,23 +180,35 @@ const HomeWithLogin = () => {
               <Card variant="outlined">
                 <CardContent>
                   <Typography variant="h6" component="div">
-                    <Link href={`/organProfileShownToDonorsFromNeeds?${need.organisation_id}`} underline="none">
-                      Organization Name: {org ? org.organisation_name : "Unknown"}
+                    <Link
+                      href={`/organProfileShownToDonorsFromNeeds?${need.organisation_id}`}
+                      underline="none"
+                    >
+                      Organization Name:{" "}
+                      {org ? org.organisation_name : "Unknown"}
                     </Link>
                   </Typography>
                   <Typography color="textSecondary">
                     Location: {org ? org.address : "Unknown"}
                   </Typography>
-                  <Typography color="textSecondary">Date: {need.date}</Typography>
-                  {need.type && <Typography color="textSecondary">
+                  <Typography color="textSecondary">
+                    Date: {need.date}
+                  </Typography>
+                  {need.type && (
+                    <Typography color="textSecondary">
                       Amount: ${remainingAmount}
-                    </Typography>}
-                  {!need.type && <Typography color="textSecondary">
+                    </Typography>
+                  )}
+                  {!need.type && (
+                    <Typography color="textSecondary">
                       Kind: {need.kind}
-                    </Typography>}
-                  {!need.type && <Typography color="textSecondary">
-                    Quantity: {need.quantity}
-                  </Typography>}
+                    </Typography>
+                  )}
+                  {!need.type && (
+                    <Typography color="textSecondary">
+                      Quantity: {need.quantity}
+                    </Typography>
+                  )}
                   <Typography variant="body2">{need.description}</Typography>
                   <Box display="flex" justifyContent="center" mt={2}>
                     <Button
@@ -215,14 +227,16 @@ const HomeWithLogin = () => {
         })}
       </Grid>
 
-        <DonationModal
-          open={isModalOpen}
-          onClose={handleCloseModal}
-          need={selectedNeed}
-        />
-      </div>
+      <DonationModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        need={selectedNeed}
+      />
+
       <Footer />
     </div>
+    // <Footer />
+    // </div>
   );
 };
 

@@ -29,7 +29,7 @@ const ProfileForOrganisation = ({ islogged }) => {
   const [editingNeed, setEditingNeed] = useState(null);
   const [needs, setNeeds] = useState(orgDat.currentNeeds);
   const [orgData, setOrgData] = useState(orgDat);
-  const [pastDonation,setPastDonation]=useState([]);
+  const [pastDonation, setPastDonation] = useState([]);
   useEffect(async () => {
     // for needs
     // console.log(await getNeeds());
@@ -55,16 +55,16 @@ const ProfileForOrganisation = ({ islogged }) => {
       gallery: [{ id: 1, src: User.photos, alt: "Image 1" }],
     });
   }, [User]);
-  useEffect(()=>{
+  useEffect(() => {
     // console.log(orgData, User);
-    setNeeds(orgData.currentNeeds)
+    setNeeds(orgData.currentNeeds);
     // console.log(needs)
-    setPastDonation(orgData.pastDonations)
+    setPastDonation(orgData.pastDonations);
     // console.log(pastDonation)
-    console.log(orgData.gallery)
-  },[orgData,User])
-  
-  console.log(needs)
+    console.log(orgData.gallery);
+  }, [orgData, User]);
+
+  console.log(needs);
   const donationsPerPage = 10;
   const NeedsPerPage = 10;
   const totalDonations = orgData.pastDonations.length;
@@ -182,7 +182,6 @@ const ProfileForOrganisation = ({ islogged }) => {
               </tr>
             </thead>
             <tbody>
-            
               {currentNeeds.map((need) => (
                 <tr key={need.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -249,7 +248,6 @@ const ProfileForOrganisation = ({ islogged }) => {
               </tr>
             </thead>
             <tbody>
-            
               {DonationDetails.map((donation) => (
                 <tr key={donation.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -307,7 +305,7 @@ const ProfileForOrganisation = ({ islogged }) => {
         ></iframe>
       </div>
 
-      {/* Gallery Section */} 
+      {/* Gallery Section */}
       {/* <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
         <div className="flex flex-wrap">

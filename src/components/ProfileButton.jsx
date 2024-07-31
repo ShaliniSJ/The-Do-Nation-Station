@@ -38,8 +38,8 @@ const ProfileButton = ({ isdonor }) => {
     const handleLogout = async () => {
         try {
             await signOut();
-            localStorage.clear();
             router.push('/');
+            localStorage.clear();
             window.location.reload(); 
         } catch (error) {
             console.error('Failed to logout', error);

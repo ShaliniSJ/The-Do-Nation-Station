@@ -147,28 +147,34 @@ const HomeWithLogin = () => {
       <h2 className="text-2xl font-semibold mb-4 text-blue">List of Needs</h2>
       <Grid container spacing={2}>
         {needs.map((need) => {
-          const remainingAmount = need.total_amount - need.collected_amount;
+          const remainingAmount = need.total_amt - need.collected_amt;
           const org = organisations[need.organisation_id];
           return (
             <Grid item xs={12} sm={6} md={4} key={need.id}>
               <Card variant="outlined">
                 <CardContent>
                   <Typography variant="h6" component="div">
-                    Organization Name:
                     <Link href={`/organProfileShownToDonorsFromNeeds?${need.organisation_id}`} underline="none">
-                      {org ? org.name : "Unknown"}
+                    Organization Name: {org ? org.organisation_name : "Unknown"}
                     </Link>
                   </Typography>
                   <Typography color="textSecondary">
-                    Location: {org ? org.location : "Unknown"}
+                    Location: {org ? org.address : "Unknown"}
                   </Typography>
                   <Typography color="textSecondary">Date: {need.date}</Typography>
-                  <Typography color="textSecondary">
-                    Amount: ${remainingAmount}
+                  {need.type && <Typography color="textSecondary">
+                      Amount: ${remainingAmount}
+                    </Typography>
+                  }
+                  {!(need.type) && <Typography color="textSecondary">
+                      Kind: {need.kind}
+                    </Typography>
+                  }
+                  {
+                    !(need.type) && <Typography color="textSecondary">
+                    Quantity: {need.quantity}
                   </Typography>
-                  <Typography color="textSecondary">
-                    Impact: {need.impact} people
-                  </Typography>
+                  }
                   <Typography variant="body2">{need.description}</Typography>
                   <Box display="flex" justifyContent="center" mt={2}>
                     <Button

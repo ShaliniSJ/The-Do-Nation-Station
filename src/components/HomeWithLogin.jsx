@@ -11,6 +11,8 @@ import {
   Box,
 } from "@mui/material";
 import DonationModal from "./DonationModal"; // Ensure correct path
+import Link from '@mui/material/Link';
+import { getAllNeeds } from "../lib/appwrite";
 
 // Sample data function
 const getSampleNeeds = () =>
@@ -65,6 +67,10 @@ const HomeWithLogin = () => {
     setSelectedNeed(need);
     setIsModalOpen(true);
   };
+
+  useEffect(async()=>{
+    console.log(await getAllNeeds());
+  },[])
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -153,7 +159,9 @@ const HomeWithLogin = () => {
             <Card variant="outlined">
               <CardContent>
                 <Typography variant="h6" component="div">
-                  {need.organization}
+                  <Link href="/organProfileShownToDonorsFromNeeds?organid" underline="none">
+                    {need.organization}
+                  </Link>
                 </Typography>
                 <Typography color="textSecondary">
                   Location: {need.location}

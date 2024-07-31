@@ -42,7 +42,7 @@ const DonationModal = ({ open, onClose, need }) => {
         <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid item xs={6}>
             <Button variant="contained" color="primary" fullWidth>
-              <a href="organization-profile-link" target="_blank" style={{ textDecoration: 'none', color: 'white' }}>Profile</a>
+              <a href="/organProfileShownToDonorsFromNeeds" target="_blank" style={{ textDecoration: 'none', color: 'white' }}>Profile</a>
             </Button>
           </Grid>
           <Grid item xs={6}>

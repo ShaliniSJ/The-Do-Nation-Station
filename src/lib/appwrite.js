@@ -185,6 +185,20 @@ export const getNeeds = async () => {
   }
 };
 
+export const getAllNeeds = async () => {
+  try {
+    const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
+      Query.equal("completed", false),
+    ]);
+    console.log("-----------------------------")
+    console.log(allNeeds)
+    console.log("-----------------------------")
+    return allNeeds.documents;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 export const getPastDonations = async () => {
   try {
     const organisation = await getCurrentUser(false);

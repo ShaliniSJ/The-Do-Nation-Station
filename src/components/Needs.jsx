@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import CustomButton from './CustomButton';
 import InputField from './InputField';
 import { postNeeds } from '../lib/appwrite';
-import { Router } from 'next/router';
+import { router } from 'next/router';
 
 const Needs = () => {
   const [formValues, setFormValues] = useState({
@@ -43,11 +43,9 @@ const Needs = () => {
   }, [formValues.type]);
   
   useEffect(() => {
-    if (formValues.kindtype && formValues.kindtype !== 'Clothing' && formValues.kindtype !== 'Toys') {
+    if (formValues.kindtype ) {
       setShowQuantity(true);
-    } else {
-      setShowQuantity(false);
-    }
+    } 
   }, [formValues.kindtype]);
 
   const handleDateChange = (event) => {
@@ -68,8 +66,8 @@ const Needs = () => {
   const handleSubmit = async(event) => {
     event.preventDefault();
     const data=await postNeeds(formValues);
-    alert("Succes","Data added successfully");
-    Router.push("/organisationprofile")
+    alert("Success, Data added successfully");
+    router.push("/organisationprofile")
     // console.log(formValues);
   };
 

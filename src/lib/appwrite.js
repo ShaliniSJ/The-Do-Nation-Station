@@ -42,7 +42,7 @@ const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
 const storage = new Storage(client);
-const today = new Date().toISOString();
+
 
 export const createUser = async (email, password, username, isDonor) => {
   try {
@@ -266,7 +266,29 @@ catch(e){
   throw new Error(e)
 }
 }
+export const postBankDetails=async(form)=>{
+  try{
+    const organisation = await getCurrentUser(false);
+    console.log(form)
+    const updateOrganisation = await databases.updateDocument(
+      databaseId,
+      ORGANIZATIONS,
+      organisation.$id,
+      {
+        account_no: form.number,
+        ifsc_code: form.code,
+        branch: form.branch,
+        account_name: form.name,
+        bank_name: form.bankname
+      }
+    );
 
+
+  }
+  catch(e){
+    throw new Error(e)
+  }
+}
 export const getLatestPost = async () => {
   try {
     const post = await databases.listDocuments(databaseId, videoCollectionId, [

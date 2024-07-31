@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import CustomButton from './CustomButton';
 import InputField from './InputField';
 import { postNeeds } from '../lib/appwrite';
+import { Router } from 'next/router';
 
 const Needs = () => {
   const [formValues, setFormValues] = useState({
@@ -67,6 +68,8 @@ const Needs = () => {
   const handleSubmit = async(event) => {
     event.preventDefault();
     const data=await postNeeds(formValues);
+    alert("Succes","Data added successfully");
+    Router.push("/organisationprofile")
     // console.log(formValues);
   };
 

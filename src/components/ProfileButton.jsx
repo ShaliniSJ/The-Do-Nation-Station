@@ -15,6 +15,8 @@ const ProfileButton = ({ isdonor }) => {
         const fetchUserProfile=async()=>{
         if (isdonor) {
             const user=await getCurrentUser(true);
+           
+            setImage(user.avatar_url)
             
 
 

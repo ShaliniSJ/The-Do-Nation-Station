@@ -78,15 +78,10 @@ const Leaderboard = () => {
               {displayDonors.map((donor) => (
                 <TableRow key={donor.id}>
                   <TableCell>
-                    <a
-                      href={`/donor/${donor.user_id}`}
-                      className="flex flex-row items-center gap-4 md:gap-8"
-                    >
                       <Avatar alt={donor.name} src={donor.avatar_url} />
                       <div className="flex flex-col">
                         <p className="text-lg md:text-xl">{donor.name}</p>
                       </div>
-                    </a>
                   </TableCell>
                   <TableCell></TableCell>
                   <TableCell>

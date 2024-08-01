@@ -100,7 +100,6 @@ const ProfileForOrganisation = ({ islogged }) => {
   //   console.log(orgData.gallery);
   // }, [orgData, User]);
 
-  console.log(needs);
   const donationsPerPage = 10;
   const NeedsPerPage = 10;
   const totalDonations = orgData.pastDonations.length;
@@ -386,23 +385,25 @@ const ProfileForOrganisation = ({ islogged }) => {
         </div>
       </div>
 
-      {/* Gallery Section
+      {/* Gallery Section */}
       <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
         <div className="flex flex-wrap">
-          {orgData.gallery.map((image) => (
-            <div key={image.id} className="w-1/3 p-2">
-              <Image
-                src={image.src}
-                alt={image.alt}
-                width={400}
-                height={300}
-                layout="responsive"
-              />
-            </div>
-          ))}
+          {orgData.gallery.map((image) => {
+            return (
+              <div key={image.id} className="w-1/3 p-2">
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={400}
+                  height={300}
+                  layout="responsive"
+                />
+              </div>
+            );
+          })}
         </div>
-      </div> */}
+      </div>
 
       {/* Edit Popup */}
       {editingNeed && (

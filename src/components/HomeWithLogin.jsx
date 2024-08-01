@@ -93,16 +93,16 @@ const HomeWithLogin = () => {
     setSelectedNeed(null);
   };
   const formatDate = (dateString) => {
-    const options = { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric', 
-      hour: '2-digit', 
-      minute: '2-digit', 
-      second: '2-digit', 
-      timeZoneName: 'short' 
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      timeZoneName: "short",
     };
-    return new Date(dateString).toLocaleString('en-US', options);
+    return new Date(dateString).toLocaleString("en-US", options);
   };
 
   return (
@@ -182,7 +182,56 @@ const HomeWithLogin = () => {
         </section>
       )}
 
-      <h2 className="text-2xl font-semibold mb-4 text-blue">List of Needs</h2>
+      <h2 className="text-4xl font-semibold mb-4 text-primary-blue jost">
+        List of Needs
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {needs.map((need) => {
+          const org = organisations[need.organisation_id];
+          return (
+            <div
+              className="flex flex-col bg-secondary-blue/10 hover:bg-secondary-blue/50 justify-between nunito border-2 border-secondary-blue/5 rounded-lg p-4"
+              key={need.id}
+            >
+              <div className="mb-2">
+                <h6 className="text-lg font-medium">
+                  <a
+                    href={`/organProfileShownToDonorsFromNeeds?${need.organisation_id}`}
+                    className="no-underline text-xl text-primary-blue/80 jost"
+                  >
+                    Organization Name: {org ? org.organisation_name : "Unknown"}
+                  </a>
+                </h6>
+                <p className="text-gray-600">
+                  Location: {org ? org.address : "Unknown"}
+                </p>
+                <p className="text-gray-600">
+                  End Date: {formatDate(need.date)}
+                </p>
+                {need.type ? (
+                  <p className="text-gray-600">Amount: Rs. {need.total_amt}</p>
+                ) : (
+                  <>
+                    <p className="text-gray-600">Kind: {need.kind}</p>
+                    <p className="text-gray-600">Quantity: {need.quantity}</p>
+                  </>
+                )}
+                <p className="text-gray-800">{need.description}</p>
+              </div>
+              <div className="flex justify-center mt-4">
+                <button
+                  className="bg-primary-blue hover:bg-blue-100 text-white px-6 rounded-full py-2"
+                  onClick={() => handleDonate(need)}
+                >
+                  Donate
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* <h2 className="text-2xl font-semibold mb-4 text-blue">List of Needs</h2>
       <Grid container spacing={2}>
         {needs.map((need) => {
           const org = organisations[need.organisation_id];
@@ -236,7 +285,7 @@ const HomeWithLogin = () => {
             </Grid>
           );
         })}
-      </Grid>
+      </Grid> */}
 
       <DonationModal
         open={isModalOpen}

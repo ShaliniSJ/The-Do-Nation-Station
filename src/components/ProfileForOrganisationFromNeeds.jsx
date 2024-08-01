@@ -174,9 +174,7 @@ const ProfileForOrganisationFromNeeds = () => {
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Description
                 </th>
-                <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
-                  Actions
-                </th>
+                
               </tr>
             </thead>
             <tbody>
@@ -196,12 +194,14 @@ const ProfileForOrganisationFromNeeds = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
                     <button
-                      onClick={() => handleDeleteNeed(need)}
+                      onClick={() => handleDonate(need.$id)}
                       className="bg-primary-blue rounded-full text-white py-2 px-6 hover:bg-blue-700 mr-2"
                     >
-                      Delete
+                      Donate
                     </button>
                   </td>
+                
+                  
                 </tr>
               ))}
             </tbody>

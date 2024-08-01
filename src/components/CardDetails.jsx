@@ -46,7 +46,7 @@ const CardDetailsPage = () => {
   const handlePay = async () => {
     await updateNeeds(needId, amount, isdonor);
 
-    // router.push("/success");
+    router.push("/success");
   };
   useEffect(() => {
     const fetchData = async () => {

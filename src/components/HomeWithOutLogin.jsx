@@ -144,19 +144,19 @@ const HomeWithOutLogin = () => {
           <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
             <p className="text-2xl md:text-5xl opacity-50">04</p>
             <p className="text-sm md:text-lg">
-              Leaderboard and Recognition System among Donors
+              Leaderboard and Recognition System among Donors (Gamification)
             </p>
           </div>
           <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
             <p className="text-2xl md:text-5xl opacity-50">05</p>
             <p className="textext-sm md:t-lg">
-              Transparency and Accountability
+              Transparency and Accountability (History of Donations)
             </p>
           </div>
           <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
             <p className="text-2xl md:text-5xl opacity-50">06</p>
             <p className="text-sm md:text-lg">
-              AI based verification of Charitable Organizations
+              AI based verification of Charitable Organizations (Future Scope)
             </p>
           </div>
           <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
@@ -164,6 +164,12 @@ const HomeWithOutLogin = () => {
             <p className="text-sm md:text-lg">
               Platform to donate for hospitals, orphanages, old age homes, NGOs,
               etc
+            </p>
+          </div>
+          <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
+            <p className="text-2xl md:text-5xl opacity-50">08</p>
+            <p className="text-sm md:text-lg">
+              Messaging platform between Donors and Organizations (Future Scope)
             </p>
           </div>
         </div>

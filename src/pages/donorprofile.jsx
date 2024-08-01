@@ -1,13 +1,25 @@
 import Navbar from "@/src/components/Navbar";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getCurrentUser } from "@/src/lib/appwrite";
+import { getCurrentUser,getPastContributions } from "@/src/lib/appwrite";
 
 export default function Page() {
   const router = useRouter();
   const [donor, setDonor] = useState(null);
   const [pastContributions, setPastContributions] = useState([]);
   const [isLogged, setIsLogged] = useState(false);
+  const formatDate = (dateString) => {
+    const options = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit', 
+      timeZoneName: 'short' 
+    };
+    return new Date(dateString).toLocaleString('en-US', options);
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -26,11 +38,13 @@ export default function Page() {
               user_id: user.user_id,
               avatar_url: user.avatar_url,
             });
+            
             // Fetch past contributions
             // Assuming you have a function to get past contributions
             // TODO WE DONT HAVE THIS YET
-            //const contributions = await getPastContributions(user.user_id);
-            //setPastContributions(contributions);
+            const contributions = await getPastContributions();
+            setPastContributions(contributions);
+            console.log(pastContributions)
           } catch (error) {
             console.error("Failed to fetch user data", error);
           }
@@ -42,12 +56,13 @@ export default function Page() {
   }, []);
 
   const contributionsList = [];
+
   pastContributions.forEach((contrib) => {
     contributionsList.push(
       <li className="flex flex-row py-2 items-center gap-32 border-b-2 border-black/10">
         <div className="flex flex-col">
-          <p className="text-xl">{contrib.name}</p>
-          <p>{contrib.updated_at}</p>
+          <p className="text-xl">{contrib.organisation_id}</p>
+          <p>{formatDate(contrib.$updatedAt)}</p>
         </div>
         <p className="text-xl text-green-500">+{contrib.donation_amt}</p>
       </li>
@@ -77,9 +92,9 @@ export default function Page() {
                 <div className="bg-yellow-100 rounded-md p-2 w-fit">
                   <p className="text-xl">Points: +{donor.total_amount}</p>
                 </div>
-                <div className="bg-green-100 rounded-md p-2 w-fit">
-                  <p className="text-xl">Rank: 30</p> {/*TODO*/}
-                </div>
+                {/* <div className="bg-green-100 rounded-md p-2 w-fit">
+                  <p className="text-xl">Rank: 30</p> {/*TODO
+                </div> */}
               </div>
             </div>
             <div className="flex flex-col gap-4 mt-8 grow p-6">

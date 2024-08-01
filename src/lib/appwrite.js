@@ -198,7 +198,7 @@ export const getNeeds = async () => {
 export const getAllNeeds = async () => {
   try {
     const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
-      Query.equal("completed", false),
+      Query.and([Query.equal("completed", false), Query.greaterThan("total_amt", 0)]),
     ]);
     return allNeeds.documents;
   } catch (e) {

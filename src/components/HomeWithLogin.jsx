@@ -196,7 +196,7 @@ const HomeWithLogin = () => {
                   </Typography>
                   {need.type && (
                     <Typography color="textSecondary">
-                      Amount: ${remainingAmount}
+                      Amount: Rs. {remainingAmount}
                     </Typography>
                   )}
                   {!need.type && (

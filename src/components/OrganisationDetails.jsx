@@ -75,7 +75,7 @@ const Organisation = () => {
           sx={{ mt: 3 }}
           onSubmit={handleSubmit}
         >
-          <InputField title="Description" holder="Write about your organisation. Enter less than 250 characters to avoid any error in data updation." type="textarea" name="desc" id="desc" handleChange={handleChange} />
+          <InputField title="Description (Enter less than 250 characters)" holder="Write about your organisation. Enter less than 250 characters to avoid any error in data updation." type="textarea" name="desc" id="desc" handleChange={handleChange} />
             <Typography variant="subtitle1">Upload Photo</Typography>
             <div className='justify-center align-middle ml-[20%] mt-4 mb-4'>
           <FileInput handleChange={handlefileUpload} />

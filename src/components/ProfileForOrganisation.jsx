@@ -253,14 +253,6 @@ const ProfileForOrganisation = ({ islogged }) => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
                     {formatDate(need.date)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
-                    <button
-                      onClick={() => handleDonate()}
-                      className="bg-primary-blue rounded-full text-white py-2 px-6 hover:bg-blue-700 mr-2"
-                    >
-                      Donate
-                    </button>
-                  </td>
                 </tr>
               ))}
             </tbody>

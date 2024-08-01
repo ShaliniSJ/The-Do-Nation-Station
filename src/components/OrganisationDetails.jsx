@@ -104,7 +104,7 @@ const Organisation = () => {
           </FormControl>
           <InputField title="No.of Peoples Impacted" holder="5000+ people" type="text" name="impact" id="impact" handleChange={handleChange} />
           <InputField title="License ID" holder="Enter your license id" type="text" name="license" id="license" handleChange={handleChange} />
-          <InputField title="Google Map Location" holder="www.google.com/maps" type="text" name="location" id="location" handleChange={handleChange} />
+          <InputField title="Google Map Location URL Link" holder="www.google.com/maps" type="text" name="location" id="location" handleChange={handleChange} />
           <InputField title="Address" holder="Enter your address" type="text" name="address" id="address" handleChange={handleChange} />
           <InputField title="Phone Number" holder="+91 9956867412" type="text" name="phno" id="phno" handleChange={handleChange} />
 

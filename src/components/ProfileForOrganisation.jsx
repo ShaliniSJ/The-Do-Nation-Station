@@ -3,7 +3,12 @@ import Image from "next/image";
 import BlueLogo from "../assets/the-do-nation-station-high-resolution-logo.png";
 import Router from "next/router";
 import { router } from "next/router";
-import { getCurrentUser, getNeeds, getPastDonations } from "../lib/appwrite";
+import {
+  completeNeeds,
+  getCurrentUser,
+  getNeeds,
+  getPastDonations,
+} from "../lib/appwrite";
 
 // Define your Google Maps API key here
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
@@ -30,7 +35,7 @@ const ProfileForOrganisation = ({ islogged }) => {
   const [needs, setNeeds] = useState(orgDat.currentNeeds);
   const [orgData, setOrgData] = useState(orgDat);
   const [pastDonation, setPastDonation] = useState([]);
-  
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -39,11 +44,11 @@ const ProfileForOrganisation = ({ islogged }) => {
           getPastDonations(),
           getCurrentUser(false),
         ]);
-        
+
         setNeedDetails(needs);
         setDonationDetails(donations);
         setUser(user);
-        
+
         setOrgData({
           name: user.organisation_name,
           description: user.description,
@@ -55,28 +60,28 @@ const ProfileForOrganisation = ({ islogged }) => {
           mapLink: user.location,
           gallery: [{ id: 1, src: user.photos, alt: "Image 1" }],
         });
-        
+
         setNeeds(needs);
         setPastDonation(donations);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    
+
     fetchData();
-  }, []);
-  
+  }, [needs]);
+
   const formatDate = (dateString) => {
-    const options = { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric', 
-      hour: '2-digit', 
-      minute: '2-digit', 
-      second: '2-digit', 
-      timeZoneName: 'short' 
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      timeZoneName: "short",
     };
-    return new Date(dateString).toLocaleString('en-US', options);
+    return new Date(dateString).toLocaleString("en-US", options);
   };
 
   const donationsPerPage = 10;
@@ -104,12 +109,9 @@ const ProfileForOrganisation = ({ islogged }) => {
     setCurrentNeedsPage(pageNumber);
   };
 
-  const handleEditNeed = (need) => {
-    setEditingNeed(need);
-  };
-
-  const handleCompleteNeed = (needId) => {
-    setNeeds(needs.filter((need) => need.id !== needId));
+  const handleDeleteNeed = async (needId) => {
+    await completeNeeds(needId.$id);
+    setNeeds(needs.filter((need) => need.$id !== needId.$id));
   };
 
   const handleSaveEdit = () => {
@@ -244,7 +246,6 @@ const ProfileForOrganisation = ({ islogged }) => {
             </thead>
             <tbody>
               {currentNeeds.map((need) => (
-                
                 <tr key={need.id} className="even:bg-secondary-blue/20">
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
                     {need.total_amt}
@@ -254,15 +255,7 @@ const ProfileForOrganisation = ({ islogged }) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
                     <button
-                      onClick={() => handleDonate()}
-                      className="bg-primary-blue rounded-full text-white py-2 px-6 hover:bg-blue-700 mr-2"
-                    >
-                      Edit
-                    </button>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
-                    <button
-                      onClick={() => handleDonate()}
+                      onClick={() => handleDeleteNeed(need)}
                       className="bg-primary-blue rounded-full text-white py-2 px-6 hover:bg-blue-700 mr-2"
                     >
                       Delete
@@ -644,4 +637,3 @@ const ProfileForOrganisation = ({ islogged }) => {
 // };
 
 export default ProfileForOrganisation;
-

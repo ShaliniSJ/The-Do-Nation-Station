@@ -47,8 +47,7 @@ const Organisation = () => {
     }));
 
     try {
-      const fileUrl = await uploadFile(file);
-      console.log(fileUrl)
+      const fileUrl = await uploadFile(file,"image");
       setFormValues((prevValues) => ({
         ...prevValues,
         fileURL: fileUrl,

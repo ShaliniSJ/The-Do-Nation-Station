@@ -285,7 +285,7 @@ export const postOrganisationDetails = async (form) => {
         location: form.location,
         address: form.address,
         ph_no: form.phno,
-        photos: "http://localhost.com",
+        photos: form.fileURL,
         type:form.type,
         impact:form.impact
       }
@@ -360,7 +360,7 @@ export const getFilePreview = async (fileId, type) => {
     } else {
       throw new Error("Invalid file type");
     }
-    return fileUrl;
+    return fileUrl.href;
   } catch (e) {
     throw new Error(e.message);
   }

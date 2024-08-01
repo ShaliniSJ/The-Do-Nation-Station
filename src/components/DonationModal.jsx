@@ -26,7 +26,7 @@ const DonationModal = ({ open, onClose, need }) => {
         </Typography>
         <Typography sx={{ mt: 2 }}>End Date: {need.date}</Typography>
         {isCost && (
-          <Typography sx={{ mt: 2 }}>Amount: ${remainingAmount}</Typography>
+          <Typography sx={{ mt: 2 }}>Amount: Rs.{remainingAmount}</Typography>
         )}
         {!isCost && <Typography sx={{ mt: 2 }}>Kind: {need.kind}</Typography>}
         {!isCost && (

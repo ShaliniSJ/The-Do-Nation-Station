@@ -6,6 +6,7 @@ import {
   getAllNeedsOrganisation,
   getAllPastDonationsForStatic,
 } from "../lib/appwrite";
+import { router } from "next/router";
 
 // Define your Google Maps API key here
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
@@ -80,7 +81,9 @@ const ProfileForOrganisationFromNeeds = () => {
     setCurrentNeedsPage(pageNumber);
   };
 
-  const handleDonate = () => {
+  const handleDonate = (id) => {
+    console.log(id);
+    router.push(`/donate?${id}`);
     setEditingNeed(null);
   };
 
@@ -106,6 +109,7 @@ const ProfileForOrganisationFromNeeds = () => {
 
   const encodedAddress = encodeURIComponent(orgData.address);
   const mapEmbedLink = `https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${encodedAddress}`;
+  console.log(currentNeeds)
 
   return (
     <div className="min-h-screen bg-white text-dark-blue p-6">
@@ -168,7 +172,7 @@ const ProfileForOrganisationFromNeeds = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
                     <button
-                      onClick={() => handleDonate()}
+                      onClick={() => handleDonate(need.$id)}
                       className="bg-primary-blue rounded-full text-white py-2 px-6 hover:bg-blue-700 mr-2"
                     >
                       Donate

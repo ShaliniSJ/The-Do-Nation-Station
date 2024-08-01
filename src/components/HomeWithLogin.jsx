@@ -92,6 +92,18 @@ const HomeWithLogin = () => {
     setIsModalOpen(false);
     setSelectedNeed(null);
   };
+  const formatDate = (dateString) => {
+    const options = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit', 
+      timeZoneName: 'short' 
+    };
+    return new Date(dateString).toLocaleString('en-US', options);
+  };
 
   return (
     <div className="mt-0 p-4">
@@ -192,7 +204,7 @@ const HomeWithLogin = () => {
                     Location: {org ? org.address : "Unknown"}
                   </Typography>
                   <Typography color="textSecondary">
-                    Date: {need.date}
+                    End Date: {formatDate(need.date)}
                   </Typography>
                   {need.type && (
                     <Typography color="textSecondary">

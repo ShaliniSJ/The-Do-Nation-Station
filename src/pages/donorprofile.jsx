@@ -19,7 +19,6 @@ export default function Page() {
           try {
             const user = await getCurrentUser(true);
             
-            console.log(user);
             
             setDonor({
               name: user.name,
@@ -54,11 +53,6 @@ export default function Page() {
       </li>
     );
   });
-
-  // useEffect(() => {
-  //   setDonor(donor);
-  //   console.log("donor", donor);
-  // }, [router.query.slug]);
 
   return (
     <>

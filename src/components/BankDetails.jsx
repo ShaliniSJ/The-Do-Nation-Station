@@ -31,7 +31,6 @@ const BankDetails = () => {
     const data= await postBankDetails(formValues)
     alert("Data Added successfully")
     router.push('/')
-    // console.log(formValues);
   };
 
   return (

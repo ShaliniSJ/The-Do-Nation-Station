@@ -33,7 +33,6 @@ const AboutUs = () => {
                 </Typography>
                 <Grid container spacing={4}>
                     {teamMembers.map((member, index) => (
-                        console.log(member),
                         <Grid item xs={12} sm={6} md={3} key={index}>
                             <Box textAlign="center">
                                 <Avatar alt={member.name} src={member.image.src} sx={{ width: 100, height: 100, margin: '0 auto' }} />

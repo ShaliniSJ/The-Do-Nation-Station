@@ -1,54 +1,72 @@
 // pages/card-details.js
-import React, { useState,useEffect } from 'react';
-import { Container, Box, TextField, Button, Typography, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import { useRouter } from 'next/router';
-import { updateNeeds } from '../lib/appwrite';
+import React, { useState, useEffect } from "react";
+import {
+  Container,
+  Box,
+  TextField,
+  Button,
+  Typography,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@mui/material";
+import { useRouter } from "next/router";
+import { updateNeeds } from "../lib/appwrite";
 
 const CardDetailsPage = () => {
   const router = useRouter();
   // const { amount } = router.query;
-  const [cardType, setCardType] = useState('credit');
-  const [needId,setNeedId]=useState('')
-  const [amount,setAmount]=useState('')
+  const [cardType, setCardType] = useState("credit");
+  const [needId, setNeedId] = useState("");
+  const [amount, setAmount] = useState("");
   const [cardDetails, setCardDetails] = useState({
-    name: '',
-    number: '',
-    expiry: '',
-    cvv: ''
+    name: "",
+    number: "",
+    expiry: "",
+    cvv: "",
   });
+  const [isdonor, setIsdonor] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isDonor = localStorage.getItem("isdonar");
+      if (isDonor === "true") {
+        setIsdonor(true);
+      } else {
+        setIsdonor(false);
+      }
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCardDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePay = async() => {
-   await updateNeeds(needId,amount)
-    
-    router.push('/success');
+  const handlePay = async () => {
+    await updateNeeds(needId, amount, isdonor);
+
+    // router.push("/success");
   };
   useEffect(() => {
-    
-      const fetchData = async () => {
-        const url = new URL(window.location.href);
+    const fetchData = async () => {
+      const url = new URL(window.location.href);
       const queryString = url.search.substring(1); // Remove the leading '?'
-      const [amountPart, idPart] = queryString.split('id=');
+      const [amountPart, idPart] = queryString.split("id=");
 
       // Extract amount from amountPart
-      const amount = amountPart.replace('amount=', '');
-      
+      const amount = amountPart.replace("amount=", "");
+
       // Extract needId
       const needId = idPart;
 
       // Set the state with extracted values
       setNeedId(needId);
       setAmount(parseInt(amount, 10));
-      
-        
-     
-    }
+    };
     fetchData();
-  },[])
+  }, []);
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -62,10 +80,18 @@ const CardDetailsPage = () => {
           name="cardType"
           value={cardType}
           onChange={(e) => setCardType(e.target.value)}
-          sx={{ justifyContent: 'center', mb: 2 }}
+          sx={{ justifyContent: "center", mb: 2 }}
         >
-          <FormControlLabel value="credit" control={<Radio />} label="Credit Card" />
-          <FormControlLabel value="debit" control={<Radio />} label="Debit Card" />
+          <FormControlLabel
+            value="credit"
+            control={<Radio />}
+            label="Credit Card"
+          />
+          <FormControlLabel
+            value="debit"
+            control={<Radio />}
+            label="Debit Card"
+          />
         </RadioGroup>
         <TextField
           variant="outlined"
@@ -87,7 +113,7 @@ const CardDetailsPage = () => {
           value={cardDetails.number}
           onChange={handleChange}
         />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -96,7 +122,7 @@ const CardDetailsPage = () => {
             name="expiry"
             value={cardDetails.expiry}
             onChange={handleChange}
-            sx={{ width: '48%' }}
+            sx={{ width: "48%" }}
           />
           <TextField
             variant="outlined"
@@ -106,7 +132,7 @@ const CardDetailsPage = () => {
             name="cvv"
             value={cardDetails.cvv}
             onChange={handleChange}
-            sx={{ width: '48%' }}
+            sx={{ width: "48%" }}
           />
         </Box>
         <FormControlLabel

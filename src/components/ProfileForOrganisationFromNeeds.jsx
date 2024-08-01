@@ -33,9 +33,7 @@ const ProfileForOrganisationFromNeeds = () => {
   useEffect(() => {
     const fetchData = async () => {
       const url = new URL(window.location.href);
-      console.log(url);
       const userId = url.href.split("?").pop();
-      console.log(userId);
 
       // Ensure userId is not empty or undefined
       if (userId) {
@@ -105,7 +103,6 @@ const ProfileForOrganisationFromNeeds = () => {
   );
   const currentNeeds = needs.slice(indexOfFirstNeeds, indexOfLastNeeds);
 
-  console.log(currentNeeds);
 
   const encodedAddress = encodeURIComponent(orgData.address);
   const mapEmbedLink = `https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${encodedAddress}`;

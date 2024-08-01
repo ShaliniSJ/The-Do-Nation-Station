@@ -24,7 +24,6 @@ useEffect(() => {
 
   fetchUserData();
   }, [isLogged]);
-  console.log(isLogged)
   
     return( 
         <div>

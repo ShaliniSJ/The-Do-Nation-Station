@@ -68,7 +68,6 @@ const Needs = () => {
     const data=await postNeeds(formValues);
     alert("Success, Data added successfully");
     router.push("/organisationprofile")
-    // console.log(formValues);
   };
 
   return (

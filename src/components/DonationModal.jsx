@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal, Box, Typography, Button, Grid } from '@mui/material';
 
 const DonationModal = ({ open, onClose, need }) => {
-  console.log(need)
   if (!need) return null;
   const remainingAmount = need.total_amt - need.collected_amt;
   const isCost = remainingAmount > 0;

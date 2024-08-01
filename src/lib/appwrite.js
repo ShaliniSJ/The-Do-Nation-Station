@@ -125,7 +125,6 @@ export const signIn = async (email, password) => {
 export const getCurrentUser = async (is_donor) => {
   try {
     const currentAccount = await account.get();
-    // console.log(currentAccount);
     if (!currentAccount) {
       throw Error;
     }
@@ -231,7 +230,6 @@ export const getAllNeedsOrganisation = async (userId) => {
     ]);
     
     // Log the response to verify structure (for debugging)
-    console.log('Fetched Needs:', allNeeds);
     
     return allNeeds.documents; // Ensure this matches your data structure
   } catch (e) {
@@ -251,7 +249,6 @@ export const getAllPastDonationsForStatic = async (userId) => {
     ]);
     
     // Log the response to verify structure (for debugging)
-    console.log('Fetched Needs:', allNeeds);
     
     return allNeeds.documents; // Ensure this matches your data structure
   } catch (e) {
@@ -287,7 +284,6 @@ export const getPastDonations = async () => {
 export const postOrganisationDetails = async (form) => {
   try {
     const organisation = await getCurrentUser(false);
-    console.log(form)
     const updateOrganisation = await databases.updateDocument(
       databaseId,
       ORGANIZATIONS,
@@ -311,7 +307,6 @@ export const postOrganisationDetails = async (form) => {
 export const postNeeds=async(form)=>{
   try{
   const organisation = await getCurrentUser(false);
-  // console.log(form,organisation)
   const insertNeeds= await databases.createDocument(
     databaseId,
     NEEDS,
@@ -336,7 +331,6 @@ catch(e){
 export const postBankDetails=async(form)=>{
   try{
     const organisation = await getCurrentUser(false);
-    console.log(form)
     const updateOrganisation = await databases.updateDocument(
       databaseId,
       ORGANIZATIONS,
@@ -395,7 +389,7 @@ export const uploadFile = async (file, type) => {
   }
 };
 
-export const updateNeeds = async (needid, amount) => {
+export const updateNeeds = async (needid, amount,is_donor) => {
   try {
     const currentDocument = await databases.getDocument(databaseId, NEEDS, needid);
 
@@ -413,8 +407,28 @@ export const updateNeeds = async (needid, amount) => {
         collected_amt: newCollectedAmt
       }
     );
-    
-    console.log('Document updated successfully:', updatedDocument);
+    const current_user = await getCurrentUser(is_donor)
+    const addDonation = await databases.createDocument(databaseId, DONATIONS, ID.unique(), {
+      organisation_id: currentDocument.organisation_id,
+      donor_id: current_user.user_id,
+      donation_amt: amount,
+    });
+    if(is_donor){
+      // update at donar table
+      const getData=await databases.listDocuments(databaseId, DONORS, [
+        Query.equal("user_id", current_user.user_id),
+      ]);
+      
+      const updateDonar = await databases.updateDocument(
+        databaseId,
+        DONORS,
+        getData.documents[0].$id,
+        {
+          total_amount: amount,
+        }
+      );
+      
+    }
   } catch (error) {
     console.error('Error updating document:', error);
   }

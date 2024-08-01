@@ -66,39 +66,6 @@ const ProfileForOrganisation = ({ islogged }) => {
     fetchData();
   }, []);
 
-  // useEffect(async () => {
-  //   // for needs
-  //   // console.log(await getNeeds());
-  //   setNeedDetails(await getNeeds());
-  //   // for donations
-  //   // console.log(await getPastDonations());
-  //   setDonationDetails(await getPastDonations());
-  //   // for organisation details
-  //   // since it is organisation the parameter is false
-  //   // console.log(await getCurrentUser(false));
-  //   setUser(await getCurrentUser(false));
-  // }, []);
-  // useEffect(() => {
-  //   setOrgData({
-  //     name: User.organisation_name,
-  //     description: User.description,
-  //     impacts: User.impact,
-  //     type: User.type,
-  //     address: User.address,
-  //     pastDonations: DonationDetails,
-  //     currentNeeds: NeedDetails,
-  //     mapLink: User.location,
-  //     gallery: [{ id: 1, src: User.photos, alt: "Image 1" }],
-  //   });
-  // }, [User]);
-  // useEffect(() => {
-  //   // console.log(orgData, User);
-  //   setNeeds(orgData.currentNeeds);
-  //   // console.log(needs)
-  //   setPastDonation(orgData.pastDonations);
-  //   // console.log(pastDonation)
-  //   console.log(orgData.gallery);
-  // }, [orgData, User]);
 
   const donationsPerPage = 10;
   const NeedsPerPage = 10;

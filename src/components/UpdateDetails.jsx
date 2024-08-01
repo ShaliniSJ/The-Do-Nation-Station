@@ -30,7 +30,6 @@ const UpdateDetails = () => {
     
       const handleSubmit = (event) => {
         event.preventDefault();
-        // console.log(formValues);
         Router.push('/needs');
       };
     return (

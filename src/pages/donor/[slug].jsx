@@ -44,7 +44,6 @@ export default function Page() {
       ...donor,
       user_id: router.query.slug,
     });
-    console.log(donor);
   }, [router.query.slug]);
 
   return (

@@ -92,6 +92,18 @@ const HomeWithLogin = () => {
     setIsModalOpen(false);
     setSelectedNeed(null);
   };
+  const formatDate = (dateString) => {
+    const options = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit', 
+      timeZoneName: 'short' 
+    };
+    return new Date(dateString).toLocaleString('en-US', options);
+  };
 
   return (
     <div className="mt-0 p-4">
@@ -173,7 +185,6 @@ const HomeWithLogin = () => {
       <h2 className="text-2xl font-semibold mb-4 text-blue">List of Needs</h2>
       <Grid container spacing={2}>
         {needs.map((need) => {
-          const remainingAmount = need.total_amt - need.collected_amt;
           const org = organisations[need.organisation_id];
           return (
             <Grid item xs={12} sm={6} md={4} key={need.id}>
@@ -192,11 +203,11 @@ const HomeWithLogin = () => {
                     Location: {org ? org.address : "Unknown"}
                   </Typography>
                   <Typography color="textSecondary">
-                    Date: {need.date}
+                    End Date: {formatDate(need.date)}
                   </Typography>
                   {need.type && (
                     <Typography color="textSecondary">
-                      Amount: Rs. {remainingAmount}
+                      Amount: Rs. {need.total_amt}
                     </Typography>
                   )}
                   {!need.type && (

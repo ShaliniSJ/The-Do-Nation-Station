@@ -6,6 +6,7 @@ import {
   getAllNeedsOrganisation,
   getAllPastDonationsForStatic,
 } from "../lib/appwrite";
+import { router } from "next/router";
 
 // Define your Google Maps API key here
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
@@ -80,7 +81,9 @@ const ProfileForOrganisationFromNeeds = () => {
     setCurrentNeedsPage(pageNumber);
   };
 
-  const handleDonate = () => {
+  const handleDonate = (id) => {
+    console.log(id);
+    router.push(`/donate?${id}`);
     setEditingNeed(null);
   };
 
@@ -91,6 +94,19 @@ const ProfileForOrganisationFromNeeds = () => {
 
   const handleCancelDonate = () => {
     setEditingNeed(null);
+  };
+
+  const formatDate = (dateString) => {
+    const options = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit', 
+      timeZoneName: 'short' 
+    };
+    return new Date(dateString).toLocaleString('en-US', options);
   };
 
   const indexOfLastDonation = currentPage * donationsPerPage;
@@ -164,11 +180,11 @@ const ProfileForOrganisationFromNeeds = () => {
                     {need.total_amt}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
-                    {need.date}
+                    {formatDate(need.date)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
                     <button
-                      onClick={() => handleDonate()}
+                      onClick={() => handleDonate(need.$id)}
                       className="bg-primary-blue rounded-full text-white py-2 px-6 hover:bg-blue-700 mr-2"
                     >
                       Donate

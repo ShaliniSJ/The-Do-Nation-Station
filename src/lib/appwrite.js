@@ -203,7 +203,7 @@ export const getNeeds = async () => {
 export const getAllNeeds = async () => {
   try {
     const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
-      Query.equal("completed", false),
+      Query.and([Query.equal("completed", false), Query.greaterThan("total_amt", 0)]),
     ]);
     return allNeeds.documents;
   } catch (e) {
@@ -475,7 +475,23 @@ export const getPastContributions = async () => {
       Query.equal("donor_id", user.user_id),
     ]);
 
-    return donations.documents;
+    const contributionsWithOrgNames = await Promise.all(
+      donations.documents.map(async (donation) => {
+        
+        const organisation = await databases.listDocuments(
+          databaseId,
+          ORGANIZATIONS,
+         [Query.equal('organisation_id',donation.organisation_id)]
+        );
+       
+        return {
+          ...donation,
+          organisation_name: organisation.documents[0].organisation_name,
+        };
+      })
+    );
+   
+    return contributionsWithOrgNames;
   } catch (e) {
     throw new Error(e);
   }

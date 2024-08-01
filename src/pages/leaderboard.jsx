@@ -14,35 +14,12 @@ import {
   Pagination,
 } from "@mui/material";
 import Navbar from "../components/Navbar";
+import { getLeaderBoard } from "../lib/appwrite";
 // import 'tailwindcss/tailwind.css';
 
-const fakeDonors = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    user_id: "alice123",
-    avatar_url: "https://randomuser.me/api/portraits/women/1.jpg",
-    total_amount: 50000,
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    user_id: "bob_smith",
-    avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
-    total_amount: 45000,
-  },
-  // Add more fake donors as needed
-];
 
 const Leaderboard = () => {
-  const [donors, setDonors] = useState([
-    ...fakeDonors,
-    ...fakeDonors,
-    ...fakeDonors,
-    ...fakeDonors,
-    ...fakeDonors,
-    ...fakeDonors,
-  ]);
+  const [donors, setDonors] = useState([]);
   const [page, setPage] = useState(1);
   const donorsPerPage = 9;
   const totalPages = Math.ceil(donors.length / donorsPerPage);
@@ -68,11 +45,14 @@ const Leaderboard = () => {
         }
       }
     };
-  
+
   
     // Call the async function
     fetchUserData();
   }, [isLogged]);
+  useEffect(async()=>{
+      setDonors(await getLeaderBoard())
+  },[])
 
   const displayDonors = donors.slice(
     (page) => page * donorsPerPage,

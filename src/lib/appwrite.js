@@ -434,179 +434,22 @@ export const updateNeeds = async (needid, amount,is_donor) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-export const getLatestPost = async () => {
+export const getLeaderBoard = async () => {
   try {
-    const post = await databases.listDocuments(databaseId, videoCollectionId, [
-      Query.orderDesc("$createdAt", Query.limit(7)),
+    // sort the donars based on total_amount in descending order
+    const donors = await databases.listDocuments(databaseId, DONORS, [
+      // Query.sort("total_amount", "desc"),
+      Query.orderDesc("total_amount"),
     ]);
-    return post.documents;
+    return donors.documents;
   } catch (e) {
     throw new Error(e);
   }
-};
+} 
 
-export const searchPost = async (query) => {
-  try {
-    const post = await databases.listDocuments(databaseId, videoCollectionId, [
-      Query.search("title", query),
-    ]);
-    return post.documents;
-  } catch (e) {
-    throw new Error(e);
-  }
-};
 
-export const getUserPosts = async (userId) => {
-  try {
-    const post = await databases.listDocuments(databaseId, videoCollectionId, [
-      Query.equal("creator", userId),
-    ]);
-    return post.documents;
-  } catch (e) {
-    throw new Error(e);
-  }
-};
 
-// export const getFilePreview = async (fileId, type) => {
-//   let fileUrl;
-//   try {
-//     if (type == "video") {
-//       fileUrl = storage.getfileView(storageId, fileId);
-//     } else if (type == "image") {
-//       fileUrl = storage.getFilePreview(
-//         STORAGE_ID,
-//         fileId,
-//         2000,
-//         2000,
-//         "top",
-//         100
-//       );
-//     } else {
-//       throw new Error("Invalid file type");
-//     }
-//     if (!fileUrl) {
-//       throw Error;
-//     }
-//     return fileUrl;
-//   } catch (e) {
-//     throw new Error(e);
-//   }
-// };
 
-// export const uploadFile = async (file, type) => {
-//   if (!file) return;
 
-//   const assest = {
-//     name: file.fileName,
-//     type: file.mimeType,
-//     size: file.fileSize,
-//     uri: file.uri,
-//   };
-//   try {
-//     const uploadedFile = await storageId.createFile(
-//       storageId,
-//       ID.unique(),
-//       assest
-//     );
-//     const fileUrl = await getFilePreview(uploadedFile.$id, type);
-//   } catch (e) {
-//     throw new Error(e);
-//   }
-// };
 
-export const createVideo = async (form) => {
-  try {
-    const [thumbnailUrl, videoUrl] = await Promise.all([
-      uploadFile(form.thumbnail, "image"),
-      uploadFile(form.video, "video"),
-    ]);
-    const newPost = await databases.createDocument(
-      databaseId,
-      videoCollectionId,
-      ID.unique(),
-      {
-        title: form.title,
-        thumbnailUrl: thumbnailUrl,
-        video: videoUrl,
-        prompt: form.prompt,
-        creator: form.userId,
-      }
-    );
-    return newPost;
-  } catch (e) {
-    throw new Error(e);
-  }
-};
 
-export const getUserLikedVideos = async (userId) => {
-  try {
-    if (!userId) {
-      return;
-    }
-    const post = await databases.listDocuments(
-      databaseId,
-      likedVideoCollectionId,
-      [Query.equal("userId", userId)]
-    );
-    const videoIds = post.documents.map((doc) => doc.videoId);
-    if (videoIds.length === 0) {
-      return;
-    }
-    const data = await databases.listDocuments(databaseId, videoCollectionId, [
-      Query.equal("$id", videoIds),
-    ]);
-    return data.documents;
-  } catch (e) {
-    throw new Error(e);
-  }
-};
-
-export const likeVideo = async (userId, videoId) => {
-  try {
-    const newLike = await databases.createDocument(
-      databaseId, //databaseId
-      likedVideoCollectionId, //collectionId
-      ID.unique(), //documentId
-      //data
-      {
-        userId: userId,
-        videoId: videoId,
-      }
-    );
-    return newLike;
-  } catch (e) {
-    throw new Error(e);
-  }
-};
-
-export const unlikeVideo = async (userId, videoId) => {
-  try {
-    if (!userId || !videoId) {
-      throw new Error("Invalid userId or videoId");
-    }
-    const post = await databases.listDocuments(
-      databaseId,
-      likedVideoCollectionId,
-      [Query.equal("userId", userId), Query.equal("videoId", videoId)]
-    );
-
-    const documentId = post.documents[0].$id;
-
-    await databases.deleteDocument(
-      databaseId,
-      likedVideoCollectionId,
-      documentId
-    );
-  } catch (e) {
-    throw new Error(e.message);
-  }
-};

@@ -57,7 +57,7 @@ const HomeWithLogin = () => {
           org.address.toLowerCase().startsWith(location.toLowerCase())
         : true;
       const matchesDate = endDate
-        ? new Date(need.date) <= new Date(endDate)
+        ? new Date(need.date) >= new Date(endDate)
         : true;
       const matchesAmount = amount
         ? need.total_amt - need.collected_amt >= parseFloat(amount)

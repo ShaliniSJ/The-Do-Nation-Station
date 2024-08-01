@@ -85,7 +85,6 @@ const Leaderboard = () => {
                       <Avatar alt={donor.name} src={donor.avatar_url} />
                       <div className="flex flex-col">
                         <p className="text-lg md:text-xl">{donor.name}</p>
-                        <p className="opacity-80">{donor.user_id}</p>
                       </div>
                     </a>
                   </TableCell>

@@ -1,14 +1,25 @@
 // pages/donate.js
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Container, Box, TextField, Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 
+
 const Donate = () => {
   const [amount, setAmount] = useState('');
+  const [needId,setNeedId]=useState('')
   const router = useRouter();
+  useEffect(() => {
+    const fetchData = async () => {
+      const url = new URL(window.location.href);
+      const userId = url.href.split("?").pop();
+      setNeedId(userId)
+     
+    }
+    fetchData();
+  },[])
 
   const handleDonate = () => {
-    router.push(`/carddetails?amount=${amount}`);
+    router.push(`/carddetails?amount=${amount}id=${needId}`);
   };
 
   return (

@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Box, Typography, Button, Grid } from '@mui/material';
 
 const DonationModal = ({ open, onClose, need }) => {
+  console.log(need)
   if (!need) return null;
   const remainingAmount = need.total_amt - need.collected_amt;
   const isCost = remainingAmount > 0;
@@ -54,7 +55,7 @@ const DonationModal = ({ open, onClose, need }) => {
           <Grid item xs={6}>
             {isCost ? (
               <Button variant="contained" color="primary" fullWidth>
-                <a href="/donate" target="_blank" style={{ textDecoration: 'none', color: 'white' }}>Pay</a>
+                <a href={`/donate?${need.$id}`} target="_blank" style={{ textDecoration: 'none', color: 'white' }}>Pay</a>
               </Button>
             ) : (
               <Button variant="contained" color="primary" fullWidth>

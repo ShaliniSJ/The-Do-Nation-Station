@@ -132,10 +132,11 @@ const ProfileForOrganisation = ({ islogged }) => {
     indexOfLastDonation
   );
   const currentNeeds = needs.slice(indexOfFirstNeeds, indexOfLastNeeds);
+  console.log(currentNeeds);
 
   const encodedAddress = encodeURIComponent(orgData.address);
   const mapEmbedLink = `https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${encodedAddress}`;
-  console.log(currentNeeds);
+  
   return (
     // <div className="min-h-screen bg-white text-dark-blue p-6">
     //   <div className="flex justify-between items-center mb-6">

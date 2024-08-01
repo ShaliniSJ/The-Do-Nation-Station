@@ -131,8 +131,8 @@ export const getCurrentUser = async (is_donor) => {
     }
     let CurrentUser;
     if (is_donor) {
-      CurrentUser = await databases.listDocuments(databaseId, USERS, [
-        Query.equal("appwrite_id", currentAccount.$id),
+      CurrentUser = await databases.listDocuments(databaseId, DONORS, [
+        Query.equal("user_id", currentAccount.$id),
       ]);
       if (!CurrentUser) {
         throw Error;

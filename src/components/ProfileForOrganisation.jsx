@@ -67,7 +67,6 @@ const ProfileForOrganisation = ({ islogged }) => {
   }, []);
   
   const formatDate = (dateString) => {
-    console.log(dateString);
     const options = { 
       year: 'numeric', 
       month: 'long', 

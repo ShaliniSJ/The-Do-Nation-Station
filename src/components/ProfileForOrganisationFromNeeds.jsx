@@ -96,6 +96,19 @@ const ProfileForOrganisationFromNeeds = () => {
     setEditingNeed(null);
   };
 
+  const formatDate = (dateString) => {
+    const options = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit', 
+      timeZoneName: 'short' 
+    };
+    return new Date(dateString).toLocaleString('en-US', options);
+  };
+
   const indexOfLastDonation = currentPage * donationsPerPage;
   const indexOfFirstDonation = indexOfLastDonation - donationsPerPage;
   const indexOfLastNeeds = currentNeedsPage * NeedsPerPage;
@@ -109,7 +122,6 @@ const ProfileForOrganisationFromNeeds = () => {
 
   const encodedAddress = encodeURIComponent(orgData.address);
   const mapEmbedLink = `https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${encodedAddress}`;
-  console.log(currentNeeds)
 
   return (
     <div className="min-h-screen bg-white text-dark-blue p-6">
@@ -168,7 +180,7 @@ const ProfileForOrganisationFromNeeds = () => {
                     {need.total_amt}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
-                    {need.date}
+                    {formatDate(need.date)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
                     <button

@@ -192,6 +192,15 @@ const ProfileForOrganisationFromNeeds = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
                     {need.description.substring(0, 50)}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
+                    <button
+                      onClick={() => handleDonate(need.$id)}
+                      className="bg-primary-blue rounded-full text-white py-2 px-6 hover:bg-blue-700 mr-2"
+                    >
+                      Donate
+                    </button>
+                  </td>
+                
                   
                 </tr>
               ))}

@@ -203,7 +203,10 @@ export const getNeeds = async () => {
 export const getAllNeeds = async () => {
   try {
     const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
-      Query.and([Query.equal("completed", false), Query.greaterThan("total_amt", 0)]),
+      Query.and([
+        Query.equal("completed", false),
+        Query.greaterThan("total_amt", 0),
+      ]),
     ]);
     return allNeeds.documents;
   } catch (e) {
@@ -273,8 +276,11 @@ export const organisationDetailsForNeeds = async () => {
 export const getPastDonations = async () => {
   try {
     const organisation = await getCurrentUser(false);
-    const donations = await databases.listDocuments(databaseId, DONATIONS, [
-      Query.equal("organisation_id", organisation.organisation_id),
+    const donations = await databases.listDocuments(databaseId, NEEDS, [
+      Query.and([
+        Query.equal("completed", true),
+        Query.equal("organisation_id", organisation.organisation_id),
+      ]),
     ]);
 
     return donations.documents;
@@ -475,23 +481,7 @@ export const getPastContributions = async () => {
       Query.equal("donor_id", user.user_id),
     ]);
 
-    const contributionsWithOrgNames = await Promise.all(
-      donations.documents.map(async (donation) => {
-        
-        const organisation = await databases.listDocuments(
-          databaseId,
-          ORGANIZATIONS,
-         [Query.equal('organisation_id',donation.organisation_id)]
-        );
-       
-        return {
-          ...donation,
-          organisation_name: organisation.documents[0].organisation_name,
-        };
-      })
-    );
-   
-    return contributionsWithOrgNames;
+    return donations.documents;
   } catch (e) {
     throw new Error(e);
   }

@@ -1,8 +1,22 @@
 import Image from "next/image";
 import IconLogo from "../assets/apple-touch-icon.png";
 import BlueLogo from "../assets/blue-image-logo.png";
+import { useState, useEffect } from "react";
 
 export default function Page() {
+  const [islogged, setIsLogged] = useState(null);
+ 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const temp = localStorage.getItem("islogged");
+      if (temp === "true") {
+        setIsLogged(true);
+      } else {
+        setIsLogged(false);
+      }
+    }
+  }, []);
+
   return (
     <footer className="flex flex-col justify-between min-h-60 bg-primary-blue text-secondary-blue rounded-3xl m-4 md:m-6 md:mt-16 p-4 md:p-10">
       <div className="flex flex-col md:flex-row justify-between">
@@ -44,16 +58,18 @@ export default function Page() {
                 History
               </a>
             </li>
-            <li>
-              <a className="hover:underline" href="/signin">
-                Signin
-              </a>
-            </li>
-            <li>
+            {!islogged && (
+              <li>
+                <a className="hover:underline" href="/signin">
+                  Signin
+                </a>
+              </li>
+            )}
+            {/* <li>
               <a className="hover:underline" href="/login">
                 Login
               </a>
-            </li>
+            </li> */}
           </ul>
           <div className="text-center md:text-left nunito md:w-1/2 opacity-50">
             <p>Thank you for your support!</p>

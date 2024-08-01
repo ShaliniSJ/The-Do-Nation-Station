@@ -77,9 +77,9 @@ export default function Page() {
                 <div className="bg-yellow-100 rounded-md p-2 w-fit">
                   <p className="text-xl">Points: +{donor.total_amount}</p>
                 </div>
-                <div className="bg-green-100 rounded-md p-2 w-fit">
-                  <p className="text-xl">Rank: 30</p> {/*TODO*/}
-                </div>
+                {/* <div className="bg-green-100 rounded-md p-2 w-fit">
+                  <p className="text-xl">Rank: 30</p> {/*TODO
+                </div> */}
               </div>
             </div>
             <div className="flex flex-col gap-4 mt-8 grow p-6">

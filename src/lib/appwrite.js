@@ -449,12 +449,28 @@ export const getLeaderBoard = async () => {
 
 export const getPastContributions = async () => {
   try {
-    const user= await getCurrentUser(true);
+    const user = await getCurrentUser(true);
     const donations = await databases.listDocuments(databaseId, DONATIONS, [
       Query.equal("donor_id", user.user_id),
     ]);
-    
-    return donations.documents;
+
+    const contributionsWithOrgNames = await Promise.all(
+      donations.documents.map(async (donation) => {
+        
+        const organisation = await databases.listDocuments(
+          databaseId,
+          ORGANIZATIONS,
+         [Query.equal('organisation_id',donation.organisation_id)]
+        );
+       
+        return {
+          ...donation,
+          organisation_name: organisation.documents[0].organisation_name,
+        };
+      })
+    );
+   
+    return contributionsWithOrgNames;
   } catch (e) {
     throw new Error(e);
   }

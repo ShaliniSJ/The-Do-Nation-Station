@@ -30,7 +30,7 @@ const ProfileForOrganisation = ({ islogged }) => {
   const [needs, setNeeds] = useState(orgDat.currentNeeds);
   const [orgData, setOrgData] = useState(orgDat);
   const [pastDonation, setPastDonation] = useState([]);
-
+  
   useEffect(() => {
     async function fetchData() {
       try {
@@ -39,11 +39,11 @@ const ProfileForOrganisation = ({ islogged }) => {
           getPastDonations(),
           getCurrentUser(false),
         ]);
-
+        
         setNeedDetails(needs);
         setDonationDetails(donations);
         setUser(user);
-
+        
         setOrgData({
           name: user.organisation_name,
           description: user.description,
@@ -55,17 +55,30 @@ const ProfileForOrganisation = ({ islogged }) => {
           mapLink: user.location,
           gallery: [{ id: 1, src: user.photos, alt: "Image 1" }],
         });
-
+        
         setNeeds(needs);
         setPastDonation(donations);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-
+    
     fetchData();
   }, []);
-
+  
+  const formatDate = (dateString) => {
+    console.log(dateString);
+    const options = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit', 
+      timeZoneName: 'short' 
+    };
+    return new Date(dateString).toLocaleString('en-US', options);
+  };
 
   const donationsPerPage = 10;
   const NeedsPerPage = 10;
@@ -121,7 +134,7 @@ const ProfileForOrganisation = ({ islogged }) => {
 
   const encodedAddress = encodeURIComponent(orgData.address);
   const mapEmbedLink = `https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${encodedAddress}`;
-
+  console.log(currentNeeds);
   return (
     // <div className="min-h-screen bg-white text-dark-blue p-6">
     //   <div className="flex justify-between items-center mb-6">
@@ -232,12 +245,13 @@ const ProfileForOrganisation = ({ islogged }) => {
             </thead>
             <tbody>
               {currentNeeds.map((need) => (
+                
                 <tr key={need.id} className="even:bg-secondary-blue/20">
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
                     {need.total_amt}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
-                    {need.date}
+                    {formatDate(need.date)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
                     <button
@@ -624,52 +638,3 @@ const ProfileForOrganisation = ({ islogged }) => {
 
 export default ProfileForOrganisation;
 
-// const orgDat = {
-//   name: "The Do-Nation Station",
-//   description:
-//     "Many orphanages, NGOs, hospitals, foundations, and old age homes have their own websites through which donors make donations in the form of kind and money. But there lacks a central platform through which all orphanages, NGOs, hospitals, foundations, and old age homes can register themselves in the platform and donors can easily donate to the needy based on urgency, location, date, timings, population, and requirements. The platform should also be responsible and transparent by showing the government licenses, audits, details, and photographs of registered orphanages, NGOs, hospitals, foundations, and old age homes. The donors will be able to see how, where, and by whom their money and kind are being utilized. There is also a need to show a leaderboard in specific locations among donors in order to encourage their donation.",
-//   impacts: "5000+ people",
-//   type: "NGO",
-//   address:
-//     "Chennai Institute of Technology, Sarathy Nagar, Kundrathur, Chennai, Tamil Nadu 600069",
-//   pastDonations: [
-//     { id: 1, amount: "$1000", date: "2024-01-15", donor: "John Doe" },
-//     { id: 2, amount: "$500", date: "2024-02-20", donor: "Jane Doe" },
-//     { id: 3, amount: "$2000", date: "2024-03-10", donor: "John Doe" },
-//     { id: 4, amount: "$1000", date: "2024-01-15", donor: "John Doe" },
-//     { id: 5, amount: "$500", date: "2024-02-20", donor: "Jane Doe" },
-//     { id: 6, amount: "$2000", date: "2024-03-10", donor: "John Doe" },
-//     { id: 7, amount: "$1000", date: "2024-01-15", donor: "John Doe" },
-//     { id: 8, amount: "$500", date: "2024-02-20", donor: "Jane Doe" },
-//     { id: 9, amount: "$2000", date: "2024-03-10", donor: "John Doe" },
-//     { id: 10, amount: "$1000", date: "2024-01-15", donor: "John Doe" },
-//     { id: 11, amount: "$500", date: "2024-02-20", donor: "Jane Doe" },
-//     { id: 12, amount: "$2000", date: "2024-03-10", donor: "John Doe" },
-//     { id: 13, amount: "$1000", date: "2024-01-15", donor: "John Doe" },
-//     { id: 14, amount: "$500", date: "2024-02-20", donor: "Jane Doe" },
-//     { id: 15, amount: "$2000", date: "2024-03-10", donor: "John Doe" },
-//   ],
-//   currentNeeds: [
-//     { id: 1, amount: "$1000", date: "2024-01-15" },
-//     { id: 2, amount: "$500", date: "2024-02-20" },
-//     { id: 3, amount: "$2000", date: "2024-03-10" },
-//     { id: 4, amount: "$1000", date: "2024-01-15" },
-//     { id: 5, amount: "$500", date: "2024-02-20" },
-//     { id: 6, amount: "$2000", date: "2024-03-10" },
-//     { id: 7, amount: "$1000", date: "2024-01-15" },
-//     { id: 8, amount: "$500", date: "2024-02-20" },
-//     { id: 9, amount: "$2000", date: "2024-03-10" },
-//     { id: 10, amount: "$1000", date: "2024-01-15" },
-//     { id: 11, amount: "$500", date: "2024-02-20" },
-//     { id: 12, amount: "$2000", date: "2024-03-10" },
-//     { id: 13, amount: "$1000", date: "2024-01-15" },
-//     { id: 14, amount: "$500", date: "2024-02-20" },
-//     { id: 15, amount: "$2000", date: "2024-03-10" },
-//   ],
-//   mapLink: "https://maps.app.goo.gl/X9yj6RURE2A6zNLr7",
-//   gallery: [
-//     { id: 1, src: "/path-to-image1.jpg", alt: "Image 1" },
-//     { id: 2, src: "/path-to-image2.jpg", alt: "Image 2" },
-//     { id: 3, src: "/path-to-image3.jpg", alt: "Image 3" },
-//   ],
-// };

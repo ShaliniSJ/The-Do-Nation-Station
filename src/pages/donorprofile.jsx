@@ -44,7 +44,6 @@ export default function Page() {
             // TODO WE DONT HAVE THIS YET
             const contributions = await getPastContributions();
             setPastContributions(contributions);
-            console.log(pastContributions)
           } catch (error) {
             console.error("Failed to fetch user data", error);
           }
@@ -61,7 +60,7 @@ export default function Page() {
     contributionsList.push(
       <li className="flex flex-row py-2 items-center gap-32 border-b-2 border-black/10">
         <div className="flex flex-col">
-          <p className="text-xl">{contrib.organisation_id}</p>
+          <p className="text-xl">{contrib.organisation_name}</p>
           <p>{formatDate(contrib.$updatedAt)}</p>
         </div>
         <p className="text-xl text-green-500">+{contrib.donation_amt}</p>

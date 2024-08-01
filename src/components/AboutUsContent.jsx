@@ -1,13 +1,17 @@
 import React from 'react';
 import Image from 'next/image';
+import arunpranavat from '../assets/arunpranavat.png';
+import kierthana from '../assets/kierthana.jpeg';
+import shalini from '../assets/shalinis.jpeg';
+import kavirajar from '../assets/dataoverflow.png';
 import solutionImage from '../assets/the-do-nation-station-high-resolution-logo.png';
 import { Typography, Container, Box, Grid, Avatar, List, ListItem } from '@mui/material';
 
 const teamMembers = [
-    { name: 'Arun Pranav A T', role: 'He/Him', image: '/path/to/john-image.jpg' },
-    { name: 'Shalini S', role: 'She/Her', image: '/path/to/jane-image.jpg' },
-    { name: 'Kierthana R S', role: 'She/Her', image: '/path/to/alice-image.jpg' },
-    { name: 'Kavirajar B', role: 'They/Them', image: '/path/to/alice-image.jpg' }
+    { name: 'Arun Pranav A T', role: 'He/Him', image: arunpranavat },
+    { name: 'Shalini S', role: 'She/Her', image: shalini },
+    { name: 'Kierthana R S', role: 'She/Her', image: kierthana },
+    { name: 'Kavirajar B', role: 'He/Him', image: kavirajar },
 ];
 
 const AboutUs = () => {
@@ -29,9 +33,10 @@ const AboutUs = () => {
                 </Typography>
                 <Grid container spacing={4}>
                     {teamMembers.map((member, index) => (
+                        console.log(member),
                         <Grid item xs={12} sm={6} md={3} key={index}>
                             <Box textAlign="center">
-                                <Avatar alt={member.name} src={member.image} sx={{ width: 100, height: 100, margin: '0 auto' }} />
+                                <Avatar alt={member.name} src={member.image.src} sx={{ width: 100, height: 100, margin: '0 auto' }} />
                                 <Typography variant="h6" component="h3">
                                     {member.name}
                                 </Typography>

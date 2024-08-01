@@ -40,9 +40,9 @@ const ProfileButton = ({ isdonor }) => {
     const handleLogout = async () => {
         try {
             await signOut();
-            router.push('/');
             localStorage.clear();
-            window.location.reload(); 
+            router.push('/');
+            window.location.reload(); // Reload the page to reflect the changes
         } catch (error) {
             console.error('Failed to logout', error);
             alert('Logout failed. Please try again.');

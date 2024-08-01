@@ -43,7 +43,6 @@ const avatars = new Avatars(client);
 const databases = new Databases(client);
 const storage = new Storage(client);
 
-
 export const createUser = async (email, password, username, isDonor) => {
   try {
     const newAccount = await account.create(
@@ -152,9 +151,11 @@ export const getCurrentUser = async (is_donor) => {
 
 export const getOrganisationUser = async (organisation_id) => {
   try {
-      const organisation = await databases.listDocuments(databaseId, ORGANIZATIONS, [
-        Query.equal("organisation_id", organisation_id),
-      ]);
+    const organisation = await databases.listDocuments(
+      databaseId,
+      ORGANIZATIONS,
+      [Query.equal("organisation_id", organisation_id)]
+    );
     return organisation.documents[0];
   } catch (error) {
     console.log(error);
@@ -187,7 +188,11 @@ export const getNeeds = async () => {
   try {
     const organisation = await getCurrentUser(false);
     const needs = await databases.listDocuments(databaseId, NEEDS, [
-      Query.equal("organisation_id", organisation.organisation_id),
+      // the completed column should be false
+      Query.and([
+        Query.equal("completed", false),
+        Query.equal("organisation_id", organisation.organisation_id),
+      ]),
     ]);
     return needs.documents;
   } catch (e) {
@@ -208,33 +213,30 @@ export const getAllNeeds = async () => {
 
 export const getNeedswithNeedsId = async (needsId) => {
   try {
-    const needs = await databases.listDocuments(databaseId, NEEDS,
-      [
-        Query.equal("$id", needsId),
-      ]
-    );
+    const needs = await databases.listDocuments(databaseId, NEEDS, [
+      Query.equal("$id", needsId),
+    ]);
     return needs.documents;
   } catch (e) {
     throw new Error(e);
   }
 };
 
-
 export const getAllNeedsOrganisation = async (userId) => {
   try {
     const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
       Query.and([
-        Query.equal('completed', false),
-        Query.equal('organisation_id', userId)
-      ])
+        Query.equal("completed", false),
+        Query.equal("organisation_id", userId),
+      ]),
     ]);
-    
+
     // Log the response to verify structure (for debugging)
-    
+
     return allNeeds.documents; // Ensure this matches your data structure
   } catch (e) {
     // Handle and log the error more explicitly
-    console.error('Error fetching needs:', e.message || e);
+    console.error("Error fetching needs:", e.message || e);
     throw e; // Rethrow to propagate error
   }
 };
@@ -243,17 +245,17 @@ export const getAllPastDonationsForStatic = async (userId) => {
   try {
     const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
       Query.and([
-        Query.equal('completed', true),
-        Query.equal('organisation_id', userId)
-      ])
+        Query.equal("completed", true),
+        Query.equal("organisation_id", userId),
+      ]),
     ]);
-    
+
     // Log the response to verify structure (for debugging)
-    
+
     return allNeeds.documents; // Ensure this matches your data structure
   } catch (e) {
     // Handle and log the error more explicitly
-    console.error('Error fetching needs:', e.message || e);
+    console.error("Error fetching needs:", e.message || e);
     throw e; // Rethrow to propagate error
   }
 };
@@ -262,7 +264,7 @@ export const organisationDetailsForNeeds = async () => {
   try {
     const details = await databases.listDocuments(databaseId, ORGANIZATIONS);
 
-    return details.documents;    
+    return details.documents;
   } catch (e) {
     throw new Error(e);
   }
@@ -274,7 +276,7 @@ export const getPastDonations = async () => {
     const donations = await databases.listDocuments(databaseId, DONATIONS, [
       Query.equal("organisation_id", organisation.organisation_id),
     ]);
-    
+
     return donations.documents;
   } catch (e) {
     throw new Error(e);
@@ -295,8 +297,8 @@ export const postOrganisationDetails = async (form) => {
         address: form.address,
         ph_no: form.phno,
         photos: form.fileURL,
-        type:form.type,
-        impact:form.impact
+        type: form.type,
+        impact: form.impact,
       }
     );
   } catch (e) {
@@ -304,32 +306,31 @@ export const postOrganisationDetails = async (form) => {
   }
 };
 
-export const postNeeds=async(form)=>{
-  try{
-  const organisation = await getCurrentUser(false);
-  const insertNeeds= await databases.createDocument(
-    databaseId,
-    NEEDS,
-    ID.unique(),
-    {
-     organisation_id:organisation.organisation_id,
-     total_amt:form.amount,
-     type:form.iscash,
-     kind:form.kindtype,
-     description:form.purpose,
-     date:form.tillDate['$d'],
-     completed:false,
-     organisation_name:organisation.organisation_name,
-     quantity:form.quantity
-    }
-  );
-}
-catch(e){
-  throw new Error(e)
-}
-}
-export const postBankDetails=async(form)=>{
-  try{
+export const postNeeds = async (form) => {
+  try {
+    const organisation = await getCurrentUser(false);
+    const insertNeeds = await databases.createDocument(
+      databaseId,
+      NEEDS,
+      ID.unique(),
+      {
+        organisation_id: organisation.organisation_id,
+        total_amt: form.amount,
+        type: form.iscash,
+        kind: form.kindtype,
+        description: form.purpose,
+        date: form.tillDate["$d"],
+        completed: false,
+        organisation_name: organisation.organisation_name,
+        quantity: form.quantity,
+      }
+    );
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+export const postBankDetails = async (form) => {
+  try {
     const organisation = await getCurrentUser(false);
     const updateOrganisation = await databases.updateDocument(
       databaseId,
@@ -340,16 +341,13 @@ export const postBankDetails=async(form)=>{
         ifsc_code: form.code,
         branch: form.branch,
         account_name: form.name,
-        bank_name: form.bankname
+        bank_name: form.bankname,
       }
     );
-
-
+  } catch (e) {
+    throw new Error(e);
   }
-  catch(e){
-    throw new Error(e)
-  }
-}
+};
 export const getFilePreview = async (fileId, type) => {
   let fileUrl;
   try {
@@ -389,13 +387,33 @@ export const uploadFile = async (file, type) => {
   }
 };
 
-export const updateNeeds = async (needid, amount,is_donor) => {
+export const completeNeeds = async (needid) => {
   try {
-    const currentDocument = await databases.getDocument(databaseId, NEEDS, needid);
+    const updatedDocument = await databases.updateDocument(
+      databaseId,
+      NEEDS,
+      needid,
+      {
+        completed: true,
+      }
+    );
+    console.log("Document updated:", updatedDocument);
+  } catch (error) {
+    console.error("Error updating document:", error);
+  }
+};
+
+export const updateNeeds = async (needid, amount, is_donor) => {
+  try {
+    const currentDocument = await databases.getDocument(
+      databaseId,
+      NEEDS,
+      needid
+    );
 
     const currentTotalAmt = currentDocument.total_amt;
     const currentCollectedAmt = currentDocument.collected_amt;
-    
+
     const newTotalAmt = currentTotalAmt - amount;
     const newCollectedAmt = currentCollectedAmt + amount;
     const updatedDocument = await databases.updateDocument(
@@ -404,18 +422,23 @@ export const updateNeeds = async (needid, amount,is_donor) => {
       needid,
       {
         total_amt: newTotalAmt,
-        collected_amt: newCollectedAmt
+        collected_amt: newCollectedAmt,
       }
     );
-    const current_user = await getCurrentUser(is_donor)
-    const addDonation = await databases.createDocument(databaseId, DONATIONS, ID.unique(), {
-      organisation_id: currentDocument.organisation_id,
-      donor_id: current_user.user_id,
-      donation_amt: amount,
-    });
-    if(is_donor){
+    const current_user = await getCurrentUser(is_donor);
+    const addDonation = await databases.createDocument(
+      databaseId,
+      DONATIONS,
+      ID.unique(),
+      {
+        organisation_id: currentDocument.organisation_id,
+        donor_id: current_user.user_id,
+        donation_amt: amount,
+      }
+    );
+    if (is_donor) {
       // update at donar table
-      const getData=await databases.listDocuments(databaseId, DONORS, [
+      const getData = await databases.listDocuments(databaseId, DONORS, [
         Query.equal("user_id", current_user.user_id),
       ]);
       const updateDonar = await databases.updateDocument(
@@ -426,10 +449,9 @@ export const updateNeeds = async (needid, amount,is_donor) => {
           total_amount: getData.documents[0].total_amount + amount,
         }
       );
-      
     }
   } catch (error) {
-    console.error('Error updating document:', error);
+    console.error("Error updating document:", error);
   }
 };
 
@@ -444,23 +466,17 @@ export const getLeaderBoard = async () => {
   } catch (e) {
     throw new Error(e);
   }
-} 
+};
 
 export const getPastContributions = async () => {
   try {
-    const user= await getCurrentUser(true);
+    const user = await getCurrentUser(true);
     const donations = await databases.listDocuments(databaseId, DONATIONS, [
       Query.equal("donor_id", user.user_id),
     ]);
-    
+
     return donations.documents;
   } catch (e) {
     throw new Error(e);
   }
 };
-
-
-
-
-
-

@@ -3,7 +3,12 @@ import Image from "next/image";
 import BlueLogo from "../assets/the-do-nation-station-high-resolution-logo.png";
 import Router from "next/router";
 import { router } from "next/router";
-import { getCurrentUser, getNeeds, getPastDonations } from "../lib/appwrite";
+import {
+  completeNeeds,
+  getCurrentUser,
+  getNeeds,
+  getPastDonations,
+} from "../lib/appwrite";
 
 // Define your Google Maps API key here
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
@@ -64,8 +69,7 @@ const ProfileForOrganisation = ({ islogged }) => {
     }
 
     fetchData();
-  }, []);
-
+  }, [needs]);
 
   const donationsPerPage = 10;
   const NeedsPerPage = 10;
@@ -92,12 +96,9 @@ const ProfileForOrganisation = ({ islogged }) => {
     setCurrentNeedsPage(pageNumber);
   };
 
-  const handleEditNeed = (need) => {
-    setEditingNeed(need);
-  };
-
-  const handleCompleteNeed = (needId) => {
-    setNeeds(needs.filter((need) => need.id !== needId));
+  const handleDeleteNeed = async (needId) => {
+    await completeNeeds(needId.$id);
+    setNeeds(needs.filter((need) => need.$id !== needId.$id));
   };
 
   const handleSaveEdit = () => {
@@ -241,15 +242,7 @@ const ProfileForOrganisation = ({ islogged }) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
                     <button
-                      onClick={() => handleDonate()}
-                      className="bg-primary-blue rounded-full text-white py-2 px-6 hover:bg-blue-700 mr-2"
-                    >
-                      Edit
-                    </button>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
-                    <button
-                      onClick={() => handleDonate()}
+                      onClick={() => handleDeleteNeed(need)}
                       className="bg-primary-blue rounded-full text-white py-2 px-6 hover:bg-blue-700 mr-2"
                     >
                       Delete

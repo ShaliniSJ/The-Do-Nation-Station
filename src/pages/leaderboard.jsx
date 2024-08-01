@@ -1,6 +1,6 @@
 // src/pages/leaderboard/index.jsx
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Table,
@@ -15,8 +15,6 @@ import {
 } from "@mui/material";
 import Navbar from "../components/Navbar";
 import { getLeaderBoard } from "../lib/appwrite";
-// import 'tailwindcss/tailwind.css';
-
 
 const Leaderboard = () => {
   const [donors, setDonors] = useState([]);
@@ -30,29 +28,28 @@ const Leaderboard = () => {
   const [showAfterLogin, setShowAfterLogin] = useState(false);
   const [user, setUser] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
-  const [isdonor,setIsdonor]=useState(false);
+  const [isdonor, setIsdonor] = useState(false);
 
   useEffect(() => {
     // Define an async function to handle the async operation
-    const fetchUserData = async () => {
-      if (typeof window !== 'undefined') {
-        const islogged = localStorage.getItem('islogged');
-        if(islogged === 'true') {
+    const fetchUserData = () => {
+      if (typeof window !== "undefined") {
+        const islogged = localStorage.getItem("islogged");
+        if (islogged === "true") {
           setIsLogged(true);
-        }
-        else{
+        } else {
           setIsLogged(false);
         }
       }
     };
 
-  
     // Call the async function
     fetchUserData();
   }, [isLogged]);
-  useEffect(async()=>{
-      setDonors(await getLeaderBoard())
-  },[])
+  useEffect(() => {
+    const fetch = async () => setDonors(await getLeaderBoard());
+    fetch();
+  }, []);
 
   const displayDonors = donors.slice(
     (page) => page * donorsPerPage,
@@ -61,7 +58,7 @@ const Leaderboard = () => {
 
   return (
     <>
-      <Navbar islogged={isLogged}   />
+      <Navbar islogged={isLogged} />
       <Container>
         <h1 className="text-3xl font-bold text-center my-8">Top Donors</h1>
         <TableContainer component={Paper}>
@@ -78,10 +75,10 @@ const Leaderboard = () => {
               {displayDonors.map((donor) => (
                 <TableRow key={donor.id}>
                   <TableCell>
-                      <Avatar alt={donor.name} src={donor.avatar_url} />
-                      <div className="flex flex-col">
-                        <p className="text-lg md:text-xl">{donor.name}</p>
-                      </div>
+                    <Avatar alt={donor.name} src={donor.avatar_url} />
+                    <div className="flex flex-col">
+                      <p className="text-lg md:text-xl">{donor.name}</p>
+                    </div>
                   </TableCell>
                   <TableCell></TableCell>
                   <TableCell>

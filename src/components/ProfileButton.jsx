@@ -10,6 +10,7 @@ import {
 import { AccountCircle, Logout } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { signOut, getCurrentUser } from "../lib/appwrite";
+import { usePathname } from "next/navigation";
 
 const ProfileButton = ({ isdonor }) => {
   const [log, SetLog] = useState([false]);
@@ -43,7 +44,8 @@ const ProfileButton = ({ isdonor }) => {
     try {
       await signOut();
       localStorage.clear();
-      router.push("/");
+      if(router.pathname !== "/") router.push("/");
+      else router.reload();
     } catch (error) {
       console.error("Failed to logout", error);
       alert("Logout failed. Please try again.");

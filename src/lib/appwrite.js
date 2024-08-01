@@ -447,6 +447,18 @@ export const getLeaderBoard = async () => {
   }
 } 
 
+export const getPastContributions = async () => {
+  try {
+    const user= await getCurrentUser(true);
+    const donations = await databases.listDocuments(databaseId, DONATIONS, [
+      Query.equal("donor_id", user.user_id),
+    ]);
+    
+    return donations.documents;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
 
 
 

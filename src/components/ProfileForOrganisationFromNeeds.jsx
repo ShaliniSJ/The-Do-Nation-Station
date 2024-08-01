@@ -162,11 +162,17 @@ const ProfileForOrganisationFromNeeds = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
               <tr>
+              <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
+                  Amount Needed
+                </th>
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
-                  Amount
+                  Amount Collected
                 </th>
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Date
+                </th>
+                <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
+                  Description
                 </th>
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Actions
@@ -179,15 +185,21 @@ const ProfileForOrganisationFromNeeds = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
                     {need.total_amt}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
+                    {need.collected_amt}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
                     {formatDate(need.date)}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
+                    {need.description.substring(0, 50)}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
                     <button
-                      onClick={() => handleDonate(need.$id)}
+                      onClick={() => handleDeleteNeed(need)}
                       className="bg-primary-blue rounded-full text-white py-2 px-6 hover:bg-blue-700 mr-2"
                     >
-                      Donate
+                      Delete
                     </button>
                   </td>
                 </tr>
@@ -223,30 +235,37 @@ const ProfileForOrganisationFromNeeds = () => {
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
-              <tr>
+            <tr>
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
-                  Amount
+                  Amount Needed
+                </th>
+                <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
+                  Amount Collected
                 </th>
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Date
                 </th>
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
-                  Donor
+                  Description
                 </th>
+                
               </tr>
             </thead>
             <tbody>
-              {currentDonations.map((donation) => (
+              {currentDonations.map((need) => (
                 <tr key={donation.id} className="even:bg-secondary-blue/20">
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
-                    {donation.total_amt}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
-                    {donation.date}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
-                    {donation.description}
-                  </td>
+                 {need.total_amt}
+               </td>
+               <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
+                 {need.collected_amt}
+               </td>
+               <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
+                 {formatDate(need.date)}
+               </td>
+               <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
+                 {need.description.substring(0, 50)}
+               </td>
                 </tr>
               ))}
             </tbody>

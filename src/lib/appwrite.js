@@ -418,13 +418,12 @@ export const updateNeeds = async (needid, amount,is_donor) => {
       const getData=await databases.listDocuments(databaseId, DONORS, [
         Query.equal("user_id", current_user.user_id),
       ]);
-      
       const updateDonar = await databases.updateDocument(
         databaseId,
         DONORS,
         getData.documents[0].$id,
         {
-          total_amount: amount,
+          total_amount: getData.documents[0].total_amount + amount,
         }
       );
       

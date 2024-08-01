@@ -136,7 +136,6 @@ const ProfileForOrganisation = ({ islogged }) => {
 
   const encodedAddress = encodeURIComponent(orgData.address);
   const mapEmbedLink = `https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${encodedAddress}`;
-  
   return (
     // <div className="min-h-screen bg-white text-dark-blue p-6">
     //   <div className="flex justify-between items-center mb-6">
@@ -235,10 +234,16 @@ const ProfileForOrganisation = ({ islogged }) => {
             <thead>
               <tr>
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
-                  Amount
+                  Amount Needed
+                </th>
+                <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
+                  Amount Collected
                 </th>
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Date
+                </th>
+                <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
+                  Description
                 </th>
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Actions
@@ -251,8 +256,14 @@ const ProfileForOrganisation = ({ islogged }) => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
                     {need.total_amt}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
+                    {need.collected_amt}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
                     {formatDate(need.date)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
+                    {need.description.substring(0, 50)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium">
                     <button
@@ -295,31 +306,38 @@ const ProfileForOrganisation = ({ islogged }) => {
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
-              <tr>
+            <tr>
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
-                  Amount
+                  Amount Needed
+                </th>
+                <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
+                  Amount Collected
                 </th>
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
                   Date
                 </th>
                 <th className="px-6 py-3 text-left text-xs md:text-base font-medium text-primary-blue/80 uppercase tracking-wider">
-                  Donor
+                  Description
                 </th>
+                
               </tr>
             </thead>
             <tbody>
-              {currentDonations.map((donation) => (
-                <tr key={donation.id} className="even:bg-secondary-blue/20">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
-                    {donation.total_amt}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
-                    {donation.date}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
-                    {donation.description}
-                  </td>
-                </tr>
+              {currentDonations.map((need) => (
+               <tr key={need.id} className="even:bg-secondary-blue/20">
+               <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
+                 {need.total_amt}
+               </td>
+               <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
+                 {need.collected_amt}
+               </td>
+               <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
+                 {formatDate(need.date)}
+               </td>
+               <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base text-black/80">
+                 {need.description.substring(0, 50)}
+               </td>
+               </tr>
               ))}
             </tbody>
           </table>

@@ -107,7 +107,7 @@ const HomeWithLogin = () => {
 
   return (
     <div className="mt-0 p-4">
-      <h1 className="text-4xl font-bold mb-4 text-blue">
+      <h1 className="text-4xl jost font-bold mb-4 text-blue">
         Search for Donation Needs
       </h1>
       <Box sx={{ mb: 4 }}>
@@ -156,6 +156,7 @@ const HomeWithLogin = () => {
 
       <Box display="flex" justifyContent="center" mt={2} gap={2}>
         <Button
+          className="rounded-full"
           variant="contained"
           color="primary"
           onClick={handleSearch}
@@ -163,7 +164,12 @@ const HomeWithLogin = () => {
         >
           Search
         </Button>
-        <Button variant="outlined" color="secondary" onClick={handleClear}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={handleClear}
+          className="rounded-full"
+        >
           Clear
         </Button>
       </Box>

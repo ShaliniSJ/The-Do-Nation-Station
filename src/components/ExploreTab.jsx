@@ -6,6 +6,7 @@ const ExploreTab = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [description, setDescription] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
+    const [posts, setPosts] = useState([]);
 
     const handleAddPostClick = () => {
         setIsModalOpen(true);
@@ -27,13 +28,33 @@ const ExploreTab = () => {
     };
 
     const handlePostClick = () => {
-        console.log('Description:', description);
-        console.log('Selected file:', selectedFile);
+        const newPost = {
+            id: posts.length + 1,
+            image: selectedFile,
+            text: description
+        };
+        setPosts([newPost, ...posts]);
         handleCloseModal();
     };
 
+    const getPost = () => {
+        // You can replace this dummy data with real API calls in the future
+        return posts.map((post) => (
+            <div key={post.id} className="bg-white rounded-lg shadow-lg mb-6 p-4">
+                {post.image && (
+                    <img
+                        src={post.image}
+                        alt="Post"
+                        className="w-full h-auto rounded-lg mb-4"
+                    />
+                )}
+                <p className="text-gray-800">{post.text}</p>
+            </div>
+        ));
+    };
+
     return (
-        <div className="relative">
+        <div className="relative p-4">
             <HiOutlinePlusCircle
                 onClick={handleAddPostClick}
                 className="text-blue-500 text-4xl absolute top-4 right-4 cursor-pointer"
@@ -85,6 +106,10 @@ const ExploreTab = () => {
                     </div>
                 </div>
             )}
+
+            <div className="mt-8">
+                {getPost()}
+            </div>
         </div>
     );
 };

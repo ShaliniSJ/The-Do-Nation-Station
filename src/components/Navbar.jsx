@@ -48,6 +48,11 @@ const Navbar = ({ islogged }) => {
             History
           </a>
         </li>
+        <li className="mx-5">
+          <a href="/explore" className="hover:underline focus:underline">
+            Explore
+          </a>
+        </li>
       </ul>
 
       <div className="mx-5">

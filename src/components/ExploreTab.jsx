@@ -1,0 +1,92 @@
+import React, { useState } from 'react';
+import { HiOutlinePlusCircle } from 'react-icons/hi'; // Icon for the Add Post button
+import { BsPaperclip } from 'react-icons/bs'; // Icon for the Pin button
+
+const ExploreTab = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [description, setDescription] = useState('');
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const handleAddPostClick = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setDescription('');
+        setSelectedFile(null);
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            setSelectedFile(URL.createObjectURL(file));
+        } else {
+            alert('Please select an image file.');
+        }
+    };
+
+    const handlePostClick = () => {
+        console.log('Description:', description);
+        console.log('Selected file:', selectedFile);
+        handleCloseModal();
+    };
+
+    return (
+        <div className="relative">
+            <HiOutlinePlusCircle
+                onClick={handleAddPostClick}
+                className="text-blue-500 text-4xl absolute top-4 right-4 cursor-pointer"
+            />
+
+            {isModalOpen && (
+                <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center z-50">
+                    <div className="bg-white p-8 rounded-lg w-1/2 shadow-lg">
+                        <h2 className="text-xl font-semibold mb-4">Add Post</h2>
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="What's on your mind?"
+                            className="w-full h-20 p-4 border rounded mb-4 resize-none"
+                        />
+                        {selectedFile && (
+                            <div className="overflow-y-auto max-h-64 mb-4">
+                                <img
+                                    src={selectedFile}
+                                    alt="Selected"
+                                    className="w-full h-auto rounded-lg"
+                                />
+                            </div>
+                        )}
+                        <div className="flex justify-between items-center mb-4">
+                            <label htmlFor="fileInput" className="cursor-pointer">
+                                <BsPaperclip className="text-blue-500 text-2xl" />
+                                <input
+                                    type="file"
+                                    id="fileInput"
+                                    style={{ display: 'none' }}
+                                    onChange={handleFileChange}
+                                    accept="image/*"
+                                />
+                            </label>
+                            <button
+                                onClick={handlePostClick}
+                                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                            >
+                                Post
+                            </button>
+                        </div>
+                        <button
+                            onClick={handleCloseModal}
+                            className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default ExploreTab;

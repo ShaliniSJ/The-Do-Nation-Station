@@ -6,6 +6,8 @@ import {
   getUserLikedVideos,
   getUser,
   getCurrentUser,
+  likeVideo,
+  unlikeVideo,
 } from "@/src/lib/appwrite";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -18,6 +20,21 @@ import {
 import { IoSend } from "react-icons/io5";
 
 import { FaComment, FaRegCommentAlt } from "react-icons/fa";
+
+const handleShareClick = (postId) => {
+  const postUrl = `${window.location.origin}/posts/${postId}`;
+  if (navigator.share) {
+    navigator
+      .share({
+        title: "Check out this post!",
+        url: postUrl,
+      })
+      .then(() => console.log("Post shared successfully!"))
+      .catch((error) => console.error("Error sharing post:", error));
+  } else {
+    alert(`Copy this link to share: ${postUrl}`);
+  }
+};
 
 export default function Page() {
   const router = useRouter();
@@ -99,6 +116,32 @@ export default function Page() {
     }
   };
 
+  const toggleLike = async (postId, currentLikes) => {
+    setLikedPosts((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+
+    setPost({ ...post, like: post.like + (likedPosts[postId] ? -1 : 1) });
+    // (prevPosts) =>
+    //   prevPosts.map((post) =>
+    //     post.$id === postId
+    //       ? { ...post, like: post.like + (likedPosts[postId] ? -1 : 1) }
+    //       : post
+    //   )
+    // );
+
+    try {
+      if (likedPosts[postId]) {
+        await unlikeVideo(isdonor, postId, currentLikes);
+      } else {
+        await likeVideo(isdonor, postId, currentLikes);
+      }
+    } catch (error) {
+      console.error("Error liking post:", error.message);
+    }
+  };
+
   function renderComments() {
     // return comments.map((comment) => (
     //   <div key={comment.$id} className="p-4 border-b">
@@ -116,12 +159,14 @@ export default function Page() {
             alt={comment.user.name}
             className="w-8 h-8 rounded-full object-cover mr-2"
           />
-          <p className="font-semibold text-gray-800">{comment.user.name}</p>
+          <div className="flex flex-col">
+            <p className="font-semibold text-gray-800">{comment.user.name}</p>
+            <p className="text-gray-500 text-sm">
+              {new Date(comment.$createdAt).toLocaleString()}
+            </p>
+          </div>
         </div>
-        <p className="text-gray-800">{comment.text}</p>
-        <p className="text-gray-500 text-sm">
-          {new Date(comment.$createdAt).toLocaleString()}
-        </p>
+        <p className="text-gray-800 text-lg nunito">{comment.text}</p>
       </div>
     ));
   }
@@ -158,7 +203,7 @@ export default function Page() {
             />
           )}
 
-          <p className="text-gray-800 nunito text-base mb-4">
+          <p className="text-gray-800 nunito text-lg mb-4">
             {post.description}
           </p>
 
@@ -188,7 +233,10 @@ export default function Page() {
                 <p>{comments.length}</p>
               </a>
             </div>
-            <button className="focus:outline-none">
+            <button
+              onClick={() => handleShareClick(post.$id)}
+              className="focus:outline-none"
+            >
               <AiOutlineShareAlt className="text-gray-600 w-6 h-6" />
             </button>
           </div>

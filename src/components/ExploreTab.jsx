@@ -19,6 +19,21 @@ import {
   countComments,
 } from "../lib/appwrite";
 
+const handleShareClick = (postId) => {
+  const postUrl = `${window.location.origin}/posts/${postId}`;
+  if (navigator.share) {
+    navigator
+      .share({
+        title: "Check out this post!",
+        url: postUrl,
+      })
+      .then(() => console.log("Post shared successfully!"))
+      .catch((error) => console.error("Error sharing post:", error));
+  } else {
+    alert(`Copy this link to share: ${postUrl}`);
+  }
+};
+
 const ExploreTab = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [description, setDescription] = useState("");
@@ -198,7 +213,10 @@ const ExploreTab = () => {
               <p>{comments[post.$id] ? comments[post.$id] : 0}</p>
             </a>
           </div>
-          <button className="focus:outline-none">
+          <button
+            onClick={() => handleShareClick(post.$id)}
+            className="focus:outline-none"
+          >
             <AiOutlineShareAlt className="text-gray-600 w-6 h-6" />
           </button>
         </div>
@@ -240,7 +258,7 @@ const ExploreTab = () => {
                     <input
                       type="file"
                       id="fileInput"
-                      style={{ display: 'none' }}
+                      style={{ display: "none" }}
                       onChange={handleFileChange}
                       accept="image/*"
                     />

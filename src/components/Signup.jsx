@@ -34,7 +34,7 @@ export default function SignUp() {
         router.push("/");
       } else {
         localStorage.setItem("isdonar", false);
-        router.push("/orgdetails");
+        router.push("/orgdetails?Edit=false");
       }
       // router.push("/signin"); // Redirect to sign-in page after successful sign-up
     } catch (e) {

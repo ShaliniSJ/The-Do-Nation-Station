@@ -331,7 +331,10 @@ export const getAllNeeds = async () => {
     const allNeeds = await databases.listDocuments(databaseId, NEEDS, [
       Query.and([
         Query.equal("completed", false),
-        Query.greaterThan("total_amt", 0),
+        Query.or([
+          Query.greaterThan("total_amt", 0),
+          Query.equal("type", false),
+        ]),        
       ]),
     ]);
     return allNeeds.documents;
@@ -747,3 +750,38 @@ export const updateNeed = async (needId, data) => {
     throw new Error(e);
   }
 };
+
+
+export const  getOrganisationDetails = async()=>{
+  try{
+    const organisation = await getCurrentUser(false);
+    const details = await databases.listDocuments(databaseId, ORGANIZATIONS, [Query.equal("organisation_id", organisation.organisation_id)]);
+    return details.documents[0];
+  }catch(e){
+    throw new Error(e);
+  }
+}
+
+export const updateOrganisationDetails = async (form) => {
+  try {
+    const organisation = await getCurrentUser(false);
+    console.log(form)
+    const updateOrganisation = await databases.updateDocument(
+      databaseId,
+      ORGANIZATIONS,
+      organisation.$id,
+      {
+        description: form.desc,
+        license_id: form.license,
+        location: form.location,
+        address: form.address,
+        ph_no: form.phno,
+        photos: form.fileURL,
+        type: form.type,
+        impact: form.impact,
+      }
+    );
+  } catch (e) {
+    throw new Error(e);
+  }
+}

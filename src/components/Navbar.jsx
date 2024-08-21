@@ -34,8 +34,8 @@ const Navbar = ({ islogged }) => {
           </a>
         </li>
         <li className="ml-5">
-          <a href="/aboutUs" className="hover:underline focus:underline">
-            About
+          <a href="/explore" className="hover:underline focus:underline">
+            Explore
           </a>
         </li>
         {/* <li className="ml-5">
@@ -43,14 +43,14 @@ const Navbar = ({ islogged }) => {
             Leaderboard
           </a>
         </li> */}
-        <li className="mx-5">
+        <li className="ml-5">
           <a href="/history" className="hover:underline focus:underline">
             History
           </a>
         </li>
-        <li className="m1-5">
-          <a href="/explore" className="hover:underline focus:underline">
-            Explore
+        <li className="ml-5">
+          <a href="/aboutUs" className="hover:underline focus:underline">
+            About
           </a>
         </li>
       </ul>

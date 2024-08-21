@@ -269,8 +269,10 @@ export const getCurrentUser = async (is_donor) => {
         throw Error;
       }
     }
+    console.log("cu", CurrentUser);
     return CurrentUser.documents[0];
   } catch (error) {
+    console.log("this came here");
     console.log(error);
   }
 };
@@ -630,7 +632,13 @@ export const getPastContributions = async () => {
 
 export const likeVideo = async (is_donar, postId, likesCount) => {
   try {
-    const { user_id } = await getCurrentUser(is_donar);
+    const user = await getCurrentUser(is_donar);
+
+    if (!user) {
+      return;
+    }
+
+    const user_id = user.user_id;
     // Add a like to the likes table
 
     const newLike = await databases.createDocument(
@@ -658,15 +666,28 @@ export const likeVideo = async (is_donar, postId, likesCount) => {
   }
 };
 
-export const unlikeVideo = async (userId, postid) => {
+export const unlikeVideo = async (is_donar, postid, likesCount) => {
+  const user = await getCurrentUser(is_donar);
+  if (!user) {
+    return;
+  }
+  const userId = user.user_id;
   try {
-    if (!userId || !videoId) {
+    if (!userId || !postid) {
       throw new Error("Invalid userId or videoId");
     }
     const post = await databases.listDocuments(databaseId, LIKES, [
       Query.equal("user_id", userId),
       Query.equal("post_id", postid),
     ]);
+    const updatedPost = await databases.updateDocument(
+      databaseId, // databaseId
+      POST, // collectionId
+      postid, // documentId
+      {
+        like: likesCount - 1,
+      }
+    );
 
     const documentId = post.documents[0].$id;
 
@@ -707,15 +728,7 @@ export const getUserLikedVideos = async () => {
     }
     return data.documents;
   } catch (e) {
-    throw new Error(e);
-  }
-};
-
-export const getNeedsTable = async () => {
-  try {
-    const needs = await databases.listDocuments(databaseId, NEEDS);
-    return needs.documents;
-  } catch (e) {
+    console.log(e);
     throw new Error(e);
   }
 };

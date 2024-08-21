@@ -15,6 +15,7 @@ import {
   Query,
   Storage,
 } from "appwrite";
+import { data } from "cheerio/dist/commonjs/api/attributes";
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_DATABASE_ID;
 const PROJECT_ID = process.env.NEXT_PUBLIC_PROJECT_ID;
@@ -306,15 +307,66 @@ export const getOrganisationUser = async (organisation_id) => {
 
 export const getHistory = async () => {
   try {
-    const data = await databases.listDocuments(databaseId, NEEDS, [
-      Query.equal("completed", true),
-    ]);
+    // Step 1: Fetch all donation records
+    const donationsResponse = await databases.listDocuments(
+      databaseId,
+      DONATIONS
+    );
 
-    return data.documents;
-  } catch (e) {
-    throw new Error(e);
+    const donations = donationsResponse.documents;
+
+    // Step 2: Extract unique donor and organisation IDs
+    const donorIds = [
+      ...new Set(donations.map((donation) => donation.donor_id)),
+    ];
+    const organisationIds = [
+      ...new Set(donations.map((donation) => donation.organisation_id)),
+    ];
+
+    // Step 3: Fetch all donors in a single request
+    const donorsResponse = await databases.listDocuments(
+      databaseId,
+      DONORS,
+      [Query.equal('user_id', donorIDs.
+    );
+
+    // Create a mapping of donor_id to donor_name
+    const donorsMap = donorsResponse.documents.reduce((acc, donor) => {
+      acc[donor.$id] = donor.name;
+      return acc;
+    }, {});
+
+    // Step 4: Fetch all organisations in a single request
+    const organisationsResponse = await databases.listDocuments(
+      DATABASE_ID, 
+      ORGANISATIONS_COLLECTION_ID,
+      [Query.equal('$id', organisationIds)]
+    );
+
+    // Create a mapping of organisation_id to organisation_name
+    const organisationsMap = organisationsResponse.documents.reduce(
+      (acc, organisation) => {
+        acc[organisation.$id] = organisation.organisation_name;
+        return acc;
+      },
+      {}
+    );
+
+    // Step 5: Merge the data
+    const donationHistory = donations.map((donation) => ({
+      ...donation,
+      donor_name: donorsMap[donation.donor_id] || 'Unknown Donor',
+      organisation_name:
+        organisationsMap[donation.organisation_id] || 'Unknown Organisation',
+    }));
+    console.log('donationHistory', donationHistory);
+    return donationHistory;
+  } catch (error) {
+    console.error('Error fetching donation history:', error);
+    throw new Error('Failed to fetch donation history');
   }
 };
+
 
 export const signOut = async () => {
   try {

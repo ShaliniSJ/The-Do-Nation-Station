@@ -15,7 +15,7 @@ import {
   Query,
   Storage,
 } from "appwrite";
-import { data } from "cheerio/dist/commonjs/api/attributes";
+
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_DATABASE_ID;
 const PROJECT_ID = process.env.NEXT_PUBLIC_PROJECT_ID;
@@ -312,60 +312,52 @@ export const getHistory = async () => {
       databaseId,
       DONATIONS
     );
-
     const donations = donationsResponse.documents;
 
-    // Step 2: Extract unique donor and organisation IDs
-    const donorIds = [
-      ...new Set(donations.map((donation) => donation.donor_id)),
-    ];
-    const organisationIds = [
-      ...new Set(donations.map((donation) => donation.organisation_id)),
-    ];
-
-    // Step 3: Fetch all donors in a single request
+    // Step 2: Fetch all donors
     const donorsResponse = await databases.listDocuments(
       databaseId,
-      DONORS,
-      [Query.equal('user_id', donorIDs.
+      DONORS
     );
+    const donors = donorsResponse.documents;
 
-    // Create a mapping of donor_id to donor_name
-    const donorsMap = donorsResponse.documents.reduce((acc, donor) => {
-      acc[donor.$id] = donor.name;
-      return acc;
-    }, {});
-
-    // Step 4: Fetch all organisations in a single request
+    // Step 3: Fetch all organisations
     const organisationsResponse = await databases.listDocuments(
-      DATABASE_ID, 
-      ORGANISATIONS_COLLECTION_ID,
-      [Query.equal('$id', organisationIds)]
+      databaseId,
+      ORGANIZATIONS
     );
+    const organisations = organisationsResponse.documents;
 
-    // Create a mapping of organisation_id to organisation_name
-    const organisationsMap = organisationsResponse.documents.reduce(
-      (acc, organisation) => {
-        acc[organisation.$id] = organisation.organisation_name;
-        return acc;
-      },
-      {}
-    );
+    // Create a map for donor_id to donor_name
+    const donorsMap = {};
+    for (const donor of donors) {
+      donorsMap[donor.user_id] = donor.name; // Assuming 'user_id' is the key and 'name' is the value
+    }
 
-    // Step 5: Merge the data
-    const donationHistory = donations.map((donation) => ({
-      ...donation,
-      donor_name: donorsMap[donation.donor_id] || 'Unknown Donor',
-      organisation_name:
-        organisationsMap[donation.organisation_id] || 'Unknown Organisation',
-    }));
-    console.log('donationHistory', donationHistory);
+    // Create a map for organisation_id to organisation_name
+    const organisationsMap = {};
+    for (const organisation of organisations) {
+      organisationsMap[organisation.organisation_id] = organisation.organisation_name; // Assuming 'organisation_id' is the key and 'organisation_name' is the value
+    }
+
+    // Combine the data
+    const donationHistory = [];
+    for (const donation of donations) {
+      donationHistory.push({
+        ...donation,
+        donor_name: donorsMap[donation.donor_id], // Map donor_id to donor_name
+        organisation_name: organisationsMap[donation.organisation_id] // Map organisation_id to organisation_name
+      });
+    }
+
+   
     return donationHistory;
-  } catch (error) {
-    console.error('Error fetching donation history:', error);
+  } catch (e) {
+    console.error('Error fetching donation history:', e);
     throw new Error('Failed to fetch donation history');
   }
 };
+
 
 
 export const signOut = async () => {

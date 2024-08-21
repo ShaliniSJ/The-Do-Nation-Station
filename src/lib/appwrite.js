@@ -695,26 +695,34 @@ export const unlikeVideo = async (is_donar, postid, likesCount) => {
   }
 };
 
-export const getUserLikedVideos = async (is_donar) => {
-  const user = await getCurrentUser(is_donar);
-  if (!user) {
-    return;
-  }
-  const user_id = user.user_id;
-  if (!user_id) {
-    return;
-  }
+export const getUserLikedVideos = async () => {
   try {
-    const post = await databases.listDocuments(databaseId, LIKES, [
-      Query.equal("user_id", user_id),
-    ]);
-    const postIDs = post.documents.map((doc) => doc.post_id);
-    if (postIDs.length === 0) {
-      return;
+    const user = await getCurrentUser(is_donar);
+    let data;
+    if (!is_donar) {
+      // do the same for organisation
+      const post = await databases.listDocuments(databaseId, LIKES, [
+        Query.equal("user_id", user.organisation_id),
+      ]);
+      const postIDs = post.documents.map((doc) => doc.post_id);
+      if (postIDs.length === 0) {
+        return;
+      }
+      data = await databases.listDocuments(databaseId, POST, [
+        Query.equal("$id", postIDs),
+      ]);
+    } else {
+      const post = await databases.listDocuments(databaseId, LIKES, [
+        Query.equal("user_id", user_id),
+      ]);
+      const postIDs = post.documents.map((doc) => doc.post_id);
+      if (postIDs.length === 0) {
+        return;
+      }
+      data = await databases.listDocuments(databaseId, POST, [
+        Query.equal("$id", postIDs),
+      ]);
     }
-    const data = await databases.listDocuments(databaseId, POST, [
-      Query.equal("$id", postIDs),
-    ]);
     return data.documents;
   } catch (e) {
     throw new Error(e);

@@ -109,6 +109,22 @@ export const createReply = async (commentId, reply) => {
   }
 };
 
+export const countComments = async (postId) => {
+  try {
+    // Fetch comments for the given postId
+    const comments = await databases.listDocuments(databaseId, COMMENTS, [
+      Query.equal("post_id", postId),
+    ]);
+
+    console.log("comm", comments);
+    // Return the total number of comments
+    return comments.total; // 'total' gives the total count of documents in the response
+  } catch (e) {
+    console.error("Error counting comments:", e);
+    throw new Error(e);
+  }
+};
+
 export const createPost = async (image_url, isDonor, description) => {
   try {
     let poster_id, poster_url, poster_name;
@@ -334,7 +350,7 @@ export const getAllNeeds = async () => {
         Query.or([
           Query.greaterThan("total_amt", 0),
           Query.equal("type", false),
-        ]),        
+        ]),
       ]),
     ]);
     return allNeeds.documents;
@@ -751,21 +767,22 @@ export const updateNeed = async (needId, data) => {
   }
 };
 
-
-export const  getOrganisationDetails = async()=>{
-  try{
+export const getOrganisationDetails = async () => {
+  try {
     const organisation = await getCurrentUser(false);
-    const details = await databases.listDocuments(databaseId, ORGANIZATIONS, [Query.equal("organisation_id", organisation.organisation_id)]);
+    const details = await databases.listDocuments(databaseId, ORGANIZATIONS, [
+      Query.equal("organisation_id", organisation.organisation_id),
+    ]);
     return details.documents[0];
-  }catch(e){
+  } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 export const updateOrganisationDetails = async (form) => {
   try {
     const organisation = await getCurrentUser(false);
-    console.log(form)
+    console.log(form);
     const updateOrganisation = await databases.updateDocument(
       databaseId,
       ORGANIZATIONS,
@@ -784,4 +801,4 @@ export const updateOrganisationDetails = async (form) => {
   } catch (e) {
     throw new Error(e);
   }
-}
+};

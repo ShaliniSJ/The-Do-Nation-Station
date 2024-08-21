@@ -6,7 +6,11 @@ import { useEffect } from "react";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    fetch("./api/schedule");
+    try {
+      fetch("./api/schedule");
+    } catch (e) {
+      console.log("scheduler disabled for this page. Reason: ", e);
+    }
   }, []);
 
   return (

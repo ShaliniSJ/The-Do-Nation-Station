@@ -113,6 +113,7 @@ const ExploreTab = () => {
   };
 
   const handlePostClick = async () => {
+    handleCloseModal();
     let uploadedFileURL = fileURL;
 
     try {
@@ -128,8 +129,6 @@ const ExploreTab = () => {
       alert("File upload failed. Please try again.");
       return;
     }
-
-    handleCloseModal();
   };
 
   const getPost = (likedPosts) => {
@@ -183,11 +182,11 @@ const ExploreTab = () => {
           <img
             src={post.image_url}
             alt="Post"
-            className="w-full h-auto rounded-lg mb-4"
+            className="w-full h-auto rounded-lg mb-4 max-h-72 object-scale-down"
           />
         )}
 
-        <p className="text-gray-800 nunito text-base mb-4">
+        <p className="text-gray-800 nunito text-base mb-4 whitespace-pre-line max-h-72 truncate">
           {post.description}
         </p>
 
@@ -231,13 +230,13 @@ const ExploreTab = () => {
       {isloggedin && (
         <>
           <div className="absolute top-32 right-0">
-            <div className="flex flex-col justify-center items-center fixed bottom-32 right-10">
+            <div className="flex flex-col justify-center items-center fixed bottom-36 right-10">
               <HiOutlinePlusCircle
                 title="ADD POST"
                 onClick={handleAddPostClick}
                 className="text-blue-500 text-6xl cursor-pointer hover:opacity-50 hover:rotate-90 transition-all"
               />
-              <p className="text-sm nunito">New Post</p>
+              <p className="text-sm nunito opacity-80">New Post</p>
             </div>
           </div>
 
@@ -249,7 +248,7 @@ const ExploreTab = () => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="What's on your mind?"
-                  className="w-full h-20 p-4 border rounded mb-4 resize-none"
+                  className="w-full h-32 p-4 border rounded mb-4 resize-none"
                 />
                 {fileURL && (
                   <div className="overflow-y-auto max-h-64 mb-4">

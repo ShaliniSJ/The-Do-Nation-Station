@@ -91,6 +91,7 @@ export default function Page() {
     }
 
     const user = await getCurrentUser(true);
+    console.log("gomma", user, isdonor);
     const user_id = isdonor ? user.user_id : user.organisation_id;
 
     setComments([
@@ -202,7 +203,7 @@ export default function Page() {
           />
         )}
 
-        <p className="text-gray-800 nunito text-base mb-4">
+        <p className="text-gray-800 nunito text-base whitespace-pre-line mb-4">
           {post.description}
         </p>
 
@@ -223,14 +224,14 @@ export default function Page() {
               </button>
               <div className="text-black ml-3">{post.like}</div>
             </div>
-            <a
+            {/* <a
               title="comment"
               href={"/posts/" + post.$id}
               className="flex flex-row items-center gap-4 rounded-full hover:bg-secondary-blue/20 p-2 px-4"
             >
               <FaRegCommentAlt className="w-5 h-5 text-gray-600" />
               <p>{comments[post.$id] ? comments[post.$id] : 0}</p>
-            </a>
+            </a> */}
           </div>
           <button
             onClick={() => handleShareClick(post.$id)}
@@ -245,27 +246,36 @@ export default function Page() {
         <div className="mt-16 flex flex-col gap-4">
           <h2 className="text-3xl font-bold jost">Comments</h2>
           <div className="w-full flex flex-row">
-            <form
-              onSubmit={handleSubmit}
-              className="w-full flex flex-row comment-form"
-            >
-              <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                className="w-full min-h-16 border-2 border-black/10 rounded-lg p-4 outline-none focus:border-primary-blue"
-                placeholder="Add a Comment..."
-              ></textarea>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="p-4 group disabled:opacity-40"
+            {isloggedin ? (
+              <form
+                onSubmit={handleSubmit}
+                className="w-full flex flex-row comment-form"
               >
-                <IoSend
-                  className="w-8 h-8 group-hover:opacity-80"
-                  title="send message"
-                />
-              </button>
-            </form>
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  className="w-full min-h-16 border-2 border-black/10 rounded-lg p-4 outline-none focus:border-primary-blue"
+                  placeholder="Add a Comment..."
+                ></textarea>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="p-4 group disabled:opacity-40"
+                >
+                  <IoSend
+                    className="w-8 h-8 group-hover:opacity-80"
+                    title="send message"
+                  />
+                </button>
+              </form>
+            ) : (
+              <p>
+                <a href="/signin" className="underline">
+                  Login
+                </a>{" "}
+                to join the discussion
+              </p>
+            )}
           </div>
           {renderComments()}
         </div>

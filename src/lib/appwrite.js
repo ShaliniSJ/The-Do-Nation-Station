@@ -648,3 +648,28 @@ export const getUserLikedVideos = async () => {
       throw new Error(e);
   }
 }
+
+export const getNeedsTable = async () => {
+  try {
+    const needs = await databases.listDocuments(databaseId, NEEDS);
+    return needs.documents;
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
+export const updateNeed = async (needId, data) => {
+  try{
+    const updatedDocument= await databases.updateDocument
+    (
+      databaseId,
+      NEEDS,
+      needId,
+      data
+    )
+    return updatedDocument;
+  }
+  catch(e){
+    throw new Error(e);
+  }
+  }

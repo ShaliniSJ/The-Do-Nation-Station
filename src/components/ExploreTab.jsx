@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { HiOutlinePlusCircle } from "react-icons/hi";
 import { BsPaperclip } from "react-icons/bs";
-import { uploadFile } from "../lib/appwrite";
-import { createPost, getAllPost, likeVideo, getUserLikedVideos } from "../lib/appwrite";
 import { AiOutlineHeart, AiFillHeart, AiOutlineShareAlt } from "react-icons/ai";
+import {
+  uploadFile,
+  createPost,
+  getAllPost,
+  likeVideo,
+  unlikeVideo,
+  getUserLikedVideos,
+} from "../lib/appwrite";
 
 const ExploreTab = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,13 +33,45 @@ const ExploreTab = () => {
     setFileURL("");
   };
 
+  const toggleLike = async (postId, currentLikes) => {
+    try {
+      if (likedPosts[postId]) {
+        await unlikeVideo(userId, postId);
+        setLikedPosts((prev) => ({
+          ...prev,
+          [postId]: false,
+        }));
+      } else {
+        await likeVideo(isdonor, postId, currentLikes);
+        setLikedPosts((prev) => ({
+          ...prev,
+          [postId]: true,
+        }));
+      }
+      // Refetch posts or manually update the post's likes count in the UI
+      const updatedPosts = posts.map((post) =>
+        post.$id === postId ? { ...post, like: likedPosts[postId] ? currentLikes - 1 : currentLikes + 1 } : post
+      );
+      setPosts(updatedPosts);
+    } catch (error) {
+      console.error("Error toggling like:", error.message);
+    }
+  };
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const fetchedPosts = await getAllPost();
         setPosts(fetchedPosts);
+
+        const likedVideos = await getUserLikedVideos();
+        const likedPostsIds = likedVideos.reduce((acc, post) => {
+          acc[post.$id] = true;
+          return acc;
+        }, {});
+        setLikedPosts(likedPostsIds);
       } catch (error) {
-        console.error("Error fetching posts:", error.message);
+        console.error("Error fetching posts or likes:", error.message);
       }
     };
 
@@ -41,17 +79,13 @@ const ExploreTab = () => {
 
     if (typeof window !== "undefined") {
       const isLoggedin = localStorage.getItem("islogged");
-      if (isLoggedin === "true") {
-        setIsloggedin(true);
-      } else {
-        setIsloggedin(false);
-      }
+      setIsloggedin(isLoggedin === "true");
+
       const isDonor = localStorage.getItem("isdonar");
-      if (isDonor === "true") {
-        setIsdonor(true);
-      } else {
-        setIsdonor(false);
-      }
+      setIsdonor(isDonor === "true");
+
+      const currentUserId = localStorage.getItem("user_id");
+      setUserId(currentUserId);
     }
   }, []);
 
@@ -73,92 +107,17 @@ const ExploreTab = () => {
       if (selectedFile) {
         uploadedFileURL = await uploadFile(selectedFile, "image");
       }
-      const response = await createPost(uploadedFileURL, isdonor, description);
+      await createPost(uploadedFileURL, isdonor, description);
 
       const fetchedPosts = await getAllPost();
       setPosts(fetchedPosts);
     } catch (error) {
       console.error("Error uploading file:", error.message);
       alert("File upload failed. Please try again.");
-      return; // Exit if the upload fails
+      return;
     }
 
     handleCloseModal();
-  };
-
-  const getPost = () => {
-    const [likedPosts, setLikedPosts] = useState({});
-
-    const toggleLike = async (postId, currentLikes) => {
-      try {
-        await likeVideo(isdonor, postId, currentLikes);
-
-        setLikedPosts((prev) => ({
-          ...prev,
-          [postId]: !prev[postId],
-        }));
-
-        setPosts((prevPosts) =>
-          prevPosts.map((post) =>
-            post.$id === postId ? { ...post, likes: post.likes + 1 } : post
-          )
-        );
-      } catch (error) {
-        console.error("Error liking post:", error.message);
-      }
-    };
-
-    return posts.map((post) => (
-      <div
-        key={post.$id}
-        className="bg-white rounded-lg shadow-lg mb-6 p-4 max-w-2xl mx-auto"
-      >
-        <div className="flex items-center mb-4">
-          <img
-            src={post.poster_url}
-            alt={post.poster_name}
-            className="w-12 h-12 rounded-full object-cover mr-4"
-          />
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              {post.poster_name}
-            </h3>
-            <p className="text-sm text-gray-500">
-              {new Date(post.$createdAt).toLocaleString()}
-            </p>
-          </div>
-        </div>
-
-        {post.image_url && (
-          <img
-            src={post.image_url}
-            alt="Post"
-            className="w-full h-auto rounded-lg mb-4"
-          />
-        )}
-
-        <p className="text-gray-800 text-base mb-4">{post.description}</p>
-
-        <div className="flex items-center justify-between">
-          <div className="flex">
-          <button
-            onClick={() => toggleLike(post.$id, post.like)}
-            className="focus:outline-none"
-          >
-            {likedPosts[post.$id] ? (
-              <AiFillHeart className="text-red-500 w-6 h-6" />
-            ) : (
-              <AiOutlineHeart className="text-gray-600 w-6 h-6" />
-            )}
-          </button>
-          <div className="text-black ml-3">{post.like}</div>
-          </div>
-          <button className="focus:outline-none">
-            <AiOutlineShareAlt className="text-gray-600 w-6 h-6" />
-          </button>
-        </div>
-      </div>
-    ));
   };
 
   return (
@@ -218,7 +177,59 @@ const ExploreTab = () => {
           )}
         </>
       )}
-      <div className="mt-8">{getPost()}</div>
+      <div className="mt-8">
+        {posts.map((post) => (
+          <div
+            key={post.$id}
+            className="bg-white rounded-lg shadow-lg mb-6 p-4 max-w-2xl mx-auto"
+          >
+            <div className="flex items-center mb-4">
+              <img
+                src={post.poster_url}
+                alt={post.poster_name}
+                className="w-12 h-12 rounded-full object-cover mr-4"
+              />
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {post.poster_name}
+                </h3>
+                <p className="text-sm text-gray-500">
+                  {new Date(post.$createdAt).toLocaleString()}
+                </p>
+              </div>
+            </div>
+
+            {post.image_url && (
+              <img
+                src={post.image_url}
+                alt="Post"
+                className="w-full h-auto rounded-lg mb-4"
+              />
+            )}
+
+            <p className="text-gray-800 text-base mb-4">{post.description}</p>
+
+            <div className="flex items-center justify-between">
+              <div className="flex">
+                <button
+                  onClick={() => toggleLike(post.$id, post.like)}
+                  className="focus:outline-none"
+                >
+                  {likedPosts[post.$id] ? (
+                    <AiFillHeart className="text-red-500 w-6 h-6" />
+                  ) : (
+                    <AiOutlineHeart className="text-gray-600 w-6 h-6" />
+                  )}
+                </button>
+                <div className="text-black ml-3">{post.like}</div>
+              </div>
+              <button className="focus:outline-none">
+                <AiOutlineShareAlt className="text-gray-600 w-6 h-6" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

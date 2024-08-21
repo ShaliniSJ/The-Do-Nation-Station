@@ -52,34 +52,11 @@ const ExploreTab = () => {
   };
 
   useEffect(() => {
-    // const fetchPosts = async () => {
-    //   try {
-    //     const fetchedPosts = await getAllPost();
-    //     setPosts(fetchedPosts);
-
-    //     const likedVideos = await getUserLikedVideos();
-    //     const likedPostsIds = likedVideos.reduce((acc, post) => {
-    //       acc[post.$id] = true;
-    //       return acc;
-    //     }, {});
-    //     setLikedPosts(likedPostsIds);
-    //   } catch (error) {
-    //     console.error("Error fetching posts or likes:", error.message);
-    //   }
-    // };
-
-    // fetchPosts();
-
     if (typeof window !== "undefined") {
       const isLoggedin = localStorage.getItem("islogged");
       setIsloggedin(isLoggedin === "true");
 
       setIsdonor(JSON.parse(localStorage.getItem("isdonar")));
-      // if (isDonor === "true") {
-      //   setIsdonor(true);
-      // } else {
-      //   setIsdonor(false);
-      // }
     }
   }, []);
 

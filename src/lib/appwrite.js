@@ -59,7 +59,7 @@ export const createComment = async (postId, comment) => {
       {
         post_id: postId,
         user_id: user.user_id,
-        comment,
+        text: comment,
       }
     );
     return newComment;
@@ -181,6 +181,31 @@ export const getAllPost = async () => {
     return posts.documents;
   } catch (e) {
     console.log(e);
+    throw new Error(e);
+  }
+};
+
+export const getSinglePost = async (postId) => {
+  try {
+    // Fetch the document with the specified postId
+    console.log("1", postId);
+    console.log("2", databaseId);
+    const post = await databases.getDocument(databaseId, POST, postId);
+    console.log("3", post);
+    return post;
+  } catch (e) {
+    console.error("Error fetching post:", e);
+    throw new Error(e);
+  }
+};
+
+export const getUser = async (userId) => {
+  try {
+    // Fetch the document with the specified userId
+    const record = await databases.getDocument(databaseId, USERS, userId);
+    return record;
+  } catch (e) {
+    console.error("Error fetching user:", e);
     throw new Error(e);
   }
 };
@@ -718,7 +743,6 @@ export const getUserLikedVideos = async (is_donar) => {
   try {
     const user = await getCurrentUser(is_donar);
     let data;
-    console.log("bro", user, is_donar);
     if (!user) {
       console.log("bye");
       return;

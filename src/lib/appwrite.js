@@ -25,6 +25,8 @@ const DONORS = process.env.NEXT_PUBLIC_DONARS_COLLECTION;
 const NEEDS = process.env.NEXT_PUBLIC_NEEDS_COLLECTION;
 const DONATIONS = process.env.NEXT_PUBLIC_DONATIONS_COLLECTION;
 const STORAGE_ID = process.env.NEXT_PUBLIC_STORAGE_ID;
+const POST = process.env.NEXT_PUBLIC_POST_COLLECTION;
+const LIKES=process.env.NEXT_PUBLIC_LIKES_COLLECTION;
 
 export const Config = {
   endpoint: BASE_URL,
@@ -42,6 +44,66 @@ const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
 const storage = new Storage(client);
+
+export const createPost = async (image_url, isDonor, description) => {
+  try {
+    let poster_id, poster_url, poster_name;
+    if (isDonor) {
+      const donor = await getCurrentUser(true);
+      poster_id = donor.user_id;
+      poster_url = donor.avatar_url;
+      poster_name = donor.name;
+    } else {
+      const organisation = await getCurrentUser(false);
+      poster_id = organisation.organisation_id;
+      poster_url = organisation.avatar;
+      poster_name = organisation.organisation_name;
+    }
+    if (!image_url) {
+      const post = await databases.createDocument(
+        databaseId,
+        POST,
+        ID.unique(),
+        {
+          poster_name,
+          poster_id,
+          poster_url,
+          description,
+        }
+      );
+    } else {
+      const post = await databases.createDocument(
+        databaseId,
+        POST,
+        ID.unique(),
+        {
+          poster_name,
+          poster_id,
+          poster_url,
+          description,
+          image_url,
+        }
+      );
+    }
+    return "successfully posted";
+  } catch (e) {
+    console.log(e);
+    throw new Error(e);
+  }
+};
+
+export const getAllPost = async () => {
+  try {
+    // get post in descending order
+    const posts = await databases.listDocuments(databaseId, POST, [
+      Query.orderDesc("$createdAt"),
+    ]);
+    return posts.documents;
+  } catch (e) {
+    console.log(e);
+    throw new Error(e);
+  }
+};
 
 export const createUser = async (email, password, username, isDonor) => {
   try {
@@ -403,7 +465,6 @@ export const completeNeeds = async (needid) => {
         completed: true,
       }
     );
-    console.log("Document updated:", updatedDocument);
   } catch (error) {
     console.error("Error updating document:", error);
   }
@@ -486,7 +547,7 @@ export const getPastContributions = async () => {
         const organisation = await databases.listDocuments(
           databaseId,
           ORGANIZATIONS,
-         [Query.equal('organisation_id',donation.organisation_id)]
+          [Query.equal("organisation_id", donation.organisation_id)]
         );
         return {
           ...donation,
@@ -494,9 +555,96 @@ export const getPastContributions = async () => {
         };
       })
     );
-    
+
     return contributionsWithOrgNames;
   } catch (e) {
     throw new Error(e);
   }
 };
+
+export const likeVideo = async (is_donar, postId, likesCount) => {
+  try {
+    const {user_id}= await getCurrentUser(is_donar);
+    // Add a like to the likes table
+    
+    const newLike = await databases.createDocument(
+      databaseId, // databaseId
+      LIKES, // collectionId
+      ID.unique(), // documentId
+      {
+        user_id,
+        post_id: postId,
+      }
+    );
+
+    const updatedPost = await databases.updateDocument(
+      databaseId, // databaseId
+      POST, // collectionId
+      postId, // documentId
+      {
+        like: likesCount + 1,
+      }
+    );
+
+    return { newLike, updatedPost };
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const unlikeVideo = async (userId,postid) => {
+  try {
+      if (!userId || !videoId) {
+          throw new Error('Invalid userId or videoId');
+      }
+      const post = await databases.listDocuments(
+          databaseId,
+          LIKES,
+          [
+              Query.equal('user_id', userId),
+              Query.equal('post_id', postid)
+          ]
+      );
+
+      const documentId = post.documents[0].$id;
+
+      await databases.deleteDocument(
+          databaseId,
+          LIKES,
+          documentId
+      );
+
+    
+  } catch (e) {
+      throw new Error(e.message);
+  }
+
+}
+
+
+export const getUserLikedVideos = async () => {
+  try{
+    const {user_id}= await getCurrentUser(is_donar);
+    if (!user_id){
+        return;
+    }
+      const post= await databases.listDocuments(
+          databaseId,
+          LIKES,
+          [Query.equal('user_id',user_id)]
+      )
+      const postIDs = post.documents.map(doc => doc.post_id);
+      if (postIDs.length === 0) {
+          return;
+      }
+       const data= await databases.listDocuments(
+           databaseId,
+           POST,
+           [Query.equal('$id',postIDs)]
+       )
+      return data.documents;
+  }
+  catch(e){
+      throw new Error(e);
+  }
+}

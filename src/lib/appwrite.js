@@ -269,10 +269,8 @@ export const getCurrentUser = async (is_donor) => {
         throw Error;
       }
     }
-    console.log("cu", CurrentUser);
     return CurrentUser.documents[0];
   } catch (error) {
-    console.log("this came here");
     console.log(error);
   }
 };
@@ -698,13 +696,11 @@ export const unlikeVideo = async (is_donar, postid, likesCount) => {
 };
 
 export const getUserLikedVideos = async (is_donar) => {
-  console.log("donor i got", is_donar);
   const user = await getCurrentUser(is_donar);
   if (!user) {
     return;
   }
   const user_id = user.user_id;
-  console.log("sadfs", user, user_id);
   if (!user_id) {
     return;
   }
@@ -712,7 +708,6 @@ export const getUserLikedVideos = async (is_donar) => {
     const post = await databases.listDocuments(databaseId, LIKES, [
       Query.equal("user_id", user_id),
     ]);
-    console.log("post", post);
     const postIDs = post.documents.map((doc) => doc.post_id);
     if (postIDs.length === 0) {
       return;
@@ -720,10 +715,8 @@ export const getUserLikedVideos = async (is_donar) => {
     const data = await databases.listDocuments(databaseId, POST, [
       Query.equal("$id", postIDs),
     ]);
-    console.log("DATA", data);
     return data.documents;
   } catch (e) {
-    console.log(e);
     throw new Error(e);
   }
 };

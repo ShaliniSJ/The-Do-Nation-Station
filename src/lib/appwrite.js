@@ -94,9 +94,10 @@ export const createPost = async (image_url, isDonor, description) => {
 
 export const getAllPost = async () => {
   try {
-    const posts = await databases.listDocuments(databaseId, POST
-      
-    );
+    // get post in descending order
+    const posts = await databases.listDocuments(databaseId, POST, [
+      Query.orderDesc("$createdAt"),
+    ]);
     return posts.documents;
   } catch (e) {
     console.log(e);

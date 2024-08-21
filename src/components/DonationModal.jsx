@@ -69,7 +69,7 @@ const DonationModal = ({ open, onClose, need }) => {
               </a>
             ) : (
               <a
-                href="delivery-address-link"
+                href={`/organProfileShownToDonorsFromNeeds?${need.organisation_id}`}
                 target="_blank"
                 style={{ textDecoration: "none", color: "white" }}
               >

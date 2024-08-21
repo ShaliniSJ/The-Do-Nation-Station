@@ -49,17 +49,19 @@ const avatars = new Avatars(client);
 const databases = new Databases(client);
 const storage = new Storage(client);
 
-export const createComment = async (postId, comment) => {
+export const createComment = async (postId, comment, is_donor) => {
   try {
     const user = await getCurrentUser(true);
+
     const newComment = await databases.createDocument(
       databaseId,
       COMMENTS,
       ID.unique(),
       {
         post_id: postId,
-        user_id: user.user_id,
+        user_id: is_donor ? user.user_id : user.organisation_id,
         text: comment,
+        is_donor: JSON.parse(localStorage.getItem("isdonar")),
       }
     );
     return newComment;
@@ -199,11 +201,35 @@ export const getSinglePost = async (postId) => {
   }
 };
 
-export const getUser = async (userId) => {
+export const getUser = async (userId, is_donor) => {
   try {
+    if (!userId) {
+      return;
+    }
     // Fetch the document with the specified userId
-    const record = await databases.getDocument(databaseId, USERS, userId);
-    return record;
+    // const record = await databases.getDocument(databaseId, USERS, userId);
+    if (is_donor) {
+      const donor = await databases.listDocuments(databaseId, DONORS, [
+        Query.equal("user_id", userId),
+      ]);
+      console.log("check", userId, is_donor, donor);
+      return {
+        name: donor.documents[0].name,
+        id: userId,
+        avatar_url: donor.documents[0].avatar_url,
+        link: null,
+      };
+    } else {
+      const org = await databases.listDocuments(databaseId, ORGANIZATIONS, [
+        Query.equal("organisation_id", userId),
+      ]);
+      return {
+        name: org.documents[0].organisation_name,
+        id: userId,
+        avatar_url: org.documents[0].avatar_url,
+        link: "/organProfileShownToDonorsFromNeeds?" + userId,
+      };
+    }
   } catch (e) {
     console.error("Error fetching user:", e);
     throw new Error(e);

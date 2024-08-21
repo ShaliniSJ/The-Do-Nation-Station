@@ -4,6 +4,8 @@ import {
   createComment,
   getSinglePost,
   getUserLikedVideos,
+  getUser,
+  getCurrentUser,
 } from "@/src/lib/appwrite";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -47,7 +49,16 @@ export default function Page() {
       setLikedPosts(newLikedPosts);
 
       const newComments = await getComments(router.query.slug);
-      setComments(newComments);
+      // Fetch user details for each comment
+      const commentsWithUser = await Promise.all(
+        newComments.map(async (comment) => {
+          const user = await getUser(comment.user_id, comment.is_donor); // Assuming comment has a userId field
+
+          return { ...comment, user };
+        })
+      );
+      console.log("comments", commentsWithUser);
+      setComments(commentsWithUser);
     }
     if (router.query.slug) {
       getPost();
@@ -62,10 +73,22 @@ export default function Page() {
       return;
     }
 
+    const user = await getCurrentUser(true);
+    const user_id = isdonor ? user.user_id : user.organisation_id;
+
+    setComments([
+      ...comments,
+      {
+        $createdAt: Date.now(),
+        text: comment,
+        user: await getUser(user_id, isdonor), // TODO: this is inefficient af
+      },
+    ]);
+
     setIsSubmitting(true);
 
     try {
-      await createComment(router.query.slug, comment);
+      await createComment(router.query.slug, comment, isdonor);
       setComment(""); // Clear the textarea after successful submission
       alert("Comment posted successfully");
     } catch (error) {
@@ -77,10 +100,30 @@ export default function Page() {
   };
 
   function renderComments() {
-    console.log("comments", comments);
-    return comments.map((comment) => {
-      <div>{comment.text}</div>;
-    });
+    // return comments.map((comment) => (
+    //   <div key={comment.$id} className="p-4 border-b">
+    //     <p className="text-gray-800">{comment.text}</p>
+    //     <p className="text-gray-500 text-sm">
+    //       {new Date(comment.$createdAt).toLocaleString()}
+    //     </p>
+    //   </div>
+    // ));
+    return comments.map((comment) => (
+      <div key={comment.$id} className="p-4 border-b">
+        <div className="flex items-center mb-2">
+          <img
+            src={comment.user.avatar_url} // Assuming the user object has profilePictureUrl
+            alt={comment.user.name}
+            className="w-8 h-8 rounded-full object-cover mr-2"
+          />
+          <p className="font-semibold text-gray-800">{comment.user.name}</p>
+        </div>
+        <p className="text-gray-800">{comment.text}</p>
+        <p className="text-gray-500 text-sm">
+          {new Date(comment.$createdAt).toLocaleString()}
+        </p>
+      </div>
+    ));
   }
 
   return (

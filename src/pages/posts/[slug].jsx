@@ -91,6 +91,7 @@ export default function Page() {
     }
 
     const user = await getCurrentUser(true);
+    console.log("gomma", user, isdonor);
     const user_id = isdonor ? user.user_id : user.organisation_id;
 
     setComments([
@@ -202,7 +203,7 @@ export default function Page() {
           />
         )}
 
-        <p className="text-gray-800 nunito text-base mb-4">
+        <p className="text-gray-800 nunito text-base whitespace-pre-line mb-4">
           {post.description}
         </p>
 

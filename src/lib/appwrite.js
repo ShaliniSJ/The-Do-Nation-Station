@@ -16,7 +16,6 @@ import {
   Storage,
 } from "appwrite";
 
-
 const DATABASE_ID = process.env.NEXT_PUBLIC_DATABASE_ID;
 const PROJECT_ID = process.env.NEXT_PUBLIC_PROJECT_ID;
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -139,7 +138,7 @@ export const createPost = async (image_url, isDonor, description) => {
     } else {
       const organisation = await getCurrentUser(false);
       poster_id = organisation.organisation_id;
-      poster_url = organisation.avatar;
+      poster_url = organisation.avatar_url;
       poster_name = organisation.organisation_name;
     }
     if (!image_url) {
@@ -366,10 +365,7 @@ export const getHistory = async () => {
     const donations = donationsResponse.documents;
 
     // Step 2: Fetch all donors
-    const donorsResponse = await databases.listDocuments(
-      databaseId,
-      DONORS
-    );
+    const donorsResponse = await databases.listDocuments(databaseId, DONORS);
     const donors = donorsResponse.documents;
 
     // Step 3: Fetch all organisations
@@ -388,7 +384,8 @@ export const getHistory = async () => {
     // Create a map for organisation_id to organisation_name
     const organisationsMap = {};
     for (const organisation of organisations) {
-      organisationsMap[organisation.organisation_id] = organisation.organisation_name; // Assuming 'organisation_id' is the key and 'organisation_name' is the value
+      organisationsMap[organisation.organisation_id] =
+        organisation.organisation_name; // Assuming 'organisation_id' is the key and 'organisation_name' is the value
     }
 
     // Combine the data
@@ -397,19 +394,16 @@ export const getHistory = async () => {
       donationHistory.push({
         ...donation,
         donor_name: donorsMap[donation.donor_id], // Map donor_id to donor_name
-        organisation_name: organisationsMap[donation.organisation_id] // Map organisation_id to organisation_name
+        organisation_name: organisationsMap[donation.organisation_id], // Map organisation_id to organisation_name
       });
     }
 
-   
     return donationHistory;
   } catch (e) {
-    console.error('Error fetching donation history:', e);
-    throw new Error('Failed to fetch donation history');
+    console.error("Error fetching donation history:", e);
+    throw new Error("Failed to fetch donation history");
   }
 };
-
-
 
 export const signOut = async () => {
   try {
@@ -754,7 +748,7 @@ export const likeVideo = async (is_donar, postId, likesCount) => {
         LIKES, // collectionId
         ID.unique(), // documentId
         {
-          user_id:organisation_id,
+          user_id: organisation_id,
           post_id: postId,
         }
       );

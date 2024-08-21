@@ -49,8 +49,8 @@ export default function Page() {
               </a>
             </li>
             <li>
-              <a className="hover:underline" href="/leaderboard">
-                Leaderboard
+              <a className="hover:underline" href="/explore">
+                Explore
               </a>
             </li>
             <li>

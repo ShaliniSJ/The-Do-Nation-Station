@@ -38,11 +38,11 @@ const Navbar = ({ islogged }) => {
             About
           </a>
         </li>
-        <li className="ml-5">
+        {/* <li className="ml-5">
           <a href="/leaderboard" className="hover:underline focus:underline">
             Leaderboard
           </a>
-        </li>
+        </li> */}
         <li className="mx-5">
           <a href="/history" className="hover:underline focus:underline">
             History

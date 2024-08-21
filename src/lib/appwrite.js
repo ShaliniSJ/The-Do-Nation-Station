@@ -535,7 +535,7 @@ export const completeNeeds = async (needid) => {
   }
 };
 
-export const updateNeeds = async (needid, amount, is_donor) => {
+export const updateNeeds = async (needid, amount, is_donor, isAnonymous) => {
   try {
     const currentDocument = await databases.getDocument(
       databaseId,
@@ -557,30 +557,32 @@ export const updateNeeds = async (needid, amount, is_donor) => {
         collected_amt: newCollectedAmt,
       }
     );
-    const current_user = await getCurrentUser(is_donor);
-    const addDonation = await databases.createDocument(
-      databaseId,
-      DONATIONS,
-      ID.unique(),
-      {
-        organisation_id: currentDocument.organisation_id,
-        donor_id: current_user.user_id,
-        donation_amt: amount,
-      }
-    );
-    if (is_donor) {
-      // update at donar table
-      const getData = await databases.listDocuments(databaseId, DONORS, [
-        Query.equal("user_id", current_user.user_id),
-      ]);
-      const updateDonar = await databases.updateDocument(
+    if (!isAnonymous){
+      const current_user = await getCurrentUser(is_donor);
+      const addDonation = await databases.createDocument(
         databaseId,
-        DONORS,
-        getData.documents[0].$id,
+        DONATIONS,
+        ID.unique(),
         {
-          total_amount: getData.documents[0].total_amount + amount,
+          organisation_id: currentDocument.organisation_id,
+          donor_id: current_user.user_id,
+          donation_amt: amount,
         }
       );
+      if (is_donor) {
+        // update at donar table
+        const getData = await databases.listDocuments(databaseId, DONORS, [
+          Query.equal("user_id", current_user.user_id),
+        ]);
+        const updateDonar = await databases.updateDocument(
+          databaseId,
+          DONORS,
+          getData.documents[0].$id,
+          {
+            total_amount: getData.documents[0].total_amount + amount,
+          }
+        );
+      }
     }
   } catch (error) {
     console.error("Error updating document:", error);
@@ -695,4 +697,29 @@ export const getUserLikedVideos = async () => {
   } catch (e) {
     throw new Error(e);
   }
-};
+}
+
+export const getNeedsTable = async () => {
+  try {
+    const needs = await databases.listDocuments(databaseId, NEEDS);
+    return needs.documents;
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
+export const updateNeed = async (needId, data) => {
+  try{
+    const updatedDocument= await databases.updateDocument
+    (
+      databaseId,
+      NEEDS,
+      needId,
+      data
+    )
+    return updatedDocument;
+  }
+  catch(e){
+    throw new Error(e);
+  }
+  }

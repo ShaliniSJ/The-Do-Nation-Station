@@ -1,12 +1,14 @@
 // pages/donate.js
 import React, { useState, useEffect } from "react";
-import { Container, Box, TextField, Button, Typography } from "@mui/material";
+import { Container, Box, TextField, Button, Typography, FormControlLabel, Switch } from "@mui/material";
 import { useRouter } from "next/router";
 
 const Donate = () => {
   const [amount, setAmount] = useState("");
   const [needId, setNeedId] = useState("");
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const router = useRouter();
+
   useEffect(() => {
     const fetchData = async () => {
       const url = new URL(window.location.href);
@@ -17,7 +19,7 @@ const Donate = () => {
   }, []);
 
   const handleDonate = () => {
-    router.push(`/carddetails?amount=${amount}id=${needId}`);
+    router.push(`/carddetails?amount=${amount}&id=${needId}&anonymous=${isAnonymous}`);
   };
 
   return (
@@ -37,6 +39,17 @@ const Donate = () => {
             autoFocus
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isAnonymous}
+                onChange={(e) => setIsAnonymous(e.target.checked)}
+                name="anonymous"
+                color="primary"
+              />
+            }
+            label="Donate Anonymously"
           />
           <Button
             type="button"

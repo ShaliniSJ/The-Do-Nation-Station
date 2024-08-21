@@ -20,7 +20,7 @@ const explore = () => {
   }, [isLogged]);
   return (
     <div>
-      <Navbar islogged={isLogged} />
+      {/* <Navbar islogged={isLogged} /> */}
       <ExploreTab />
     </div>
   );

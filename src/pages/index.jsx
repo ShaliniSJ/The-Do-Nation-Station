@@ -25,7 +25,7 @@ export default function Home() {
 
   return (
     <div>
-      <Navbar islogged={isLogged}  />
+      {/* <Navbar islogged={isLogged}  /> */}
       {showAfterLogin ? <HomeWithLogin /> : <HomeWithOutLogin />}
     </div>
   );

@@ -650,23 +650,33 @@ export const getPastContributions = async () => {
 export const likeVideo = async (is_donar, postId, likesCount) => {
   try {
     const user = await getCurrentUser(is_donar);
+    let newLike;
+    if (!is_donar) {
+      const organisation_id = user.organisation_id;
 
-    if (!user) {
-      return;
+      newLike = await databases.createDocument(
+        databaseId, // databaseId
+        LIKES, // collectionId
+        ID.unique(), // documentId
+        {
+          user_id:organisation_id,
+          post_id: postId,
+        }
+      );
+    } else {
+      const user_id = user.user_id;
+      // Add a like to the likes table
+
+      newLike = await databases.createDocument(
+        databaseId, // databaseId
+        LIKES, // collectionId
+        ID.unique(), // documentId
+        {
+          user_id,
+          post_id: postId,
+        }
+      );
     }
-
-    const user_id = user.user_id;
-    // Add a like to the likes table
-
-    const newLike = await databases.createDocument(
-      databaseId, // databaseId
-      LIKES, // collectionId
-      ID.unique(), // documentId
-      {
-        user_id,
-        post_id: postId,
-      }
-    );
 
     const updatedPost = await databases.updateDocument(
       databaseId, // databaseId
@@ -685,32 +695,56 @@ export const likeVideo = async (is_donar, postId, likesCount) => {
 
 export const unlikeVideo = async (is_donar, postid, likesCount) => {
   const user = await getCurrentUser(is_donar);
-  if (!user) {
-    return;
-  }
-  const userId = user.user_id;
-  try {
-    if (!userId || !postid) {
-      throw new Error("Invalid userId or videoId");
-    }
-    const post = await databases.listDocuments(databaseId, LIKES, [
-      Query.equal("user_id", userId),
-      Query.equal("post_id", postid),
-    ]);
-    const updatedPost = await databases.updateDocument(
-      databaseId, // databaseId
-      POST, // collectionId
-      postid, // documentId
-      {
-        like: likesCount - 1,
+  if (!is_donar) {
+    const organisation_id = user.organisation_id;
+    try {
+      if (!organisation_id || !postid) {
+        throw new Error("Invalid userId or videoId");
       }
-    );
+      const post = await databases.listDocuments(databaseId, LIKES, [
+        Query.equal("user_id", organisation_id),
+        Query.equal("post_id", postid),
+      ]);
+      const updatedPost = await databases.updateDocument(
+        databaseId, // databaseId
+        POST, // collectionId
+        postid, // documentId
+        {
+          like: likesCount - 1,
+        }
+      );
 
-    const documentId = post.documents[0].$id;
+      const documentId = post.documents[0].$id;
 
-    await databases.deleteDocument(databaseId, LIKES, documentId);
-  } catch (e) {
-    throw new Error(e.message);
+      await databases.deleteDocument(databaseId, LIKES, documentId);
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  } else {
+    const userId = user.user_id;
+    try {
+      if (!userId || !postid) {
+        throw new Error("Invalid userId or videoId");
+      }
+      const post = await databases.listDocuments(databaseId, LIKES, [
+        Query.equal("user_id", userId),
+        Query.equal("post_id", postid),
+      ]);
+      const updatedPost = await databases.updateDocument(
+        databaseId, // databaseId
+        POST, // collectionId
+        postid, // documentId
+        {
+          like: likesCount - 1,
+        }
+      );
+
+      const documentId = post.documents[0].$id;
+
+      await databases.deleteDocument(databaseId, LIKES, documentId);
+    } catch (e) {
+      throw new Error(e.message);
+    }
   }
 };
 
@@ -718,13 +752,7 @@ export const getUserLikedVideos = async (is_donar) => {
   try {
     const user = await getCurrentUser(is_donar);
     let data;
-    console.log("bro", user, is_donar);
-    if (!user) {
-      console.log("bye");
-      return;
-    }
     if (!is_donar) {
-      // do the same for organisation
       const post = await databases.listDocuments(databaseId, LIKES, [
         Query.equal("user_id", user.organisation_id),
       ]);

@@ -48,11 +48,11 @@ export default function Page() {
                 About
               </a>
             </li>
-            <li>
+            {/* <li>
               <a className="hover:underline" href="/leaderboard">
                 Leaderboard
               </a>
-            </li>
+            </li> */}
             <li>
               <a className="hover:underline" href="/history">
                 History

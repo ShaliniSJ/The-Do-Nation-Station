@@ -8,7 +8,7 @@ export default function CheckNgo() {
         e.preventDefault();
         setMessage('');  // Reset the message
 
-        const response = await fetch(`/lib/checkNgo?ngoId=${ngoId}`);
+        const response = await fetch(`/components/checkNgo?ngoId=${ngoId}`);
         const data = await response.json();
         setMessage(data.message || 'Error checking NGO');
     };

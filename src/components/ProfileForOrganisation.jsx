@@ -97,7 +97,7 @@ const ProfileForOrganisation = ({ islogged }) => {
   };
 
   const handleEditDetails = () => {
-    router.push("/orgdetails");
+    router.push("/orgdetails?Edit=true");
     // alert('Edit Details button clicked');
   };
 

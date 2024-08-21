@@ -65,11 +65,11 @@ export default function Page() {
                 </a>
               </li>
             )}
-            <li>
+            {/* <li>
               <a className="hover:underline" href="/login">
                 Login
               </a>
-            </li>
+            </li> */}
           </ul>
           <div className="text-center md:text-left nunito md:w-1/2 opacity-50">
             <p>Thank you for your support!</p>

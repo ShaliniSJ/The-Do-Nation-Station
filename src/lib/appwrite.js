@@ -88,7 +88,7 @@ export const getReplies = async (commentId) => {
   } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 export const createReply = async (commentId, reply) => {
   try {
@@ -108,7 +108,6 @@ export const createReply = async (commentId, reply) => {
     throw new Error(e);
   }
 };
-
 
 export const createPost = async (image_url, isDonor, description) => {
   try {
@@ -557,7 +556,7 @@ export const updateNeeds = async (needid, amount, is_donor, isAnonymous) => {
         collected_amt: newCollectedAmt,
       }
     );
-    if (!isAnonymous){
+    if (!isAnonymous) {
       const current_user = await getCurrentUser(is_donor);
       const addDonation = await databases.createDocument(
         databaseId,
@@ -697,7 +696,7 @@ export const getUserLikedVideos = async () => {
   } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 export const getNeedsTable = async () => {
   try {
@@ -706,20 +705,18 @@ export const getNeedsTable = async () => {
   } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 export const updateNeed = async (needId, data) => {
-  try{
-    const updatedDocument= await databases.updateDocument
-    (
+  try {
+    const updatedDocument = await databases.updateDocument(
       databaseId,
       NEEDS,
       needId,
       data
-    )
+    );
     return updatedDocument;
-  }
-  catch(e){
+  } catch (e) {
     throw new Error(e);
   }
-  }
+};

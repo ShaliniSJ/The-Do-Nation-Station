@@ -196,43 +196,44 @@ const HomeWithLogin = () => {
           const org = organisations[need.organisation_id];
           return (
             <div
-              className="flex flex-col bg-secondary-blue/10 hover:bg-secondary-blue/50 justify-between nunito border-2 border-secondary-blue/5 rounded-lg p-4"
-              key={need.id}
-            >
-              <div className="mb-2">
-                <h6 className="text-lg font-medium">
-                  <a
-                    href={`/organProfileShownToDonorsFromNeeds?${need.organisation_id}`}
-                    className="no-underline text-xl text-primary-blue/80 jost"
-                  >
-                    Organization Name: {org ? org.organisation_name : "Unknown"}
-                  </a>
-                </h6>
-                <p className="text-gray-600">
-                  Location: {org ? org.address : "Unknown"}
-                </p>
-                <p className="text-gray-600">
-                  End Date: {formatDate(need.date)}
-                </p>
-                {need.type ? (
-                  <p className="text-gray-600">Amount: Rs. {need.total_amt}</p>
-                ) : (
-                  <>
-                    <p className="text-gray-600">Kind: {need.kind}</p>
-                    <p className="text-gray-600">Quantity: {need.quantity}</p>
-                  </>
-                )}
-                <p className="text-gray-800">{need.description}</p>
-              </div>
-              <div className="flex justify-center mt-4">
-                <button
-                  className="bg-primary-blue hover:bg-blue-100 text-white px-6 rounded-full py-2"
-                  onClick={() => handleDonate(need)}
+            className="flex flex-col bg-secondary-blue/10 hover:bg-secondary-blue/30 justify-between border-2 border-secondary-blue/20 rounded-lg p-6 shadow-lg transition-transform transform hover:scale-105"
+            key={need.id}
+          >
+            <div className="mb-4">
+              <h6 className="text-xl font-semibold text-primary-blue/90">
+                <a
+                  href={`/organProfileShownToDonorsFromNeeds?${need.organisation_id}`}
+                  className="no-underline hover:underline"
                 >
-                  Donate
-                </button>
-              </div>
+                  Organization Name: {org ? org.organisation_name : "Unknown"}
+                </a>
+              </h6>
+              <p className="text-gray-700 text-sm">
+                Location: {org ? org.address : "Unknown"}
+              </p>
+              <p className="text-gray-700 text-sm">
+                End Date: {formatDate(need.date)}
+              </p>
+              {need.type ? (
+                <p className="text-gray-700 text-sm">Amount: Rs. {need.total_amt}</p>
+              ) : (
+                <>
+                  <p className="text-gray-700 text-sm">Kind: {need.kind}</p>
+                  <p className="text-gray-700 text-sm">Quantity: {need.quantity}</p>
+                </>
+              )}
+              <p className="text-gray-800 mt-2">{need.description}</p>
             </div>
+            <div className="flex justify-center mt-4">
+              <button
+                className="bg-primary-blue hover:bg-primary-blue/80 text-white px-6 py-2 rounded-full font-semibold transition-colors duration-300"
+                onClick={() => handleDonate(need)}
+              >
+                Donate
+              </button>
+            </div>
+          </div>
+          
           );
         })}
       </div>

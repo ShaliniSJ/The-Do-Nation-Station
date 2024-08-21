@@ -8,7 +8,15 @@ import { BsPaperclip } from "react-icons/bs";
 //   likeVideo,
 //   getUserLikedVideos,
 // } from "../lib/appwrite";
-import { AiOutlineHeart, AiFillHeart, AiOutlineShareAlt } from "react-icons/ai";
+import {
+  AiOutlineHeart,
+  AiFillHeart,
+  AiOutlineShareAlt,
+  AiOutlineComment,
+} from "react-icons/ai";
+
+import { FaComment, FaRegCommentAlt } from "react-icons/fa";
+
 import {
   uploadFile,
   createPost,
@@ -63,8 +71,6 @@ const ExploreTab = () => {
       const isLoggedin = localStorage.getItem("islogged");
       setIsloggedin(isLoggedin === "true");
 
-      const isDonor = localStorage.getItem("isdonar");
-      console.log("wtf", isDonor, localStorage.getItem("isdonar"));
       setIsdonor(JSON.parse(localStorage.getItem("isdonar")));
       // if (isDonor === "true") {
       //   setIsdonor(true);
@@ -79,7 +85,6 @@ const ExploreTab = () => {
       try {
         const fetchedPosts = await getAllPost();
         setPosts(fetchedPosts);
-        console.log("DONOR", isdonor);
         const postsILiked = await getUserLikedVideos(isdonor);
         const newLikedPosts = {};
         for (let i in postsILiked) {
@@ -88,10 +93,8 @@ const ExploreTab = () => {
           // newLikedPosts.push(likedPost);
           newLikedPosts[postsILiked[i].$id] = true;
         }
-        console.log("whoia whoa", newLikedPosts);
 
         setLikedPosts(newLikedPosts);
-        console.log("postsILiked", postsILiked, likedPosts);
       } catch (error) {
         console.error("Error fetching posts:", error.message);
       }
@@ -100,9 +103,9 @@ const ExploreTab = () => {
     fetchPosts();
   }, [isdonor]);
 
-  useEffect(() => {
-    console.log("likedPosts updated:", likedPosts);
-  }, [likedPosts]);
+  // useEffect(() => {
+  //   console.log("likedPosts updated:", likedPosts);
+  // }, [likedPosts]);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -144,8 +147,6 @@ const ExploreTab = () => {
         [postId]: !prev[postId],
       }));
 
-      console.log("likedposts", likedPosts);
-
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
           post.$id === postId
@@ -154,10 +155,8 @@ const ExploreTab = () => {
         )
       );
 
-      console.log(posts, postId);
       try {
         if (likedPosts[postId]) {
-          console.log("USER ID AHHHHHH", userId);
           await unlikeVideo(isdonor, postId, currentLikes);
         } else {
           await likeVideo(isdonor, postId, currentLikes);
@@ -166,8 +165,6 @@ const ExploreTab = () => {
         console.error("Error liking post:", error.message);
       }
     };
-
-    console.log("likedposts broo", likedPosts);
 
     return posts.map((post) => (
       <div
@@ -201,22 +198,25 @@ const ExploreTab = () => {
         <p className="text-gray-800 text-base mb-4">{post.description}</p>
 
         <div className="flex items-center justify-between">
-          <div className="flex">
-            {/* <p>
-              {post.$id} | {likedPosts.length} |{" "}
-              {likedPosts["66c5cdd70027ed46a7c7"]}
-            </p> */}
-            <button
-              onClick={() => toggleLike(post.$id, post.like)}
-              className="focus:outline-none"
-            >
-              {likedPosts[post.$id] ? (
-                <AiFillHeart className="text-red-500 w-6 h-6" />
-              ) : (
-                <AiOutlineHeart className="text-gray-600 w-6 h-6" />
-              )}
-            </button>
-            <div className="text-black ml-3">{post.like}</div>
+          <div className="flex flex-row gap-16">
+            <div className="flex flex-row items-center">
+              <button
+                onClick={() => toggleLike(post.$id, post.like)}
+                className="focus:outline-none"
+              >
+                {likedPosts[post.$id] ? (
+                  <AiFillHeart className="text-red-500 w-6 h-6" />
+                ) : (
+                  <AiOutlineHeart className="text-gray-600 w-6 h-6" />
+                )}
+              </button>
+              <div className="text-black ml-3">{post.like}</div>
+            </div>
+            <div className="flex flex-row items-center">
+              {/* <AiOutlineComment className="w-6 h-6" />
+              <FaComment /> */}
+              <FaRegCommentAlt className="w-5 h-5 text-gray-600" />
+            </div>
           </div>
           <button className="focus:outline-none">
             <AiOutlineShareAlt className="text-gray-600 w-6 h-6" />

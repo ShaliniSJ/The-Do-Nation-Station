@@ -19,6 +19,7 @@ const CardDetailsPage = () => {
   const [cardType, setCardType] = useState("credit");
   const [needId, setNeedId] = useState("");
   const [amount, setAmount] = useState("");
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const [cardDetails, setCardDetails] = useState({
     name: "",
     number: "",
@@ -44,25 +45,24 @@ const CardDetailsPage = () => {
   };
 
   const handlePay = async () => {
-    await updateNeeds(needId, amount, isdonor);
+    await updateNeeds(needId, amount, isdonor, isAnonymous);
 
     router.push("/success");
   };
   useEffect(() => {
     const fetchData = async () => {
-      const url = new URL(window.location.href);
-      const queryString = url.search.substring(1); // Remove the leading '?'
-      const [amountPart, idPart] = queryString.split("id=");
+      // Get the current URL search parameters
+      const urlParams = new URLSearchParams(window.location.search);
 
-      // Extract amount from amountPart
-      const amount = amountPart.replace("amount=", "");
-
-      // Extract needId
-      const needId = idPart;
+      // Extract the parameters from the query string
+      const amount = urlParams.get("amount");
+      const needId = urlParams.get("id");
+      const isAnonymous = urlParams.get("anonymous") === "true";
 
       // Set the state with extracted values
       setNeedId(needId);
       setAmount(parseInt(amount, 10));
+      setIsAnonymous(isAnonymous);
     };
     fetchData();
   }, []);

@@ -11,7 +11,9 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <Component {...pageProps} />
+      <div className="flex flex-col min-h-96">
+        <Component {...pageProps} />
+      </div>
       <Footer />
     </>
   );

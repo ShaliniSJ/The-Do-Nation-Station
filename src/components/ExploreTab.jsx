@@ -228,10 +228,16 @@ const ExploreTab = () => {
     <div className="relative p-4">
       {isloggedin && (
         <>
-          <HiOutlinePlusCircle
-            onClick={handleAddPostClick}
-            className="text-blue-500 text-4xl absolute top-4 right-4 cursor-pointer"
-          />
+          <div className="absolute top-32 right-0">
+            <div className="flex flex-col justify-center items-center fixed bottom-32 right-10">
+              <HiOutlinePlusCircle
+                title="ADD POST"
+                onClick={handleAddPostClick}
+                className="text-blue-500 text-6xl cursor-pointer hover:opacity-50 hover:rotate-90 transition-all"
+              />
+              <p className="text-sm nunito">New Post</p>
+            </div>
+          </div>
 
           {isModalOpen && (
             <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center z-50">

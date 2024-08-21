@@ -174,76 +174,75 @@ export default function Page() {
   return (
     <>
       {/* <Navbar islogged={isloggedin} /> */}
-      <div className="flex flex-col gap-8">
-        <div
-          key={post.$id}
-          className="bg-white rounded-lg shadow-lg mb-6 p-4 md:w-3/4 max-w-2xl mx-auto"
-        >
-          <div className="flex items-center mb-4">
-            <img
-              src={post.poster_url}
-              alt={post.poster_name}
-              className="w-12 h-12 rounded-full object-cover mr-4"
-            />
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900">
-                {post.poster_name}
-              </h3>
-              <p className="text-sm text-gray-500">
-                {new Date(post.$createdAt).toLocaleString()}
-              </p>
-            </div>
-          </div>
-
-          {post.image_url && (
-            <img
-              src={post.image_url}
-              alt="Post"
-              className="w-full h-auto rounded-lg mb-4"
-            />
-          )}
-
-          <p className="text-gray-800 nunito text-lg mb-4">
-            {post.description}
-          </p>
-
-          <div className="flex items-center justify-between">
-            <div className="flex flex-row gap-16">
-              <div className="flex flex-row items-center">
-                <button
-                  disabled={!isloggedin}
-                  onClick={() => toggleLike(post.$id, post.like)}
-                  className="focus:outline-none disabled:opacity-50"
-                >
-                  {likedPosts[post.$id] ? (
-                    <AiFillHeart className="text-red-500 w-6 h-6" />
-                  ) : (
-                    <AiOutlineHeart className="text-gray-600 w-6 h-6" />
-                  )}
-                </button>
-                <div className="text-black ml-3">{post.like}</div>
-              </div>
-              <a
-                href={"/posts/" + post.$id}
-                className="flex flex-row items-center gap-4"
-              >
-                {/* <AiOutlineComment className="w-6 h-6" />
-              <FaComment /> */}
-                <FaRegCommentAlt className="w-5 h-5 text-gray-600" />
-                <p>{comments.length}</p>
-              </a>
-            </div>
-            <button
-              onClick={() => handleShareClick(post.$id)}
-              className="focus:outline-none"
-            >
-              <AiOutlineShareAlt className="text-gray-600 w-6 h-6" />
-            </button>
+      <div
+        key={post.$id}
+        className="rounded-lg shadow-lg mb-6 p-4 max-w-2xl mx-auto bg-secondary-blue/10"
+      >
+        <div className="flex items-center mb-4">
+          <img
+            src={post.poster_url}
+            alt={post.poster_name}
+            className="w-12 h-12 rounded-full object-cover mr-4"
+          />
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">
+              {post.poster_name}
+            </h3>
+            <p className="text-sm text-gray-500">
+              {new Date(post.$createdAt).toLocaleString()}
+            </p>
           </div>
         </div>
 
+        {post.image_url && (
+          <img
+            src={post.image_url}
+            alt="Post"
+            className="w-full h-auto rounded-lg mb-4"
+          />
+        )}
+
+        <p className="text-gray-800 nunito text-base mb-4">
+          {post.description}
+        </p>
+
+        <div className="flex items-center justify-between">
+          <div className="flex flex-row gap-8">
+            <div className="flex flex-row items-center rounded-full hover:bg-secondary-blue/20 p-2 px-4">
+              <button
+                title="like"
+                disabled={!isloggedin}
+                onClick={() => toggleLike(post.$id, post.like)}
+                className="focus:outline-none disabled:opacity-50 "
+              >
+                {likedPosts[post.$id] ? (
+                  <AiFillHeart className="text-red-500 w-6 h-6" />
+                ) : (
+                  <AiOutlineHeart className="text-gray-600 w-6 h-6" />
+                )}
+              </button>
+              <div className="text-black ml-3">{post.like}</div>
+            </div>
+            <a
+              title="comment"
+              href={"/posts/" + post.$id}
+              className="flex flex-row items-center gap-4 rounded-full hover:bg-secondary-blue/20 p-2 px-4"
+            >
+              <FaRegCommentAlt className="w-5 h-5 text-gray-600" />
+              <p>{comments[post.$id] ? comments[post.$id] : 0}</p>
+            </a>
+          </div>
+          <button
+            onClick={() => handleShareClick(post.$id)}
+            title="share"
+            className="focus:outline-none rounded-full hover:bg-secondary-blue/20 p-2 px-4"
+          >
+            <AiOutlineShareAlt className="text-gray-600 w-6 h-6 " />
+          </button>
+        </div>
+
         {/* Comment Section */}
-        <div className="flex flex-col gap-4 md:w-3/4 max-w-2xl mx-auto">
+        <div className="mt-16 flex flex-col gap-4">
           <h2 className="text-3xl font-bold jost">Comments</h2>
           <div className="w-full flex flex-row">
             <form

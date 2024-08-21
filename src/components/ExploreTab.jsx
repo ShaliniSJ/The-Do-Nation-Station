@@ -161,7 +161,7 @@ const ExploreTab = () => {
     return posts.map((post) => (
       <div
         key={post.$id}
-        className="bg-white rounded-lg shadow-lg mb-6 p-4 max-w-2xl mx-auto"
+        className="bg-white rounded-lg shadow-lg mb-6 p-4 max-w-2xl mx-auto hover:bg-secondary-blue/20"
       >
         <div className="flex items-center mb-4">
           <img
@@ -187,15 +187,17 @@ const ExploreTab = () => {
           />
         )}
 
-        <p className="text-gray-800 text-base mb-4">{post.description}</p>
+        <p className="text-gray-800 nunito text-base mb-4">
+          {post.description}
+        </p>
 
         <div className="flex items-center justify-between">
-          <div className="flex flex-row gap-16">
-            <div className="flex flex-row items-center">
+          <div className="flex flex-row gap-8">
+            <div className="flex flex-row items-center rounded-full hover:bg-secondary-blue/20 p-2 px-4">
               <button
                 disabled={!isloggedin}
                 onClick={() => toggleLike(post.$id, post.like)}
-                className="focus:outline-none disabled:opacity-50"
+                className="focus:outline-none disabled:opacity-50 "
               >
                 {likedPosts[post.$id] ? (
                   <AiFillHeart className="text-red-500 w-6 h-6" />
@@ -207,7 +209,7 @@ const ExploreTab = () => {
             </div>
             <a
               href={"/posts/" + post.$id}
-              className="flex flex-row items-center gap-4"
+              className="flex flex-row items-center gap-4 rounded-full hover:bg-secondary-blue/20 p-2 px-4"
             >
               <FaRegCommentAlt className="w-5 h-5 text-gray-600" />
               <p>{comments[post.$id] ? comments[post.$id] : 0}</p>
@@ -215,9 +217,9 @@ const ExploreTab = () => {
           </div>
           <button
             onClick={() => handleShareClick(post.$id)}
-            className="focus:outline-none"
+            className="focus:outline-none rounded-full hover:bg-secondary-blue/20 p-2 px-4"
           >
-            <AiOutlineShareAlt className="text-gray-600 w-6 h-6" />
+            <AiOutlineShareAlt className="text-gray-600 w-6 h-6 " />
           </button>
         </div>
       </div>

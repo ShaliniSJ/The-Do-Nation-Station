@@ -11,24 +11,10 @@ export default function Home() {
   const [isLogged, setIsLogged] = useState(false);
   const [isdonor, setIsdonor] = useState(false);
 
-  const router = useRouter();
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const islogged = localStorage.getItem("islogged");
-      if (islogged === "true") {
-        setIsLogged(true);
-        setShowAfterLogin(true);
-        router.push("/explore");
-      } else {
-        setIsLogged(false);
-      }
-    }
-  }, []);
-
   return (
     <div>
       {/* <Navbar islogged={isLogged}  /> */}
-      {showAfterLogin ? <HomeWithLogin /> : <HomeWithOutLogin />}
+      <HomeWithLogin />
     </div>
   );
 }

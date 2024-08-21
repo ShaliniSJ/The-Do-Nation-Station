@@ -223,14 +223,14 @@ export default function Page() {
               </button>
               <div className="text-black ml-3">{post.like}</div>
             </div>
-            <a
+            {/* <a
               title="comment"
               href={"/posts/" + post.$id}
               className="flex flex-row items-center gap-4 rounded-full hover:bg-secondary-blue/20 p-2 px-4"
             >
               <FaRegCommentAlt className="w-5 h-5 text-gray-600" />
               <p>{comments[post.$id] ? comments[post.$id] : 0}</p>
-            </a>
+            </a> */}
           </div>
           <button
             onClick={() => handleShareClick(post.$id)}

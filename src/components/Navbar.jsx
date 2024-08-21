@@ -29,9 +29,15 @@ const Navbar = ({ islogged }) => {
       </a>
       <ul className="list-none ml-auto hidden md:flex jost md:text-lg gap-4">
         <li className="ml-5">
-          <a href="/donations" className="hover:underline focus:underline">
-            Donate
-          </a>
+          {islogged ? (
+            <a href="/donations" className="hover:underline focus:underline">
+              Donate
+            </a>
+          ) : (
+            <a href="/signin" className="hover:underline focus:underline">
+              Donate
+            </a>
+          )}
         </li>
         <li className="ml-5">
           <a href="/explore" className="hover:underline focus:underline">

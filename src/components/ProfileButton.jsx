@@ -22,7 +22,9 @@ const ProfileButton = ({ isdonor }) => {
     const fetchUserProfile = async () => {
       if (isdonor) {
         const user = await getCurrentUser(true);
-
+        if (!user) {
+          return
+        }
         setImage(user.avatar_url);
       } else {
         const user = await getCurrentUser(false);
@@ -30,7 +32,7 @@ const ProfileButton = ({ isdonor }) => {
       }
     };
     fetchUserProfile();
-  }, []);
+  }, [isdonor]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

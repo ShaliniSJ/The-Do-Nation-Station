@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { HiOutlinePlusCircle } from "react-icons/hi"; 
-import { BsPaperclip } from "react-icons/bs"; 
-import { uploadFile } from "../lib/appwrite"; 
-import { createPost, getAllPost } from "../lib/appwrite";
+import { HiOutlinePlusCircle } from "react-icons/hi";
+import { BsPaperclip } from "react-icons/bs";
+import { uploadFile } from "../lib/appwrite";
+import { createPost, getAllPost, likeVideo, getUserLikedVideos } from "../lib/appwrite";
+import { AiOutlineHeart, AiFillHeart, AiOutlineShareAlt } from "react-icons/ai";
 
 const ExploreTab = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,6 +11,10 @@ const ExploreTab = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileURL, setFileURL] = useState("");
   const [posts, setPosts] = useState([]);
+  const [likedPosts, setLikedPosts] = useState({});
+  const [userId, setUserId] = useState("");
+  const [isdonor, setIsdonor] = useState(false);
+  const [isloggedin, setIsloggedin] = useState(false);
 
   const handleAddPostClick = () => {
     setIsModalOpen(true);
@@ -21,9 +26,6 @@ const ExploreTab = () => {
     setSelectedFile(null);
     setFileURL("");
   };
-
-  const [isdonor, setIsdonor] = useState(false);
-  const [isloggedin, setIsloggedin] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -71,11 +73,7 @@ const ExploreTab = () => {
       if (selectedFile) {
         uploadedFileURL = await uploadFile(selectedFile, "image");
       }
-      const response = await createPost(
-        uploadedFileURL,
-        isdonor,
-        description
-      );
+      const response = await createPost(uploadedFileURL, isdonor, description);
 
       const fetchedPosts = await getAllPost();
       setPosts(fetchedPosts);
@@ -89,8 +87,32 @@ const ExploreTab = () => {
   };
 
   const getPost = () => {
+    const [likedPosts, setLikedPosts] = useState({});
+
+    const toggleLike = async (postId, currentLikes) => {
+      try {
+        await likeVideo(isdonor, postId, currentLikes);
+
+        setLikedPosts((prev) => ({
+          ...prev,
+          [postId]: !prev[postId],
+        }));
+
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post.$id === postId ? { ...post, likes: post.likes + 1 } : post
+          )
+        );
+      } catch (error) {
+        console.error("Error liking post:", error.message);
+      }
+    };
+
     return posts.map((post) => (
-      <div key={post.$id} className="bg-white rounded-lg shadow-lg mb-6 p-4 max-w-2xl mx-auto">
+      <div
+        key={post.$id}
+        className="bg-white rounded-lg shadow-lg mb-6 p-4 max-w-2xl mx-auto"
+      >
         <div className="flex items-center mb-4">
           <img
             src={post.poster_url}
@@ -98,8 +120,12 @@ const ExploreTab = () => {
             className="w-12 h-12 rounded-full object-cover mr-4"
           />
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">{post.poster_name}</h3>
-            <p className="text-sm text-gray-500">{new Date(post.$createdAt).toLocaleString()}</p>
+            <h3 className="text-lg font-semibold text-gray-900">
+              {post.poster_name}
+            </h3>
+            <p className="text-sm text-gray-500">
+              {new Date(post.$createdAt).toLocaleString()}
+            </p>
           </div>
         </div>
 
@@ -111,7 +137,26 @@ const ExploreTab = () => {
           />
         )}
 
-        <p className="text-gray-800 text-base">{post.description}</p>
+        <p className="text-gray-800 text-base mb-4">{post.description}</p>
+
+        <div className="flex items-center justify-between">
+          <div className="flex">
+          <button
+            onClick={() => toggleLike(post.$id, post.like)}
+            className="focus:outline-none"
+          >
+            {likedPosts[post.$id] ? (
+              <AiFillHeart className="text-red-500 w-6 h-6" />
+            ) : (
+              <AiOutlineHeart className="text-gray-600 w-6 h-6" />
+            )}
+          </button>
+          <div className="text-black ml-3">{post.like}</div>
+          </div>
+          <button className="focus:outline-none">
+            <AiOutlineShareAlt className="text-gray-600 w-6 h-6" />
+          </button>
+        </div>
       </div>
     ));
   };

@@ -26,6 +26,7 @@ const NEEDS = process.env.NEXT_PUBLIC_NEEDS_COLLECTION;
 const DONATIONS = process.env.NEXT_PUBLIC_DONATIONS_COLLECTION;
 const STORAGE_ID = process.env.NEXT_PUBLIC_STORAGE_ID;
 const POST = process.env.NEXT_PUBLIC_POST_COLLECTION;
+const LIKES=process.env.NEXT_PUBLIC_LIKES_COLLECTION;
 
 export const Config = {
   endpoint: BASE_URL,
@@ -93,7 +94,10 @@ export const createPost = async (image_url, isDonor, description) => {
 
 export const getAllPost = async () => {
   try {
-    const posts = await databases.listDocuments(databaseId, POST);
+    // get post in descending order
+    const posts = await databases.listDocuments(databaseId, POST, [
+      Query.orderDesc("$createdAt"),
+    ]);
     return posts.documents;
   } catch (e) {
     console.log(e);
@@ -557,3 +561,90 @@ export const getPastContributions = async () => {
     throw new Error(e);
   }
 };
+
+export const likeVideo = async (is_donar, postId, likesCount) => {
+  try {
+    const {user_id}= await getCurrentUser(is_donar);
+    // Add a like to the likes table
+    
+    const newLike = await databases.createDocument(
+      databaseId, // databaseId
+      LIKES, // collectionId
+      ID.unique(), // documentId
+      {
+        user_id,
+        post_id: postId,
+      }
+    );
+
+    const updatedPost = await databases.updateDocument(
+      databaseId, // databaseId
+      POST, // collectionId
+      postId, // documentId
+      {
+        like: likesCount + 1,
+      }
+    );
+
+    return { newLike, updatedPost };
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const unlikeVideo = async (userId,postid) => {
+  try {
+      if (!userId || !videoId) {
+          throw new Error('Invalid userId or videoId');
+      }
+      const post = await databases.listDocuments(
+          databaseId,
+          LIKES,
+          [
+              Query.equal('user_id', userId),
+              Query.equal('post_id', postid)
+          ]
+      );
+
+      const documentId = post.documents[0].$id;
+
+      await databases.deleteDocument(
+          databaseId,
+          LIKES,
+          documentId
+      );
+
+    
+  } catch (e) {
+      throw new Error(e.message);
+  }
+
+}
+
+
+export const getUserLikedVideos = async () => {
+  try{
+    const {user_id}= await getCurrentUser(is_donar);
+    if (!user_id){
+        return;
+    }
+      const post= await databases.listDocuments(
+          databaseId,
+          LIKES,
+          [Query.equal('user_id',user_id)]
+      )
+      const postIDs = post.documents.map(doc => doc.post_id);
+      if (postIDs.length === 0) {
+          return;
+      }
+       const data= await databases.listDocuments(
+           databaseId,
+           POST,
+           [Query.equal('$id',postIDs)]
+       )
+      return data.documents;
+  }
+  catch(e){
+      throw new Error(e);
+  }
+}

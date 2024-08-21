@@ -25,6 +25,7 @@ const DONORS = process.env.NEXT_PUBLIC_DONARS_COLLECTION;
 const NEEDS = process.env.NEXT_PUBLIC_NEEDS_COLLECTION;
 const DONATIONS = process.env.NEXT_PUBLIC_DONATIONS_COLLECTION;
 const STORAGE_ID = process.env.NEXT_PUBLIC_STORAGE_ID;
+const POST = process.env.NEXT_PUBLIC_POST_COLLECTION;
 
 export const Config = {
   endpoint: BASE_URL,
@@ -42,6 +43,52 @@ const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
 const storage = new Storage(client);
+
+export const createPost = async (image_url, isDonor, description) => {
+  try{
+    let poster_id,poster_url,poster_name;
+    console.log(image_url,isDonor,description);
+    if(isDonor){
+      const donor = await getCurrentUser(true);
+      poster_id = donor.user_id;
+      poster_url = donor.avatar_url;
+      poster_name = donor.name;
+    }
+    else{
+      const organisation = await getCurrentUser(false);
+      poster_id = organisation.organisation_id;
+      poster_url = organisation.avatar
+      poster_name = organisation.organisation_name;
+    }
+    const post = await databases.createDocument(
+      databaseId,
+      POST,
+      ID.unique(),
+      {
+        poster_name,
+        poster_id,
+        poster_url,
+        image_url,
+        description,
+      }
+    );
+    return post;
+  }
+  catch(e){
+    console.log(e);
+    throw new Error(e);
+  }
+};
+
+export const getPost = async () => {
+  try {
+    const posts = await databases.listDocuments(databaseId, POST);
+    return posts.documents;
+  } catch (e) {
+    console.log(e);
+    throw new Error(e);
+  }
+}
 
 export const createUser = async (email, password, username, isDonor) => {
   try {

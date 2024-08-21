@@ -27,6 +27,10 @@ const DONATIONS = process.env.NEXT_PUBLIC_DONATIONS_COLLECTION;
 const STORAGE_ID = process.env.NEXT_PUBLIC_STORAGE_ID;
 const POST = process.env.NEXT_PUBLIC_POST_COLLECTION;
 const LIKES = process.env.NEXT_PUBLIC_LIKES_COLLECTION;
+const COMMENTS = process.env.NEXT_PUBLIC_COMMENTS_COLLECTION;
+const COMMENT_LIKES = process.env.NEXT_PUBLIC_COMMENT_LIKES_COLLECTION;
+const REPLIES = process.env.NEXT_PUBLIC_REPLIES_COLLECTION;
+const REPLY_LIKES = process.env.NEXT_PUBLIC_REPLY_LIKES_COLLECTION;
 
 export const Config = {
   endpoint: BASE_URL,
@@ -44,6 +48,66 @@ const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
 const storage = new Storage(client);
+
+export const createComment = async (postId, comment) => {
+  try {
+    const user = await getCurrentUser(true);
+    const newComment = await databases.createDocument(
+      databaseId,
+      COMMENTS,
+      ID.unique(),
+      {
+        post_id: postId,
+        user_id: user.user_id,
+        comment,
+      }
+    );
+    return newComment;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const getComments = async (postId) => {
+  try {
+    const comments = await databases.listDocuments(databaseId, COMMENTS, [
+      Query.equal("post_id", postId),
+    ]);
+    return comments.documents;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const getReplies = async (commentId) => {
+  try {
+    const replies = await databases.listDocuments(databaseId, REPLIES, [
+      Query.equal("comment_id", commentId),
+    ]);
+    return replies.documents;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const createReply = async (commentId, reply) => {
+  try {
+    const user = await getCurrentUser(true);
+    const newReply = await databases.createDocument(
+      databaseId,
+      REPLIES,
+      ID.unique(),
+      {
+        comment_id: commentId,
+        user_id: user.user_id,
+        reply,
+      }
+    );
+    return newReply;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
 
 export const createPost = async (image_url, isDonor, description) => {
   try {
@@ -660,6 +724,20 @@ export const getUserLikedVideos = async (is_donar) => {
     return data.documents;
   } catch (e) {
     console.log(e);
+    throw new Error(e);
+  }
+};
+
+export const updateNeed = async (needId, data) => {
+  try {
+    const updatedDocument = await databases.updateDocument(
+      databaseId,
+      NEEDS,
+      needId,
+      data
+    );
+    return updatedDocument;
+  } catch (e) {
     throw new Error(e);
   }
 };

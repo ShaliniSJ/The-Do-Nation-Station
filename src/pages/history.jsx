@@ -27,7 +27,7 @@ useEffect(() => {
   
     return( 
         <div>
-             <Navbar islogged={isLogged} />
+            <Navbar islogged={isLogged} />
             <History/>
         </div>
     )

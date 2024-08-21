@@ -1,4 +1,4 @@
-import Navbar from "@/src/components/Navbar";
+// import Navbar from "@/src/components/Navbar";
 import {
   getComments,
   createComment,
@@ -128,7 +128,7 @@ export default function Page() {
 
   return (
     <>
-      <Navbar islogged={isloggedin} />
+      {/* <Navbar islogged={isloggedin} /> */}
       <div className="flex flex-col gap-8">
         <div
           key={post.$id}

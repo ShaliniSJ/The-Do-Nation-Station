@@ -86,11 +86,11 @@ const ExploreTab = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        const fetchedPosts = await getAllPost();
+        setPosts(fetchedPosts);
         if (!isloggedin) {
           return;
         }
-        const fetchedPosts = await getAllPost();
-        setPosts(fetchedPosts);
         const postsILiked = await getUserLikedVideos(isdonor);
         const newLikedPosts = {};
         for (let i in postsILiked) {
@@ -198,60 +198,62 @@ const ExploreTab = () => {
         key={post.$id}
         className="bg-white rounded-lg shadow-lg mb-6 p-4 max-w-2xl mx-auto"
       >
-        <a href={"/posts/" + post.$id}>
-          <div className="flex items-center mb-4">
-            <img
-              src={post.poster_url}
-              alt={post.poster_name}
-              className="w-12 h-12 rounded-full object-cover mr-4"
-            />
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900">
-                {post.poster_name}
-              </h3>
-              <p className="text-sm text-gray-500">
-                {new Date(post.$createdAt).toLocaleString()}
-              </p>
-            </div>
+        <div className="flex items-center mb-4">
+          <img
+            src={post.poster_url}
+            alt={post.poster_name}
+            className="w-12 h-12 rounded-full object-cover mr-4"
+          />
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">
+              {post.poster_name}
+            </h3>
+            <p className="text-sm text-gray-500">
+              {new Date(post.$createdAt).toLocaleString()}
+            </p>
           </div>
+        </div>
 
-          {post.image_url && (
-            <img
-              src={post.image_url}
-              alt="Post"
-              className="w-full h-auto rounded-lg mb-4"
-            />
-          )}
+        {post.image_url && (
+          <img
+            src={post.image_url}
+            alt="Post"
+            className="w-full h-auto rounded-lg mb-4"
+          />
+        )}
 
-          <p className="text-gray-800 text-base mb-4">{post.description}</p>
+        <p className="text-gray-800 text-base mb-4">{post.description}</p>
 
-          <div className="flex items-center justify-between">
-            <div className="flex flex-row gap-16">
-              <div className="flex flex-row items-center">
-                <button
-                  onClick={() => toggleLike(post.$id, post.like)}
-                  className="focus:outline-none"
-                >
-                  {likedPosts[post.$id] ? (
-                    <AiFillHeart className="text-red-500 w-6 h-6" />
-                  ) : (
-                    <AiOutlineHeart className="text-gray-600 w-6 h-6" />
-                  )}
-                </button>
-                <div className="text-black ml-3">{post.like}</div>
-              </div>
-              <div className="flex flex-row items-center gap-4">
-                {/* <AiOutlineComment className="w-6 h-6" />
+        <div className="flex items-center justify-between">
+          <div className="flex flex-row gap-16">
+            <div className="flex flex-row items-center">
+              <button
+                disabled={!isloggedin}
+                onClick={() => toggleLike(post.$id, post.like)}
+                className="focus:outline-none disabled:opacity-50"
+              >
+                {likedPosts[post.$id] ? (
+                  <AiFillHeart className="text-red-500 w-6 h-6" />
+                ) : (
+                  <AiOutlineHeart className="text-gray-600 w-6 h-6" />
+                )}
+              </button>
+              <div className="text-black ml-3">{post.like}</div>
+            </div>
+            <a
+              href={"/posts/" + post.$id}
+              className="flex flex-row items-center gap-4"
+            >
+              {/* <AiOutlineComment className="w-6 h-6" />
               <FaComment /> */}
-                <FaRegCommentAlt className="w-5 h-5 text-gray-600" />
-                <p>{comments[post.$id] ? comments[post.$id] : 0}</p>
-              </div>
-            </div>
-            <button className="focus:outline-none">
-              <AiOutlineShareAlt className="text-gray-600 w-6 h-6" />
-            </button>
+              <FaRegCommentAlt className="w-5 h-5 text-gray-600" />
+              <p>{comments[post.$id] ? comments[post.$id] : 0}</p>
+            </a>
           </div>
-        </a>
+          <button className="focus:outline-none">
+            <AiOutlineShareAlt className="text-gray-600 w-6 h-6" />
+          </button>
+        </div>
       </div>
     ));
   };

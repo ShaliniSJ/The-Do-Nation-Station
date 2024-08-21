@@ -57,6 +57,7 @@ const Donate = () => {
             variant="contained"
             color="primary"
             onClick={handleDonate}
+            disabled={parseFloat(amount) <= 0 || isNaN(parseFloat(amount))}
           >
             Donate
           </Button>

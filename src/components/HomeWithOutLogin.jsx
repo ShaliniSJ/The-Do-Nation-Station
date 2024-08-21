@@ -11,12 +11,14 @@ const HomeWithOutLogin = () => {
     <div>
       <header className="flex flex-col items-center text-center w-full h-[100vh] gap-2">
         <div className="-mt-32 bg-secondary-blue/50 rounded-full blur-3xl w-1/2 h-1/2"></div>
-        <h2 className="-mt-8 relative text-4xl md:text-6xl md:w-1/2 font-semibold jost">
-          One Platform for All Your Charitable Donations
+        <h2 className="-mt-8 relative text-4xl md:text-6xl md:w-1/ font-semibold jost">
+          One Solution for All Donations
         </h2>
         <p className="nunito text-base md:text-xl">
+          The Do-Nation Station - Ultimate Social Media and Central Platform for Donations<br></br>
+          Smartly Encourages Donors to Donate to Charitable Organizations <br></br>
           Support Causes Based on Urgency, Location, and Need <br></br>
-          Ideal for orphanages, NGOs, hospitals, foundations, and old age homes
+          Ideal for Orphanages, NGOs, Hospitals, Foundations, and Old Age Homes
         </p>
         <div className="my-8 flex flex-row gap-4">
           <a
@@ -138,25 +140,25 @@ const HomeWithOutLogin = () => {
           <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
             <p className="text-2xl md:text-5xl opacity-50">03</p>
             <p className="text-sm md:text-lg">
-              Impact Tracking and Visualization for each Donor
+              Allows anonymous Impact Tracking and Visualization for each Donor
             </p>
           </div>
           <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
             <p className="text-2xl md:text-5xl opacity-50">04</p>
             <p className="text-sm md:text-lg">
-              Leaderboard and Recognition System among Donors (Gamification)
+              Recognition System including likes, comments and share resembling Gamification
             </p>
           </div>
           <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
             <p className="text-2xl md:text-5xl opacity-50">05</p>
-            <p className="textext-sm md:t-lg">
-              Transparency and Accountability (History of Donations)
+            <p className="text-sm md:text-lg">
+              Transparency and Accountability through History of Donations
             </p>
           </div>
           <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
             <p className="text-2xl md:text-5xl opacity-50">06</p>
             <p className="text-sm md:text-lg">
-              AI based verification of Charitable Organizations (Future Scope)
+              Explore tab resembling social media for Donors and Organizations
             </p>
           </div>
           <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
@@ -169,7 +171,7 @@ const HomeWithOutLogin = () => {
           <div className="bg-secondary-blue/80 hover:bg-secondary-blue/50 p-4 rounded-xl">
             <p className="text-2xl md:text-5xl opacity-50">08</p>
             <p className="text-sm md:text-lg">
-              Messaging platform between Donors and Organizations (Future Scope)
+              Messaging platform between Donors and Organizations
             </p>
           </div>
         </div>

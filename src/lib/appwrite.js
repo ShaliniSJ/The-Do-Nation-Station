@@ -45,36 +45,47 @@ const databases = new Databases(client);
 const storage = new Storage(client);
 
 export const createPost = async (image_url, isDonor, description) => {
-  try{
-    let poster_id,poster_url,poster_name;
-    console.log(image_url,isDonor,description);
-    if(isDonor){
+  try {
+    let poster_id, poster_url, poster_name;
+    if (isDonor) {
       const donor = await getCurrentUser(true);
       poster_id = donor.user_id;
       poster_url = donor.avatar_url;
       poster_name = donor.name;
-    }
-    else{
+    } else {
       const organisation = await getCurrentUser(false);
       poster_id = organisation.organisation_id;
-      poster_url = organisation.avatar
+      poster_url = organisation.avatar;
       poster_name = organisation.organisation_name;
     }
-    const post = await databases.createDocument(
-      databaseId,
-      POST,
-      ID.unique(),
-      {
-        poster_name,
-        poster_id,
-        poster_url,
-        image_url,
-        description,
-      }
-    );
-    return post;
-  }
-  catch(e){
+    if (!image_url) {
+      const post = await databases.createDocument(
+        databaseId,
+        POST,
+        ID.unique(),
+        {
+          poster_name,
+          poster_id,
+          poster_url,
+          description,
+        }
+      );
+    } else {
+      const post = await databases.createDocument(
+        databaseId,
+        POST,
+        ID.unique(),
+        {
+          poster_name,
+          poster_id,
+          poster_url,
+          description,
+          image_url,
+        }
+      );
+    }
+    return "successfully posted";
+  } catch (e) {
     console.log(e);
     throw new Error(e);
   }
@@ -88,7 +99,7 @@ export const getAllPost = async () => {
     console.log(e);
     throw new Error(e);
   }
-}
+};
 
 export const createUser = async (email, password, username, isDonor) => {
   try {
@@ -450,7 +461,6 @@ export const completeNeeds = async (needid) => {
         completed: true,
       }
     );
-    console.log("Document updated:", updatedDocument);
   } catch (error) {
     console.error("Error updating document:", error);
   }
@@ -533,7 +543,7 @@ export const getPastContributions = async () => {
         const organisation = await databases.listDocuments(
           databaseId,
           ORGANIZATIONS,
-         [Query.equal('organisation_id',donation.organisation_id)]
+          [Query.equal("organisation_id", donation.organisation_id)]
         );
         return {
           ...donation,
@@ -541,7 +551,7 @@ export const getPastContributions = async () => {
         };
       })
     );
-    
+
     return contributionsWithOrgNames;
   } catch (e) {
     throw new Error(e);

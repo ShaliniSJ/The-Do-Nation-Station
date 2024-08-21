@@ -678,20 +678,33 @@ export const unlikeVideo = async (userId, postid) => {
 
 export const getUserLikedVideos = async () => {
   try {
-    const { user_id } = await getCurrentUser(is_donar);
-    if (!user_id) {
-      return;
+    const user  = await getCurrentUser(is_donar);
+    let data;
+    if (!is_donar) {
+      // do the same for organisation
+      const post = await databases.listDocuments(databaseId, LIKES, [
+        Query.equal("user_id", user.organisation_id),
+      ]);
+      const postIDs = post.documents.map((doc) => doc.post_id);
+      if (postIDs.length === 0) {
+        return;
+      }
+      data = await databases.listDocuments(databaseId, POST, [
+        Query.equal("$id", postIDs),
+      ]);
     }
-    const post = await databases.listDocuments(databaseId, LIKES, [
-      Query.equal("user_id", user_id),
-    ]);
-    const postIDs = post.documents.map((doc) => doc.post_id);
-    if (postIDs.length === 0) {
-      return;
+    else{
+      const post = await databases.listDocuments(databaseId, LIKES, [
+        Query.equal("user_id", user_id),
+      ]);
+      const postIDs = post.documents.map((doc) => doc.post_id);
+      if (postIDs.length === 0) {
+        return;
+      }
+      data = await databases.listDocuments(databaseId, POST, [
+        Query.equal("$id", postIDs),
+      ]);
     }
-    const data = await databases.listDocuments(databaseId, POST, [
-      Query.equal("$id", postIDs),
-    ]);
     return data.documents;
   } catch (e) {
     throw new Error(e);

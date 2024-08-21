@@ -80,7 +80,7 @@ export const createPost = async (image_url, isDonor, description) => {
   }
 };
 
-export const getPost = async () => {
+export const getAllPost = async () => {
   try {
     const posts = await databases.listDocuments(databaseId, POST);
     return posts.documents;

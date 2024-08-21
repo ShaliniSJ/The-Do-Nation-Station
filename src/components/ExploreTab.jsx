@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { HiOutlinePlusCircle } from "react-icons/hi"; // Icon for the Add Post button
 import { BsPaperclip } from "react-icons/bs"; // Icon for the Pin button
 import { uploadFile } from "../lib/appwrite"; // Assume this is your file upload function
-import { createPost } from "../lib/appwrite";
+import { createPost, getAllPost } from "../lib/appwrite";
 
 const ExploreTab = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,6 +25,16 @@ const ExploreTab = () => {
   const [isdonor, setIsdonor] = useState(false);
 
   useEffect(() => {
+    const fetchPosts = async () => {
+        try {
+          const fetchedPosts = await getAllPost();
+          setPosts(fetchedPosts);
+        } catch (error) {
+          console.error("Error fetching posts:", error.message);
+        }
+      };
+  
+      fetchPosts();
     if (typeof window !== "undefined") {
       const isDonor = localStorage.getItem("isdonar");
       if (isDonor === "true") {
@@ -58,6 +68,9 @@ const ExploreTab = () => {
           isdonor,
           description
         );
+
+        const fetchedPosts = await getAllPost();
+        setPosts(fetchedPosts);
         console.log("response", response);
       } catch (error) {
         console.error("Error uploading file:", error.message);
@@ -78,17 +91,18 @@ const ExploreTab = () => {
 
   const getPost = () => {
     return posts.map((post) => (
-      <div key={post.id} className="bg-white rounded-lg shadow-lg mb-6 p-4">
-        {post.image && (
-          <img
-            src={post.image}
-            alt="Post"
-            className="w-full h-auto rounded-lg mb-4"
-          />
-        )}
-        <p className="text-gray-800">{post.text}</p>
-      </div>
-    ));
+        <div key={post.$id} className="bg-white rounded-lg shadow-lg mb-6 p-4">
+          {post.image_url && (
+            <img
+              src={post.image_url}
+              alt="Post"
+              className="w-full h-auto rounded-lg mb-4"
+            />
+          )}
+          <p className="text-gray-800">{post.description}</p>
+        </div>
+      ));
+    
   };
 
   return (

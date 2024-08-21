@@ -3,8 +3,19 @@ import { Modal, Box, Typography, Button, Grid } from "@mui/material";
 
 const DonationModal = ({ open, onClose, need }) => {
   if (!need) return null;
-  const remainingAmount = need.total_amt - need.collected_amt;
-  const isCost = remainingAmount > 0;
+  const isCost = need.total_amt > 0;
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      timeZoneName: "short",
+    };
+    return new Date(dateString).toLocaleString("en-US", options);
+  };
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -24,9 +35,9 @@ const DonationModal = ({ open, onClose, need }) => {
         <Typography variant="h6" component="h2">
           Organisation Name: {need.organisation_name}
         </Typography>
-        <Typography sx={{ mt: 2 }}>End Date: {need.date}</Typography>
+        <Typography sx={{ mt: 2 }}>End Date: {formatDate(need.date)}</Typography>
         {isCost && (
-          <Typography sx={{ mt: 2 }}>Amount: Rs.{remainingAmount}</Typography>
+          <Typography sx={{ mt: 2 }}>Amount: Rs.{need.total_amt}</Typography>
         )}
         {!isCost && <Typography sx={{ mt: 2 }}>Kind: {need.kind}</Typography>}
         {!isCost && (

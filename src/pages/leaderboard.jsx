@@ -25,27 +25,27 @@ const Leaderboard = () => {
   const handlePageChange = (event, value) => {
     setPage(value);
   };
-  const [showAfterLogin, setShowAfterLogin] = useState(false);
-  const [user, setUser] = useState(null);
-  const [isLogged, setIsLogged] = useState(false);
-  const [isdonor, setIsdonor] = useState(false);
+  // const [showAfterLogin, setShowAfterLogin] = useState(false);
+  // const [user, setUser] = useState(null);
+  // const [isLogged, setIsLogged] = useState(false);
+  // const [isdonor, setIsdonor] = useState(false);
 
-  useEffect(() => {
-    // Define an async function to handle the async operation
-    const fetchUserData = () => {
-      if (typeof window !== "undefined") {
-        const islogged = localStorage.getItem("islogged");
-        if (islogged === "true") {
-          setIsLogged(true);
-        } else {
-          setIsLogged(false);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   // Define an async function to handle the async operation
+  //   const fetchUserData = () => {
+  //     if (typeof window !== "undefined") {
+  //       const islogged = localStorage.getItem("islogged");
+  //       if (islogged === "true") {
+  //         setIsLogged(true);
+  //       } else {
+  //         setIsLogged(false);
+  //       }
+  //     }
+  //   };
 
     // Call the async function
-    fetchUserData();
-  }, [isLogged]);
+  //   fetchUserData();
+  // }, [isLogged]);
   useEffect(() => {
     const fetch = async () => setDonors(await getLeaderBoard());
     fetch();
@@ -58,7 +58,7 @@ const Leaderboard = () => {
 
   return (
     <>
-      <Navbar islogged={isLogged} />
+      {/* <Navbar islogged={isLogged} /> */}
       <Container>
         <h1 className="text-3xl font-bold text-center my-8">Top Donors</h1>
         <TableContainer component={Paper}>

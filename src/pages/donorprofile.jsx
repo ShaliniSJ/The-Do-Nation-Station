@@ -70,7 +70,7 @@ export default function Page() {
 
   return (
     <>
-      <Navbar islogged={isLogged} />
+      {/* <Navbar islogged={isLogged} /> */}
       <div className="flex flex-col min-h-[80vh] md:flex-row gap-4 md:gap-16">
         {donor ? (
           <>

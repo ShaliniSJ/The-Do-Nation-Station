@@ -50,7 +50,7 @@ export default function Page() {
 
   return (
     <>
-      <Navbar islogged={isLogged} />
+      {/* <Navbar islogged={isLogged} /> */}
       <div className="p-6">
         <h2 className="text-4xl font-bold jost">Inbox</h2>
         {messages.length > 0 ? messages[0].text : "loading.."}

@@ -7,27 +7,27 @@ const [user, setUser] = useState(null);
 const [isLogged, setIsLogged] = useState(false);
 const [isdonor,setIsdonor]=useState(false);
 
-useEffect(() => {
-  // Define an async function to handle the async operation
-  const fetchUserData = async () => {
-    if (typeof window !== 'undefined') {
-      const islogged = localStorage.getItem('islogged');
-      if(islogged === 'true') {
-        setIsLogged(true);
-      }
-      else{
-        setIsLogged(false);
-      }
-    }
-  };
+// useEffect(() => {
+//   // Define an async function to handle the async operation
+//   const fetchUserData = async () => {
+//     if (typeof window !== 'undefined') {
+//       const islogged = localStorage.getItem('islogged');
+//       if(islogged === 'true') {
+//         setIsLogged(true);
+//       }
+//       else{
+//         setIsLogged(false);
+//       }
+//     }
+//   };
 
 
-  fetchUserData();
-  }, [isLogged]);
+//   fetchUserData();
+//   }, [isLogged]);
   
     return( 
         <div>
-            <Navbar islogged={isLogged} />
+            {/* <Navbar islogged={isLogged} /> */}
             <History/>
         </div>
     )

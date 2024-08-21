@@ -2,10 +2,30 @@
 import "../globals.css";
 
 import Footer from "@/src/components/Footer";
-import { useEffect } from "react";
+import Navbar from "../components/Navbar";
+import { useEffect,useState } from "react";
 
 
 function MyApp({ Component, pageProps }) {
+  const [isLogged, setIsLogged] = useState(false);
+  useEffect(() => {
+    // Define an async function to handle the async operation
+    const fetchUserData = async () => {
+      if (typeof window !== "undefined") {
+        const islogged = localStorage.getItem("islogged");
+        // setIsLogged(Boolean(islogged));
+        if (islogged === "true") {
+          setIsLogged(true);
+        } else {
+          setIsLogged(false);
+        }
+      }
+    };
+
+    // Call the async function
+    fetchUserData();
+  }, [isLogged]);
+
   useEffect(() => {
     try {
       fetch("./api/schedule");
@@ -13,10 +33,12 @@ function MyApp({ Component, pageProps }) {
       console.log("scheduler disabled for this page. Reason: ", e);
     }
   }, []);
+  
 
   return (
     <>
     <div className="flex flex-col min-h-96 relative">
+    <Navbar islogged={isLogged} />
       <Component {...pageProps} />
       {/* Donation Box Button */}
       <div className="fixed bottom-8 right-8">

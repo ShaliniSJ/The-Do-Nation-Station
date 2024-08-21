@@ -24,6 +24,7 @@ import {
   likeVideo,
   unlikeVideo,
   getUserLikedVideos,
+  getComments,
 } from "../lib/appwrite";
 
 const ExploreTab = () => {
@@ -36,6 +37,7 @@ const ExploreTab = () => {
   const [userId, setUserId] = useState("");
   const [isdonor, setIsdonor] = useState(false);
   const [isloggedin, setIsloggedin] = useState(false);
+  const [comments, setComments] = useState({});
 
   const handleAddPostClick = () => {
     setIsModalOpen(true);
@@ -83,6 +85,9 @@ const ExploreTab = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        if (!isloggedin) {
+          return;
+        }
         const fetchedPosts = await getAllPost();
         setPosts(fetchedPosts);
         const postsILiked = await getUserLikedVideos(isdonor);
@@ -95,6 +100,14 @@ const ExploreTab = () => {
         }
 
         setLikedPosts(newLikedPosts);
+        // const allComments = await getComments();
+        // console.log("comments", allComments);
+        // const newComments = {};
+        // if (allComments) {
+        //   for (let i in allComments) {
+        //     allComments[i];
+        //   }
+        // }
       } catch (error) {
         console.error("Error fetching posts:", error.message);
       }

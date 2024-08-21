@@ -695,10 +695,15 @@ export const unlikeVideo = async (is_donar, postid, likesCount) => {
   }
 };
 
-export const getUserLikedVideos = async () => {
+export const getUserLikedVideos = async (is_donar) => {
   try {
     const user = await getCurrentUser(is_donar);
     let data;
+    console.log("bro", user, is_donar);
+    if (!user) {
+      console.log("bye");
+      return;
+    }
     if (!is_donar) {
       // do the same for organisation
       const post = await databases.listDocuments(databaseId, LIKES, [
@@ -713,7 +718,7 @@ export const getUserLikedVideos = async () => {
       ]);
     } else {
       const post = await databases.listDocuments(databaseId, LIKES, [
-        Query.equal("user_id", user_id),
+        Query.equal("user_id", user.user_id),
       ]);
       const postIDs = post.documents.map((doc) => doc.post_id);
       if (postIDs.length === 0) {

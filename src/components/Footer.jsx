@@ -48,11 +48,11 @@ export default function Page() {
                 About
               </a>
             </li>
-            {/* <li>
-              <a className="hover:underline" href="/leaderboard">
-                Leaderboard
+            <li>
+              <a className="hover:underline" href="/explore">
+                Explore
               </a>
-            </li> */}
+            </li>
             <li>
               <a className="hover:underline" href="/history">
                 History
@@ -65,11 +65,11 @@ export default function Page() {
                 </a>
               </li>
             )}
-            {/* <li>
+            <li>
               <a className="hover:underline" href="/login">
                 Login
               </a>
-            </li> */}
+            </li>
           </ul>
           <div className="text-center md:text-left nunito md:w-1/2 opacity-50">
             <p>Thank you for your support!</p>

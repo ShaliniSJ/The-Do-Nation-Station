@@ -253,7 +253,7 @@ const ProfileForOrganisationFromNeeds = () => {
             </thead>
             <tbody>
               {currentDonations.map((need) => (
-                <tr key={donation.id} className="even:bg-secondary-blue/20">
+                <tr key={need.id} className="even:bg-secondary-blue/20">
                   <td className="px-6 py-4 whitespace-nowrap text-sm md:text-base font-medium text-black/80">
                  {need.total_amt}
                </td>

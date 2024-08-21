@@ -59,10 +59,12 @@ const ExploreTab = () => {
   const handlePostClick = async () => {
     let uploadedFileURL = fileURL;
 
-    if (selectedFile) {
-      try {
+    try {
+        console.log("selectedFile", selectedFile);
+        if (selectedFile) {
         uploadedFileURL = await uploadFile(selectedFile, "image");
         console.log("file url", uploadedFileURL);
+        }
         const response = await createPost(
           uploadedFileURL,
           isdonor,
@@ -72,12 +74,12 @@ const ExploreTab = () => {
         const fetchedPosts = await getAllPost();
         setPosts(fetchedPosts);
         console.log("response", response);
-      } catch (error) {
+        }
+       catch (error) {
         console.error("Error uploading file:", error.message);
         alert("File upload failed. Please try again.");
         return; // Exit if the upload fails
       }
-    }
 
     const newPost = {
       id: posts.length + 1,
@@ -91,19 +93,33 @@ const ExploreTab = () => {
 
   const getPost = () => {
     return posts.map((post) => (
-        <div key={post.$id} className="bg-white rounded-lg shadow-lg mb-6 p-4">
-          {post.image_url && (
-            <img
-              src={post.image_url}
-              alt="Post"
-              className="w-full h-auto rounded-lg mb-4"
-            />
-          )}
-          <p className="text-gray-800">{post.description}</p>
+        <div key={post.$id} className="bg-white rounded-lg shadow-lg mb-6 p-4 max-w-2xl mx-auto">
+            <div className="flex items-center mb-4">
+                <img
+                    src={post.poster_url}
+                    alt={post.poster_name}
+                    className="w-12 h-12 rounded-full object-cover mr-4"
+                />
+                <div>
+                    <h3 className="text-lg font-semibold text-gray-900">{post.poster_name}</h3>
+                    <p className="text-sm text-gray-500">{new Date(post.$createdAt).toLocaleString()}</p>
+                </div>
+            </div>
+
+            {/* Post image */}
+            {post.image_url && (
+                <img
+                    src={post.image_url}
+                    alt="Post"
+                    className="w-full h-auto rounded-lg mb-4"
+                />
+            )}
+
+            {/* Post description */}
+            <p className="text-gray-800 text-base">{post.description}</p>
         </div>
-      ));
-    
-  };
+    ));
+};
 
   return (
     <div className="relative p-4">

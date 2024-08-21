@@ -312,6 +312,7 @@ export const getAllPastDonationsForStatic = async (userId) => {
 
 export const organisationDetailsForNeeds = async () => {
   try {
+
     const details = await databases.listDocuments(databaseId, ORGANIZATIONS);
 
     return details.documents;

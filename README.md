@@ -42,7 +42,7 @@ To address these challenges, we propose a comprehensive donation platform that c
 - Future scope includes AI for organization integrity checks and a messaging platform for donors and organizations.
 
 ![Alt text](/Hack4Change/Slide3.JPG)
-![Alt text](/Hack4Change/Slide4.JPG)
+<!-- ![Alt text](/Hack4Change/Slide4.JPG) -->
 
 ## Features
 
@@ -54,16 +54,16 @@ To address these challenges, we propose a comprehensive donation platform that c
 6. **AI Verification:** Future scope includes AI to verify the authenticity of organizations.
 7. **Messaging Platform:** Future scope includes a communication platform between donors and organizations.
 
-![Alt text](/Hack4Change/Slide6.JPG)
+<!-- ![Alt text](/Hack4Change/Slide6.JPG) -->
 
 ## Prototype Resources
 
 - **GitHub Repository:** [The Do-Nation Station](https://github.com/ShaliniSJ/The-Do-Nation-Station)
-- **Demo Video:** [YouTube](https://youtu.be/Jf5s93Dh6iM)
+- **Demo Video:** [YouTube](https://youtu.be/ybIr3RZenI0)
 - **Live Product:** [The Do-Nation Station](https://the-do-nation-station.vercel.app/)
 
-![Alt text](/Hack4Change/Slide5.JPG)
-![Alt text](/Hack4Change/Slide11.JPG)
+<!-- ![Alt text](/Hack4Change/Slide5.JPG) -->
+<!-- ![Alt text](/Hack4Change/Slide11.JPG) -->
 
 ## Tech Stack
 
@@ -73,7 +73,7 @@ To address these challenges, we propose a comprehensive donation platform that c
 - **Authorization:** Appwrite
 - **UI/UX Design:** Figma
 - **APIs:** REST APIs, Google Map API
-![Alt text](/Hack4Change/Slide10.JPG)
+![Alt text](/Hack4Change/Slide7.JPG)
 
 ## Implementation Details
 
@@ -104,11 +104,11 @@ To address these challenges, we propose a comprehensive donation platform that c
 
 ## Architecture Diagram
 
-![Alt text](/Hack4Change/Slide8.JPG)
+![Alt text](/Hack4Change/architecture.png)
 
 ## Process Flow Diagram
 
-![Alt text](/Hack4Change/Slide7.JPG)
+![Alt text](/Hack4Change/flow_diagram.png)
 
 ## Estimated Implementation Cost
 
@@ -116,7 +116,7 @@ To address these challenges, we propose a comprehensive donation platform that c
 - **Vercel Costs:** $20/month (Rs.1600) for advanced collaboration features, higher performance, and scalability.
 - **Appwrite Costs:** $15/month (Rs.1200) for pro developer features, including 300GB bandwidth, 150GB storage, 3.5M executions, and 200,000 monthly active users.
 
-![Alt text](/Hack4Change/Slide9.JPG)
+<!-- ![Alt text](/Hack4Change/Slide9.JPG) -->
 
 ## Future Scope
 
@@ -124,12 +124,14 @@ To address these challenges, we propose a comprehensive donation platform that c
 - **Messaging Platform:** Enhanced communication between donors and organizations.
 - **Automated Email Services:** Update donors on the impact of their donations.
 - **Live Food Donation Facility:** Redistribute leftover food to needy people.
-![Alt text](/Hack4Change/Slide12.JPG)
+![Alt text](/Hack4Change/Slide8.JPG)
 
 ## Additional Information
 
 India and the world have a vast network of charitable organizations dedicated to addressing various social, economic, and environmental challenges. In 2022, global donations reached an estimated $466 billion, with India contributing ₹21,000 crore ($2.7 billion).
-![Alt text](/Hack4Change/Slide14.JPG)
+![Alt text](/Hack4Change/Slide5.JPG)
+![Alt text](/Hack4Change/Slide4.JPG)
+![Alt text](/Hack4Change/Slide6.JPG)
 
 ## Conclusion
 
@@ -178,4 +180,4 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-![Alt text](/Hack4Change/Slide15.JPG)
+![Alt text](/Hack4Change/Slide10.JPG)

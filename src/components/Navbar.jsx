@@ -61,7 +61,7 @@ const Navbar = ({ islogged }) => {
       </ul>
 
       <div className="mx-5">
-        {islogged && isdonor ? (
+        {islogged && isdonor !== null ? (
           <ProfileButton isdonor={isdonor} />
         ) : (
           <a href="/signin">

@@ -32,29 +32,27 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    isLogged !== null && (
-      <>
-        <div className="flex flex-col min-h-screen relative">
-          <Navbar islogged={isLogged} />
-          <Component {...pageProps} />
-          {/* Donation Box Button */}
-          <div className="fixed bottom-8 right-8">
-            <a
-              href="/donate?66c6447d003dbf272e98"
-              className="flex flex-col justify-center items-center"
-            >
-              <img
-                src="https://media.tenor.com/sztMKWYRz1UAAAAi/thank-you.gif"
-                alt="Donate"
-                className="w-20 h-20 rounded-full border-4 border-white shadow-lg"
-              />
-              <p className="text-sm nunito opacity-80">Support Us</p>
-            </a>
-          </div>
+    <>
+      <div className="flex flex-col min-h-screen relative">
+        <Navbar islogged={isLogged} />
+        <Component {...pageProps} />
+        {/* Donation Box Button */}
+        <div className="fixed bottom-8 right-8">
+          <a
+            href="/donate?66c6447d003dbf272e98"
+            className="flex flex-col justify-center items-center"
+          >
+            <img
+              src="https://media.tenor.com/sztMKWYRz1UAAAAi/thank-you.gif"
+              alt="Donate"
+              className="w-20 h-20 rounded-full border-4 border-white shadow-lg"
+            />
+            <p className="text-sm nunito opacity-80">Support Us</p>
+          </a>
         </div>
-        <Footer />
-      </>
-    )
+      </div>
+      <Footer />
+    </>
   );
 }
 

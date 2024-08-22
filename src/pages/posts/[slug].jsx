@@ -90,7 +90,7 @@ export default function Page() {
       return;
     }
 
-    const user = await getCurrentUser(true);
+    const user = await getCurrentUser(isdonor);
     // console.log("gomma", user, isdonor);
     const user_id = isdonor ? user.user_id : user.organisation_id;
 

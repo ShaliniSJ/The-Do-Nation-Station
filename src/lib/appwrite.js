@@ -51,8 +51,7 @@ const storage = new Storage(client);
 
 export const createComment = async (postId, comment, is_donor) => {
   try {
-    const user = await getCurrentUser(true);
-
+    const user = await getCurrentUser(is_donor);
     const newComment = await databases.createDocument(
       databaseId,
       COMMENTS,
@@ -118,7 +117,6 @@ export const countComments = async (postId) => {
       Query.equal("post_id", postId),
     ]);
 
-    console.log("comm", comments);
     // Return the total number of comments
     return comments.total; // 'total' gives the total count of documents in the response
   } catch (e) {

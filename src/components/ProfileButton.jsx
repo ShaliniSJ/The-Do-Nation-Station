@@ -28,6 +28,9 @@ const ProfileButton = ({ isdonor }) => {
         setImage(user.avatar_url);
       } else {
         const user = await getCurrentUser(false);
+        if (!user) {
+          return
+        }
         setImage(user.avatar_url);
       }
     };

@@ -9,12 +9,13 @@ export default function Home() {
   const [showAfterLogin, setShowAfterLogin] = useState(false);
   const [user, setUser] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
-  const [isdonor, setIsdonor] = useState(false);
+  // const [isdonor, setIsdonor] = useState(false);
 
   const router = useRouter();
   useEffect(() => {
     if (typeof window !== "undefined") {
       const islogged = localStorage.getItem("islogged");
+      // const isdonor = localStorage.getItem("isdonar");
       if (islogged === "true") {
         setIsLogged(true);
         setShowAfterLogin(true);

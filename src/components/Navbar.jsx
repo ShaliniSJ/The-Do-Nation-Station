@@ -6,8 +6,7 @@ import IconLogo from "../assets/apple-touch-icon.png";
 import ProfileButton from "./ProfileButton";
 
 const Navbar = ({ islogged }) => {
-  const [isdonor, setIsdonor] = useState(false);
-
+  const [isdonor, setIsdonor] = useState(null);
   useEffect(() => {
     if (typeof window !== "undefined") {
       const isDonor = localStorage.getItem("isdonar");
@@ -62,7 +61,7 @@ const Navbar = ({ islogged }) => {
       </ul>
 
       <div className="mx-5">
-        {islogged ? (
+        {islogged && isdonor ? (
           <ProfileButton isdonor={isdonor} />
         ) : (
           <a href="/signin">

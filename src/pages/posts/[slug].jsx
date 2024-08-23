@@ -74,7 +74,7 @@ export default function Page() {
           return { ...comment, user };
         })
       );
-      console.log("comments", commentsWithUser);
+      // console.log("comments", commentsWithUser);
       setComments(commentsWithUser);
     }
     if (router.query.slug) {
@@ -90,8 +90,8 @@ export default function Page() {
       return;
     }
 
-    const user = await getCurrentUser(true);
-    console.log("gomma", user, isdonor);
+    const user = await getCurrentUser(isdonor);
+    // console.log("gomma", user, isdonor);
     const user_id = isdonor ? user.user_id : user.organisation_id;
 
     setComments([

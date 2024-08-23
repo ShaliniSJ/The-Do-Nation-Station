@@ -52,10 +52,10 @@ const HomeWithLogin = () => {
     const filteredNeeds = allNeeds.filter((need) => {
       const org = organisations[need.organisation_id];
       const matchesLocation = location
-        ? org &&
-          org.address &&
-          org.address.toLowerCase().startsWith(location.toLowerCase())
-        : true;
+      ? org &&
+        org.address &&
+        org.address.toLowerCase().includes(location.toLowerCase())
+      : true;
       const matchesDate = endDate
         ? new Date(need.date) >= new Date(endDate)
         : true;

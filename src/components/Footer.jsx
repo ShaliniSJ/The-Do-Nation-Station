@@ -38,10 +38,21 @@ export default function Page() {
         </div>
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
           <ul className="grid w-full md:w-fit text-center md:text-left grid-cols-1 md:grid-cols-2 gap-x-32 gap-y-4 md:gap-y-2">
+          <li>
+            <a href="/" className="hover:underline focus:underline">
+              Home
+            </a>
+          </li>
             <li>
-              <a className="hover:underline" href="/">
-                Home
-              </a>
+              {islogged ? (
+                <a href="/donations" className="hover:underline">
+                  Donate
+                </a>
+              ) : (
+                <a href="/signin" className="hover:underline">
+                  Donate
+                </a>
+              )}
             </li>
             <li>
               <a className="hover:underline" href="/aboutUs">

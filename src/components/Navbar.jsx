@@ -28,6 +28,11 @@ const Navbar = ({ islogged }) => {
       </a>
       <ul className="list-none ml-auto hidden md:flex jost md:text-lg gap-4">
         <li className="ml-5">
+          <a href="/" className="hover:underline focus:underline">
+            Home
+          </a>
+        </li>
+        <li className="ml-5">
           {islogged ? (
             <a href="/donations" className="hover:underline focus:underline">
               Donate

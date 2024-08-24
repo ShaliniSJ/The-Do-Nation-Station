@@ -23,7 +23,7 @@
 
 ### Project Description
 
-The Do-Nation Station is a centralized platform designed to facilitate transparent donations to orphanages, NGOs, hospitals, foundations, and old age homes. It aims to simplify the donation process, ensuring that donors can easily find and support organizations based on specific needs, locations, and urgency. The platform also provides detailed information and utilization reports to donors, enhancing transparency and trust.
+The Do-Nation Station is a centralized platform designed to facilitate transparent donations to orphanages, NGOs, hospitals, foundations, and old age homes. It aims to simplify the donation process, ensuring that donors can easily find and support organizations based on specific needs, locations, and urgency. The platform also provides detailed information and utilization reports to donors, enhancing transparency and trust. 
 
 ### Problem Statement
 
